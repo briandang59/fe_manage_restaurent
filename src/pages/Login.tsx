@@ -38,7 +38,7 @@ function Login() {
   };
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center bg-gradient-to-b from-black to-pink-500">
+    <div className="flex h-screen flex-col items-center justify-center bg-gradient-to-b from-[#4E342E] to-[#FFF8F0]">
       <div className="flex min-w-[400px] flex-col items-center rounded-[10px] border border-gray-200 bg-white p-4 shadow-md">
         <Image
           src={images.logo}

@@ -1,13 +1,19 @@
 import { Outlet } from "react-router-dom";
+import { Footer } from "react-day-picker";
+import Sidebar from "./Sidebar";
 
 const MainLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="p-4 bg-blue-600 text-white">Header</header>
-      <main className="flex-1 p-4">
-        <Outlet />
-      </main>
-      <footer className="p-4 bg-gray-100 text-center">Footer</footer>
+    <div className="flex min-h-screen">
+      <Sidebar />
+
+      <div className="flex flex-1 flex-col">
+        <main className="flex-1 overflow-auto bg-[#FFF8F0] p-6">
+          <Outlet />
+        </main>
+
+        <Footer />
+      </div>
     </div>
   );
 };
