@@ -9,7 +9,7 @@ export function FormCheckbox<TFieldValues extends FieldValues = FieldValues>({
   rules,
   errors,
   disabled,
-  type, // loại khỏi rest
+  type,
   ...rest
 }: FormFieldProps<TFieldValues> & { disabled?: boolean }) {
   return (

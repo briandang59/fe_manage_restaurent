@@ -8,5 +8,6 @@ export interface FormFieldProps<TFieldValues extends FieldValues = FieldValues> 
   type?: string;
   rules?: RegisterOptions<TFieldValues, Path<TFieldValues>>;
   errors?: FieldErrors<TFieldValues>;
+  required?: boolean;
   [key: string]: unknown;
 } 

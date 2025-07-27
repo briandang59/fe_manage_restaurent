@@ -8,11 +8,17 @@ export function FormTimePicker<TFieldValues extends FieldValues = FieldValues>({
   placeholder,
   rules,
   errors,
+  required = false,
   ...rest
 }: FormFieldProps<TFieldValues>) {
   return (
     <div className="space-y-1">
-      {label && <label htmlFor={name} className="block font-medium">{label}</label>}
+       {label && (
+        <label htmlFor={name} className="block font-medium">
+          {label}
+          {required && <span className="text-red-500 ml-1">*</span>}
+        </label>
+      )}
       <Controller
         name={name}
         control={control}
