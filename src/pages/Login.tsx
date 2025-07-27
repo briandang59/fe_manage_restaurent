@@ -6,7 +6,8 @@ import images from "@/assets/images";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { AuthRequestTypes } from "@/types/request/auth";
-import { useAuth } from "@/utils/hooks/useAuth";
+import { LoginResponseData, useAuth } from "@/utils/hooks/useAuth";
+import { BaseResponse } from "@/types/response/baseResponse";
 
 function Login() {
   const {
@@ -21,8 +22,10 @@ function Login() {
   const onSubmit = async (data: AuthRequestTypes) => {
     try {
       login.mutate(data, {
-        onSuccess: () => {
+        onSuccess: (responseData: BaseResponse<LoginResponseData>) => {
           toast.success("Đăng nhập thành công");
+          localStorage.setItem("token", responseData.data?.token || "");
+
           navigate("/", { replace: true });
         },
         onError: (error: any) => {

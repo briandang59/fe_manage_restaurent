@@ -1,46 +1,52 @@
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "@/layouts/MainLayout";
+import RequireAuth from "@/components/common/RquiredAuth";
+import RedirectIfAuthenticated from "@/components/common/RedirectIfAuthenticated";
 
 const Home = lazy(() => import("@/pages/Home"));
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const Login = lazy(() => import("@/pages/Login"));
 
 const LoadingFallback = () => (
-  <div className="flex items-center justify-center h-screen">
-    Loading...
-  </div>
+  <div className="flex h-screen items-center justify-center">Loading...</div>
 );
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
+    element: (
+      <RequireAuth>
+        <MainLayout />
+      </RequireAuth>
+    ),
     children: [
-      { 
-        index: true, 
+      {
+        index: true,
         element: (
           <Suspense fallback={<LoadingFallback />}>
             <Home />
           </Suspense>
-        ) 
+        ),
       },
-      { 
-        path: "dashboard", 
+      {
+        path: "dashboard",
         element: (
           <Suspense fallback={<LoadingFallback />}>
             <Dashboard />
           </Suspense>
-        ) 
+        ),
       },
     ],
   },
   {
     path: "/login",
     element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <Login />
-      </Suspense>
+      <RedirectIfAuthenticated>
+        <Suspense fallback={<LoadingFallback />}>
+          <Login />
+        </Suspense>
+      </RedirectIfAuthenticated>
     ),
   },
 ]);
