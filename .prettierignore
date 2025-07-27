@@ -1,0 +1,8 @@
+Freelance\fe_manage_restaurent\.prettierignore
+node_modules
+dist
+build
+coverage
+.next
+.vercel
+public

@@ -1,58 +1,73 @@
 import { useForm } from "react-hook-form";
 import { FormInput } from "@/components/forms-component/FormInput";
-import { FormCheckbox } from "@/components/forms-component/FormCheckbox";
 import { Button } from "@/components/ui/button";
 import Image from "@/components/ui/image";
 import images from "@/assets/images";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { AuthRequestTypes } from "@/types/request/auth";
+import { useAuth } from "@/utils/hooks/useAuth";
 
 function Login() {
   const {
-    register,
     handleSubmit,
     control,
-    formState: { errors },
-  } = useForm();
-  const navigate = useNavigate();
+    formState: { errors, isSubmitting },
+  } = useForm<AuthRequestTypes>();
 
-  const onSubmit = (data: any) => {
-    // Xử lý đăng nhập ở đây
-    console.log(data);
-    navigate("/", { replace: true });
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const onSubmit = async (data: AuthRequestTypes) => {
+    try {
+      login.mutate(data, {
+        onSuccess: () => {
+          toast.success("Đăng nhập thành công");
+          navigate("/", { replace: true });
+        },
+        onError: (error: any) => {
+          toast.error(error.message || "Đăng nhập thất bại");
+        },
+      });
+    } catch (error) {
+      toast.error(`${error}`);
+    }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-b from-black to-pink-500">
-      <div className="p-4 rounded-[10px] border border-gray-200 shadow-md bg-white flex flex-col items-center min-w-[400px]">
- <Image src={images.logo} alt="logo" width={100} height={100} className="mb-6 rounded-[10px]" />
-      <form className="space-y-4 w-full max-w-sm" onSubmit={handleSubmit(onSubmit)}>
-        <FormInput
-        control={control}
-          label="Mã số nhân viên"
-          name="username"
-          register={register}
-          errors={errors}
-          required
+    <div className="flex h-screen flex-col items-center justify-center bg-gradient-to-b from-black to-pink-500">
+      <div className="flex min-w-[400px] flex-col items-center rounded-[10px] border border-gray-200 bg-white p-4 shadow-md">
+        <Image
+          src={images.logo}
+          alt="logo"
+          width={100}
+          height={100}
+          className="mb-6 rounded-[10px]"
         />
-        <FormInput  
-          control={control}
-          label="Mật khẩu"
-          name="password"
-          type="password"
-          register={register}
-          errors={errors}
-          required
-        />
-        <FormCheckbox
-          name="remember"
-          control={control}
-          label="Ghi nhớ đăng nhập"
-          errors={errors}
-        />
-        <Button type="submit" className="w-full">Đăng nhập</Button>
-      </form>
+        <form className="w-full max-w-sm space-y-4" onSubmit={handleSubmit(onSubmit)}>
+          <FormInput
+            control={control}
+            label="Mã số nhân viên"
+            name="user_name"
+            errors={errors}
+            required
+            disabled={isSubmitting}
+          />
+          <FormInput
+            control={control}
+            label="Mật khẩu"
+            name="password"
+            type="password"
+            errors={errors}
+            required
+            disabled={isSubmitting}
+          />
+
+          <Button type="submit" className="w-full" disabled={isSubmitting || login.isPending}>
+            {login.isPending ? "Đang đăng nhập..." : "Đăng nhập"}
+          </Button>
+        </form>
       </div>
-     
     </div>
   );
 }
