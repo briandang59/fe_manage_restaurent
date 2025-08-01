@@ -9,4 +9,9 @@ export const PATHS = {
     ATTENDANCE: "/manage/attendance",
     ATTACHMENTS: "/manage/attachments",
   },
+  ROLE_PERMISSION: {
+    ROLE: "/role-permission/role",
+    PERMISSION: "/role-permission/permission",
+    ACCOUNT_PERMISSION: "/role-permission/account-permission",
+  },
 };

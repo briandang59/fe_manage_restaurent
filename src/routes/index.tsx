@@ -9,6 +9,8 @@ const Home = lazy(() => import("@/pages/Home"));
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const Login = lazy(() => import("@/pages/Login"));
 const ManageMenu = lazy(() => import("@/pages/manage/Menu"));
+const Role = lazy(() => import("@/pages/role-permission/Role"));
+const Permission = lazy(() => import("@/pages/role-permission/Permission"));
 
 const LoadingFallback = () => (
   <div className="flex h-screen items-center justify-center">Loading...</div>
@@ -44,6 +46,22 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingFallback />}>
             <ManageMenu />
+          </Suspense>
+        ),
+      },
+      {
+        path: PATHS.ROLE_PERMISSION.ROLE,
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <Role />
+          </Suspense>
+        ),
+      },
+      {
+        path: PATHS.ROLE_PERMISSION.PERMISSION,
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <Permission />
           </Suspense>
         ),
       },

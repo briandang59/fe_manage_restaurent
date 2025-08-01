@@ -52,16 +52,12 @@ const Sidebar = () => {
       icon: <LayoutDashboard className="size-4" />,
       key: "role-permission",
       children: [
-        { to: "/roles", label: "Vai trò", icon: <ChartArea size={14} /> },
-        { to: "/permission", label: "Quyền hạn", icon: <User size={14} /> },
-        { to: "/account-permission", label: "Tài khoản", icon: <User size={14} /> },
+        { to: PATHS.ROLE_PERMISSION.ROLE, label: "Vai trò", icon: <ChartArea size={14} /> },
+        { to: PATHS.ROLE_PERMISSION.PERMISSION, label: "Quyền hạn", icon: <User size={14} /> },
+        { to: PATHS.ROLE_PERMISSION.ACCOUNT_PERMISSION, label: "Tài khoản", icon: <User size={14} /> },
       ],
     },
-    {
-      to: "/menu",
-      label: "Thực đơn",
-      icon: <Utensils className="size-4" />,
-    },
+    
   ];
 
   return (
@@ -123,8 +119,8 @@ const Sidebar = () => {
             </div>
           ) : (
             <NavLink
-              key={item.to}
-              to={item.to}
+              key={item.key}
+              to={item.key}
               className={({ isActive }) =>
                 `flex items-center gap-2 rounded px-4 py-2 transition duration-200 hover:bg-[#5D4037] ${
                   isActive ? "bg-[#6D4C41]" : ""
