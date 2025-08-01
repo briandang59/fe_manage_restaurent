@@ -14,10 +14,12 @@ import {
   Calendar,
   ChartArea,
   Ham,
+  File,
 } from "lucide-react";
 import useLogout from "@/utils/hooks/useLogout";
 import images from "@/assets/images";
 import Image from "@/components/ui/image";
+import { PATHS } from "@/utils/constants/common/paths";
 
 const Sidebar = () => {
   const { logout } = useLogout();
@@ -35,12 +37,14 @@ const Sidebar = () => {
       icon: <LayoutDashboard className="size-4" />,
       key: "management",
       children: [
-        { to: "/dashboard", label: "Thống kê", icon: <ChartArea size={14} /> },
-        { to: "/staffs", label: "Nhân viên", icon: <User size={14} /> },
-        { to: "/warehouse", label: "Nguyên liệu", icon: <Ham size={14} /> },
-        { to: "/orders", label: "Đơn hàng", icon: <ClipboardList size={14} /> },
-        { to: "/schedules", label: "Lịch làm việc", icon: <Calendar size={14} /> },
-        { to: "/attendance", label: "Chấm công", icon: <Timer size={14} /> },
+        { to: PATHS.MANAGE.DASHBOARD, label: "Thống kê", icon: <ChartArea size={14} /> },
+        { to: PATHS.MANAGE.STAFFS, label: "Nhân viên", icon: <User size={14} /> },
+        { to: PATHS.MANAGE.WAREHOUSE, label: "Nguyên liệu", icon: <Ham size={14} /> },
+        { to: PATHS.MANAGE.ORDERS, label: "Đơn hàng", icon: <ClipboardList size={14} /> },
+        { to: PATHS.MANAGE.SCHEDULES, label: "Lịch làm việc", icon: <Calendar size={14} /> },
+        { to: PATHS.MANAGE.ATTENDANCE, label: "Chấm công", icon: <Timer size={14} /> },
+        { to: PATHS.MANAGE.MENU, label: "Thực đơn", icon: <Utensils size={14} /> },
+        { to: PATHS.MANAGE.ATTACHMENTS, label: "Tài liệu", icon: <File size={14} /> },
       ],
     },
     {
