@@ -31,6 +31,7 @@ function ManageMenu() {
         name: data.name || "",
         price: Number(data.price) || 0,
         description: data.description || "",
+        file_id: Number(data.file_id) || 0
       }
       await createMenuItemMutation.mutateAsync(createData)
       toast.success("Tạo món ăn thành công")
@@ -50,7 +51,8 @@ function ManageMenu() {
         name: data.name || "",
         price: Number(data.price) || 0,
         description: data.description || "",
-        id: data.id.toString()
+        id: data.id.toString(),
+        file_id: Number(data.file_id) || 0
       }
       await updateMenuItemMutation.mutateAsync(updateData)
       toast.success("Cập nhật món ăn thành công")

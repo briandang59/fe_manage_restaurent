@@ -31,7 +31,6 @@ out/
 Thumbs.db
 
 # IDEs
-.vscode/*
 !.vscode/extensions.json
 .idea/
 *.suo

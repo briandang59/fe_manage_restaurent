@@ -9,7 +9,7 @@ const menuApis = {
 
   getMenu: async (page: number, pageSize: number): Promise<ApiResponse<MenuItemResponse>> => {
     try {
-      const response = await axiosInstance.get(`/${urls.api}/${urls.menuItems}`, {
+      const response = await axiosInstance.get(`/${urls.api}/${urls.menuItems}?populate[file]=true`, {
         params: {
           page,
           page_size: pageSize

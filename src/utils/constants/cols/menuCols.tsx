@@ -13,11 +13,30 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { AttachmentResponse } from "@/types/response/attachment"
 
 export const createMenuColumns = (onEdit: (item: MenuItemResponse) => void, onDelete: (id: string) => void, isDeleting: boolean): ColumnDef<MenuItemResponse>[] => [
   {
+    accessorKey: "index",
+    header: "STT",
+    cell: ({ row }) => {
+      return <div className="text-center">{row.index + 1}</div>
+    },
+  },
+  {
     accessorKey: "name",
     header: "Tên món",
+  },
+  {
+    accessorKey: "file",
+    header: "Hình ảnh",
+    cell: ({ row }) => {
+      const file = row.getValue("file") as AttachmentResponse
+      if (file) {
+        return <img src={file.url} alt={file.file_name} className="w-10 h-10 rounded-full" />
+      }
+      return <div className="w-10 h-10 rounded-full bg-gray-200" />
+    },
   },
   {
     accessorKey: "price",

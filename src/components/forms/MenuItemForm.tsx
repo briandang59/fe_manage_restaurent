@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { FormInput } from "../forms-component/FormInput";
 import { FormSelect } from "../forms-component/FormSelect";
 import { FormArea } from "../forms-component/FormArea";
+import { FormAttachment } from "../forms-component/FormAttachment";
 import { Button } from "@/components/ui/button";
 import { MenuItemResponse } from "@/types/response/menuItem";
 
@@ -28,6 +29,7 @@ export function MenuItemForm({ onSubmit, initialData, isLoading, mode }: MenuIte
       description: "",
       price: 0,
       status: "active",
+      file_id: null,
     },
   });
 
@@ -67,6 +69,14 @@ export function MenuItemForm({ onSubmit, initialData, isLoading, mode }: MenuIte
         options={statusOptions}
         errors={errors}
         required
+        disabled={isLoading}
+      />
+
+      <FormAttachment
+        control={control}
+        label="Hình ảnh"
+        name="file_id"
+        errors={errors.file_id}
         disabled={isLoading}
       />
 

@@ -10,6 +10,7 @@ export interface CreateMenuItemRequest {
   name: string;
   price: number;
   description: string;
+  file_id: number;
   status?: string;
 }
 
