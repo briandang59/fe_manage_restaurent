@@ -14,8 +14,9 @@ interface MenuItemFormProps {
 }
 
 const statusOptions = [
-  { value: "active", label: "Hoạt động" },
-  { value: "inactive", label: "Không hoạt động" },
+  { value: "Available", label: "Có sẵn" },
+  { value: "Stop", label: "Dừng bán" },
+  { value: "Out of stock", label: "Hết hàng" },
 ];
 
 export function MenuItemForm({ onSubmit, initialData, isLoading, mode }: MenuItemFormProps) {
@@ -28,7 +29,7 @@ export function MenuItemForm({ onSubmit, initialData, isLoading, mode }: MenuIte
       name: "",
       description: "",
       price: 0,
-      status: "active",
+      status: "Available",
       file_id: null,
     },
   });
@@ -87,4 +88,4 @@ export function MenuItemForm({ onSubmit, initialData, isLoading, mode }: MenuIte
       </div>
     </form>
   );
-} 
+}

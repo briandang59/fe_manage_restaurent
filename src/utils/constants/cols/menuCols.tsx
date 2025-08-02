@@ -1,8 +1,8 @@
-import { ColumnDef } from "@tanstack/react-table"
-import { MenuItemResponse } from "@/types/response/menuItem"
-import { Button } from "@/components/ui/button"
-import { Edit, Trash2 } from "lucide-react"
-import { 
+import { ColumnDef } from "@tanstack/react-table";
+import { MenuItemResponse } from "@/types/response/menuItem";
+import { Button } from "@/components/ui/button";
+import { Edit, Trash2 } from "lucide-react";
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -12,15 +12,25 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { AttachmentResponse } from "@/types/response/attachment"
+} from "@/components/ui/alert-dialog";
+import { AttachmentResponse } from "@/types/response/attachment";
 
-export const createMenuColumns = (onEdit: (item: MenuItemResponse) => void, onDelete: (id: string) => void, isDeleting: boolean): ColumnDef<MenuItemResponse>[] => [
+const statusMapping = {
+  Available: "Có sẵn",
+  Stop: "Dừng bán",
+  "Out of stock": "Hết hàng",
+};
+
+export const createMenuColumns = (
+  onEdit: (item: MenuItemResponse) => void,
+  onDelete: (id: string) => void,
+  isDeleting: boolean
+): ColumnDef<MenuItemResponse>[] => [
   {
     accessorKey: "index",
     header: "STT",
     cell: ({ row }) => {
-      return <div className="text-center">{row.index + 1}</div>
+      return <div className="text-center">{row.index + 1}</div>;
     },
   },
   {
@@ -31,35 +41,35 @@ export const createMenuColumns = (onEdit: (item: MenuItemResponse) => void, onDe
     accessorKey: "file",
     header: "Hình ảnh",
     cell: ({ row }) => {
-      const file = row.getValue("file") as AttachmentResponse
+      const file = row.getValue("file") as AttachmentResponse;
       if (file) {
-        return <img src={file.url} alt={file.file_name} className="w-10 h-10 rounded-full" />
+        return <img src={file.url} alt={file.file_name} className="h-10 w-10 rounded-full" />;
       }
-      return <div className="w-10 h-10 rounded-full bg-gray-200" />
+      return <div className="h-10 w-10 rounded-full bg-gray-200" />;
     },
   },
   {
     accessorKey: "price",
     header: "Giá (VNĐ)",
     cell: ({ row }) => {
-      const price = row.getValue("price") as number
-      return new Intl.NumberFormat("vi-VN").format(price)
+      const price = row.getValue("price") as number;
+      return new Intl.NumberFormat("vi-VN").format(price);
     },
   },
   {
     accessorKey: "status",
     header: "Trạng thái",
     cell: ({ row }) => {
-      const status = row.getValue("status") as string
+      const status = row.getValue("status") as string;
       return (
-        <span className={`px-2 py-1 rounded-full text-xs ${
-          status === "Available" 
-            ? "bg-green-100 text-green-800" 
-            : "bg-red-100 text-red-800"
-        }`}>
-          {status === "Available" ? "Hoạt động" : "Tạm ngưng"}
+        <span
+          className={`rounded-full px-2 py-1 text-xs ${
+            status === "Available" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+          }`}
+        >
+          {statusMapping[status as keyof typeof statusMapping]}
         </span>
-      )
+      );
     },
   },
   {
@@ -70,25 +80,17 @@ export const createMenuColumns = (onEdit: (item: MenuItemResponse) => void, onDe
     id: "actions",
     header: "Thao tác",
     cell: ({ row }) => {
-      const menuItem = row.original
+      const menuItem = row.original;
 
       return (
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => onEdit(menuItem)}
-          >
+          <Button variant="outline" size="sm" onClick={() => onEdit(menuItem)}>
             <Edit className="h-4 w-4" />
           </Button>
-          
+
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button 
-                variant="outline" 
-                size="sm"
-                disabled={isDeleting}
-              >
+              <Button variant="outline" size="sm" disabled={isDeleting}>
                 <Trash2 className="h-4 w-4" />
               </Button>
             </AlertDialogTrigger>
@@ -111,7 +113,7 @@ export const createMenuColumns = (onEdit: (item: MenuItemResponse) => void, onDe
             </AlertDialogContent>
           </AlertDialog>
         </div>
-      )
+      );
     },
   },
-] 
+];

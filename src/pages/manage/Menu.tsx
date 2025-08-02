@@ -1,29 +1,42 @@
-import { Button } from "@/components/ui/button"
-import { File, Plus } from "lucide-react"
-import { DataTable } from "@/components/ui/data-table"
-import { useMenuItems, useDeleteMenuItem, useCreateMenuItem, useUpdateMenuItem } from "@/utils/hooks/useMenuItem"
-import { useState } from "react"
-import { createMenuColumns } from "@/utils/constants/cols"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { MenuItemForm } from "@/components/forms/MenuItemForm"
-import { MenuItemResponse } from "@/types/response/menuItem"
-import toast from "react-hot-toast"
+import { Button } from "@/components/ui/button";
+import { File, Plus } from "lucide-react";
+import { DataTable } from "@/components/ui/data-table";
+import {
+  useMenuItems,
+  useDeleteMenuItem,
+  useCreateMenuItem,
+  useUpdateMenuItem,
+} from "@/utils/hooks/useMenuItem";
+import { useState } from "react";
+import { createMenuColumns } from "@/utils/constants/cols";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { MenuItemForm } from "@/components/forms/MenuItemForm";
+import { MenuItemResponse } from "@/types/response/menuItem";
+import toast from "react-hot-toast";
 
 function ManageMenu() {
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
-  const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false)
-  const [selectedItem, setSelectedItem] = useState<MenuItemResponse | null>(null)
-  
-  const { data: menuData, isLoading, error } = useMenuItems(page, pageSize)
-  const deleteMutation = useDeleteMenuItem()
-  const createMenuItemMutation = useCreateMenuItem()
-  const updateMenuItemMutation = useUpdateMenuItem()
-  const paginationData = menuData?.pagination
-  const totalPages = paginationData ? Math.ceil(paginationData.total / paginationData.page_size) : 1
-  const totalItems = paginationData?.total || 0
-  const menuItems = menuData?.data || []
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<MenuItemResponse | null>(null);
+
+  const { data: menuData, isLoading, error } = useMenuItems(page, pageSize);
+  const deleteMutation = useDeleteMenuItem();
+  const createMenuItemMutation = useCreateMenuItem();
+  const updateMenuItemMutation = useUpdateMenuItem();
+  const paginationData = menuData?.pagination;
+  const totalPages = paginationData
+    ? Math.ceil(paginationData.total / paginationData.page_size)
+    : 1;
+  const totalItems = paginationData?.total || 0;
+  const menuItems = menuData?.data || [];
 
   const handleCreate = async (data: Partial<MenuItemResponse>) => {
     try {
@@ -31,79 +44,80 @@ function ManageMenu() {
         name: data.name || "",
         price: Number(data.price) || 0,
         description: data.description || "",
-        file_id: Number(data.file_id) || 0
-      }
-      await createMenuItemMutation.mutateAsync(createData)
-      toast.success("Tạo món ăn thành công")
-      setIsCreateDialogOpen(false)
+        file_id: Number(data.file_id) || 0,
+      };
+      await createMenuItemMutation.mutateAsync(createData);
+      toast.success("Tạo món ăn thành công");
+      setIsCreateDialogOpen(false);
     } catch (error: any) {
-      toast.error(`${error.message}` || "Có lỗi xảy ra khi tạo món ăn")
+      toast.error(`${error.message}` || "Có lỗi xảy ra khi tạo món ăn");
     }
-  }
+  };
 
   const handleUpdate = async (data: Partial<MenuItemResponse>) => {
     try {
       if (!data.id) {
-        toast.error("ID món ăn không tồn tại")
-        return
+        toast.error("ID món ăn không tồn tại");
+        return;
       }
       const updateData = {
         name: data.name || "",
         price: Number(data.price) || 0,
         description: data.description || "",
         id: data.id.toString(),
-        file_id: Number(data.file_id) || 0
-      }
-      await updateMenuItemMutation.mutateAsync(updateData)
-      toast.success("Cập nhật món ăn thành công")
-      setIsUpdateDialogOpen(false)
-      setSelectedItem(null)
+        file_id: Number(data.file_id) || 0,
+        status: data.status || "Available",
+      };
+      await updateMenuItemMutation.mutateAsync(updateData);
+      toast.success("Cập nhật món ăn thành công");
+      setIsUpdateDialogOpen(false);
+      setSelectedItem(null);
     } catch (error: any) {
-      toast.error(`${error.message}` || "Có lỗi xảy ra khi cập nhật món ăn")
+      toast.error(`${error.message}` || "Có lỗi xảy ra khi cập nhật món ăn");
     }
-  }
+  };
 
   const handleEditClick = (item: MenuItemResponse) => {
-    setSelectedItem(item)
-    setIsUpdateDialogOpen(true)
-  }
+    setSelectedItem(item);
+    setIsUpdateDialogOpen(true);
+  };
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteMutation.mutateAsync(id)
-      toast.success("Xóa món ăn thành công!")
+      await deleteMutation.mutateAsync(id);
+      toast.success("Xóa món ăn thành công!");
     } catch (error) {
-      toast.error("Có lỗi xảy ra khi xóa món ăn")
+      toast.error("Có lỗi xảy ra khi xóa món ăn");
     }
-  }
+  };
 
-  const menuColumns = createMenuColumns(handleEditClick, handleDelete, deleteMutation.isPending)
+  const menuColumns = createMenuColumns(handleEditClick, handleDelete, deleteMutation.isPending);
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <div className="flex h-64 items-center justify-center">
         <div className="text-lg">Đang tải dữ liệu...</div>
       </div>
-    )
+    );
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <div className="flex h-64 items-center justify-center">
         <div className="text-lg text-red-600">Có lỗi xảy ra khi tải dữ liệu</div>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="space-y-6 bg-white p-4 rounded-lg shadow-md">
-      <div className="flex justify-between items-center">
+    <div className="space-y-6 rounded-lg bg-white p-4 shadow-md">
+      <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Thực đơn</h1>
         <div className="flex gap-2">
           <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
             <DialogTrigger asChild>
               <Button>
-                <Plus className="h-4 w-4 mr-2" />
+                <Plus className="mr-2 h-4 w-4" />
                 <span>Thêm mới</span>
               </Button>
             </DialogTrigger>
@@ -111,27 +125,23 @@ function ManageMenu() {
               <DialogHeader>
                 <DialogTitle>Thêm món ăn mới</DialogTitle>
               </DialogHeader>
-              <MenuItemForm
-                onSubmit={handleCreate}
-                mode="create"
-                isLoading={false}
-              />
+              <MenuItemForm onSubmit={handleCreate} mode="create" isLoading={false} />
             </DialogContent>
           </Dialog>
 
           <Button variant="outline">
-            <File className="h-4 w-4 mr-2" />
+            <File className="mr-2 h-4 w-4" />
             <span>Nhập từ Excel</span>
           </Button>
         </div>
       </div>
-      
-      <DataTable 
-        columns={menuColumns} 
-        data={menuItems} 
-        page={page - 1} 
+
+      <DataTable
+        columns={menuColumns}
+        data={menuItems}
+        page={page - 1}
         pageSize={pageSize}
-        setPage={(newPage) => setPage(newPage + 1)} 
+        setPage={(newPage) => setPage(newPage + 1)}
         setPageSize={setPageSize}
         totalPages={totalPages}
         totalItems={totalItems}
@@ -154,7 +164,7 @@ function ManageMenu() {
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }
 
-export default ManageMenu
+export default ManageMenu;
