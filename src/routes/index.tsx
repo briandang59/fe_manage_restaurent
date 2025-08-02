@@ -12,6 +12,12 @@ const ManageMenu = lazy(() => import("@/pages/manage/Menu"));
 const Attachments = lazy(() => import("@/pages/manage/Attachments"));
 const Role = lazy(() => import("@/pages/role-permission/Role"));
 const Permission = lazy(() => import("@/pages/role-permission/Permission"));
+const AccountPermission = lazy(() => import("@/pages/role-permission/AccountPermisison"));
+const Attendance = lazy(() => import("@/pages/manage/Attendance"));
+const Schedules = lazy(() => import("@/pages/manage/Schedules"));
+const Orders = lazy(() => import("@/pages/manage/Orders"));
+const Warehouse = lazy(() => import("@/pages/manage/Warehouse"));
+const Staff = lazy(() => import("@/pages/manage/Staff"));
 
 const LoadingFallback = () => (
   <div className="flex h-screen items-center justify-center">Loading...</div>
@@ -71,6 +77,54 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingFallback />}>
             <Permission />
+          </Suspense>
+        ),
+      },
+      {
+        path: PATHS.ROLE_PERMISSION.ACCOUNT_PERMISSION,
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <AccountPermission />
+          </Suspense>
+        ),
+      },
+      {
+        path: PATHS.MANAGE.ATTENDANCE,
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <Attendance />
+          </Suspense>
+        ),
+      },
+      {
+        path: PATHS.MANAGE.SCHEDULES,
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <Schedules />
+          </Suspense>
+        ),
+      },
+      {
+        path: PATHS.MANAGE.ORDERS,
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <Orders />
+          </Suspense>
+        ),
+      },
+      {
+        path: PATHS.MANAGE.WAREHOUSE,
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <Warehouse />
+          </Suspense>
+        ),
+      },
+      {
+        path: PATHS.MANAGE.STAFFS,
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <Staff />
           </Suspense>
         ),
       },
