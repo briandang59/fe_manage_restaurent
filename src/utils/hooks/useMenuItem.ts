@@ -4,27 +4,13 @@ import { BaseResponse } from "@/types/response/baseResponse";
 import { ApiResponse } from "@/types/response/pagination";
 import { MenuItemResponse } from "@/types/response/menuItem";
 
-// Định nghĩa kiểu dữ liệu cho Menu Item
-export interface MenuItem {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  status: "active" | "inactive";
-  description: string;
-  image?: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
 
 // Định nghĩa kiểu dữ liệu cho request tạo mới
 export interface CreateMenuItemRequest {
   name: string;
-  category: string;
   price: number;
-  status: "active" | "inactive";
   description: string;
-  image?: string;
+  status?: string;
 }
 
 // Định nghĩa kiểu dữ liệu cho request cập nhật
@@ -131,40 +117,4 @@ export const useDeleteMenuItem = () => {
   });
 };
 
-// Hook để toggle trạng thái menu item
-export const useToggleMenuItemStatus = () => {
-  const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: "active" | "inactive" }): Promise<BaseResponse<MenuItemResponse>> => {
-      return await menuApis.updateMenuItem(id, { status });
-    },
-    onSuccess: (data, variables) => {
-      // Invalidate queries liên quan
-      queryClient.invalidateQueries({ queryKey: menuQueryKeys.lists() });
-      queryClient.invalidateQueries({ queryKey: menuQueryKeys.detail(variables.id) });
-      
-      // Cập nhật cache
-      queryClient.setQueryData(
-        menuQueryKeys.detail(variables.id),
-        data
-      );
-    },
-    onError: (error) => {
-      console.error("Lỗi khi thay đổi trạng thái menu item:", error);
-    },
-  });
-};
-
-// Hook để tìm kiếm menu items
-export const useSearchMenuItems = (searchTerm: string) => {
-  return useQuery({
-    queryKey: menuQueryKeys.list(searchTerm),
-    queryFn: async (): Promise<ApiResponse<MenuItemResponse>> => {
-      return await menuApis.searchMenuItems(searchTerm);
-    },
-    enabled: !!searchTerm,
-    staleTime: 2 * 60 * 1000, // 2 phút
-    gcTime: 5 * 60 * 1000, // 5 phút
-  });
-};

@@ -2,10 +2,19 @@ import { ColumnDef } from "@tanstack/react-table"
 import { MenuItemResponse } from "@/types/response/menuItem"
 import { Button } from "@/components/ui/button"
 import { Edit, Trash2 } from "lucide-react"
-import { useDeleteMenuItem, useToggleMenuItemStatus } from "@/utils/hooks/useMenuItem"
-import { toast } from "sonner"
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
-export const menuColumns: ColumnDef<MenuItemResponse>[] = [
+export const createMenuColumns = (onEdit: (item: MenuItemResponse) => void, onDelete: (id: string) => void, isDeleting: boolean): ColumnDef<MenuItemResponse>[] => [
   {
     accessorKey: "name",
     header: "Tên món",
@@ -43,51 +52,45 @@ export const menuColumns: ColumnDef<MenuItemResponse>[] = [
     header: "Thao tác",
     cell: ({ row }) => {
       const menuItem = row.original
-      const deleteMutation = useDeleteMenuItem()
-      const toggleStatusMutation = useToggleMenuItemStatus()
-
-      const handleDelete = async () => {
-        if (confirm("Bạn có chắc chắn muốn xóa món này?")) {
-          try {
-            await deleteMutation.mutateAsync(menuItem.id.toString())
-            toast.success("Xóa món ăn thành công!")
-          } catch (error) {
-            toast.error("Có lỗi xảy ra khi xóa món ăn")
-          }
-        }
-      }
-
-      const handleToggleStatus = async () => {
-        const newStatus = menuItem.status === "Available" ? "Unavailable" : "Available"
-        try {
-          await toggleStatusMutation.mutateAsync({ id: menuItem.id.toString(), status: newStatus as "active" | "inactive" })
-          toast.success("Cập nhật trạng thái thành công!")
-        } catch (error) {
-          toast.error("Có lỗi xảy ra khi cập nhật trạng thái")
-        }
-      }
 
       return (
         <div className="flex gap-2">
-          <Button variant="outline" size="sm">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => onEdit(menuItem)}
+          >
             <Edit className="h-4 w-4" />
           </Button>
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={handleToggleStatus}
-            disabled={toggleStatusMutation.isPending}
-          >
-            {menuItem.status === "Available" ? "Tạm ngưng" : "Kích hoạt"}
-          </Button>
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={handleDelete}
-            disabled={deleteMutation.isPending}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button 
+                variant="outline" 
+                size="sm"
+                disabled={isDeleting}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Bạn có chắc chắn muốn xóa món "{menuItem.name}"? Hành động này không thể hoàn tác.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Hủy</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => onDelete(menuItem.id.toString())}
+                  className="bg-red-600 hover:bg-red-700"
+                >
+                  Xóa
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       )
     },

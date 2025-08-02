@@ -6,7 +6,7 @@ import { MenuItemResponse } from "@/types/response/menuItem";
 import { ApiResponse } from "@/types/response/pagination";
 
 const menuApis = {
-  // Lấy danh sách menu items
+
   getMenu: async (page: number, pageSize: number): Promise<ApiResponse<MenuItemResponse>> => {
     try {
       const response = await axiosInstance.get(`/${urls.api}/${urls.menuItems}`, {
@@ -21,7 +21,7 @@ const menuApis = {
     }
   },
 
-  // Lấy chi tiết một menu item
+
   getMenuItemById: async (id: string): Promise<BaseResponse<MenuItemResponse>> => {
     try {
       const response = await axiosInstance.get(`/${urls.api}/${urls.menuItems}/${id}`);
@@ -31,7 +31,6 @@ const menuApis = {
     }
   },
 
-  // Tạo mới menu item
   createMenuItem: async (data: CreateMenuItemRequest): Promise<BaseResponse<MenuItemResponse>> => {
     try {
       const response = await axiosInstance.post(`/${urls.api}/${urls.menuItems}`, data);
@@ -41,17 +40,15 @@ const menuApis = {
     }
   },
 
-  // Cập nhật menu item
   updateMenuItem: async (id: string, data: Partial<CreateMenuItemRequest>): Promise<BaseResponse<MenuItemResponse>> => {
     try {
-      const response = await axiosInstance.put(`/${urls.api}/${urls.menuItems}/${id}`, data);
+      const response = await axiosInstance.patch(`/${urls.api}/${urls.menuItems}/${id}`, data);
       return response.data;
     } catch (error) {
       throw error;
     }
   },
 
-  // Xóa menu item
   deleteMenuItem: async (id: string): Promise<BaseResponse<void>> => {
     try {
       const response = await axiosInstance.delete(`/${urls.api}/${urls.menuItems}/${id}`);
@@ -61,17 +58,7 @@ const menuApis = {
     }
   },
 
-  // Tìm kiếm menu items
-  searchMenuItems: async (searchTerm: string): Promise<ApiResponse<MenuItemResponse>> => {
-    try {
-      const response = await axiosInstance.get(`/${urls.api}/${urls.menuItems}/search`, {
-        params: { q: searchTerm }
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  },
+ 
 };
 
 export default menuApis;

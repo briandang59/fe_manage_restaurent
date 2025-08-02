@@ -6,8 +6,9 @@ import images from "@/assets/images";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { AuthRequestTypes } from "@/types/request/auth";
-import { LoginResponseData, useAuth } from "@/utils/hooks/useAuth";
+import { useAuth } from "@/utils/hooks/useAuth";
 import { BaseResponse } from "@/types/response/baseResponse";
+import { tokenManager } from "@/lib/tokenManager";
 
 function Login() {
   const {
@@ -17,21 +18,23 @@ function Login() {
   } = useForm<AuthRequestTypes>();
 
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { loginMutation } = useAuth();
 
   const onSubmit = async (data: AuthRequestTypes) => {
     try {
-      login.mutate(data, {
-        onSuccess: (responseData: BaseResponse<LoginResponseData>) => {
-          toast.success("Đăng nhập thành công");
-          localStorage.setItem("token", responseData.data?.token || "");
-
-          navigate("/", { replace: true });
-        },
-        onError: (error: any) => {
-          toast.error(error.message || "Đăng nhập thất bại");
-        },
-      });
+      loginMutation.mutate(
+        { username: data.user_name, password: data.password },
+        {
+          onSuccess: (responseData: BaseResponse<any>) => {
+            toast.success("Đăng nhập thành công");
+            tokenManager.setToken(responseData.data?.token || "");
+            navigate("/", { replace: true });
+          },
+          onError: (error: any) => {
+            toast.error(error.message || "Đăng nhập thất bại");
+          },
+        }
+      );
     } catch (error) {
       toast.error(`${error}`);
     }
@@ -66,8 +69,8 @@ function Login() {
             disabled={isSubmitting}
           />
 
-          <Button type="submit" className="w-full" disabled={isSubmitting || login.isPending}>
-            {login.isPending ? "Đang đăng nhập..." : "Đăng nhập"}
+          <Button type="submit" className="w-full" disabled={isSubmitting || loginMutation.isPending}>
+            {loginMutation.isPending ? "Đang đăng nhập..." : "Đăng nhập"}
           </Button>
         </form>
       </div>

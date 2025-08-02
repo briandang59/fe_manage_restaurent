@@ -1,1 +1,1 @@
-export { menuColumns } from './menuCols' 
+export { createMenuColumns } from './menuCols' 
