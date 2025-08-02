@@ -6,5 +6,7 @@ const urls = {
   api: "api",
   roles: "roles",
   permissions: "permissions",
+  files: "files",
+  upload: "upload",
 };
 export default urls;

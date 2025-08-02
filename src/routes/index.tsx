@@ -9,6 +9,7 @@ const Home = lazy(() => import("@/pages/Home"));
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const Login = lazy(() => import("@/pages/Login"));
 const ManageMenu = lazy(() => import("@/pages/manage/Menu"));
+const Attachments = lazy(() => import("@/pages/manage/Attachments"));
 const Role = lazy(() => import("@/pages/role-permission/Role"));
 const Permission = lazy(() => import("@/pages/role-permission/Permission"));
 
@@ -46,6 +47,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingFallback />}>
             <ManageMenu />
+          </Suspense>
+        ),
+      },
+      {
+        path: PATHS.MANAGE.ATTACHMENTS,
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <Attachments />
           </Suspense>
         ),
       },
