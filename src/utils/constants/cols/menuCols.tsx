@@ -20,6 +20,11 @@ const statusMapping = {
   Stop: "Dừng bán",
   "Out of stock": "Hết hàng",
 };
+const statusColorMapping = {
+  Available: "bg-green-100 text-green-800",
+  Stop: "bg-red-100 text-red-800",
+  "Out of stock": "bg-yellow-100 text-yellow-800",
+};
 
 export const createMenuColumns = (
   onEdit: (item: MenuItemResponse) => void,
@@ -63,9 +68,7 @@ export const createMenuColumns = (
       const status = row.getValue("status") as string;
       return (
         <span
-          className={`rounded-full px-2 py-1 text-xs ${
-            status === "Available" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-          }`}
+          className={`rounded-full px-2 py-1 text-xs ${statusColorMapping[status as keyof typeof statusColorMapping]}`}
         >
           {statusMapping[status as keyof typeof statusMapping]}
         </span>

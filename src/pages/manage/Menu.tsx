@@ -38,42 +38,34 @@ function ManageMenu() {
   const totalItems = paginationData?.total || 0;
   const menuItems = menuData?.data || [];
 
-  const handleCreate = async (data: Partial<MenuItemResponse>) => {
+  const handleSubmitMenuItem = async (data: Partial<MenuItemResponse>) => {
     try {
-      const createData = {
+      const commonData = {
         name: data.name || "",
         price: Number(data.price) || 0,
         description: data.description || "",
         file_id: Number(data.file_id) || 0,
       };
-      await createMenuItemMutation.mutateAsync(createData);
-      toast.success("Tạo món ăn thành công");
-      setIsCreateDialogOpen(false);
-    } catch (error: any) {
-      toast.error(`${error.message}` || "Có lỗi xảy ra khi tạo món ăn");
-    }
-  };
 
-  const handleUpdate = async (data: Partial<MenuItemResponse>) => {
-    try {
-      if (!data.id) {
-        toast.error("ID món ăn không tồn tại");
-        return;
+      if (data.id) {
+        // Cập nhật
+        const updateData = {
+          ...commonData,
+          id: data.id.toString(),
+          status: data.status || "Available",
+        };
+        await updateMenuItemMutation.mutateAsync(updateData);
+        toast.success("Cập nhật món ăn thành công");
+        setIsUpdateDialogOpen(false);
+        setSelectedItem(null);
+      } else {
+        // Tạo mới
+        await createMenuItemMutation.mutateAsync(commonData);
+        toast.success("Tạo món ăn thành công");
+        setIsCreateDialogOpen(false);
       }
-      const updateData = {
-        name: data.name || "",
-        price: Number(data.price) || 0,
-        description: data.description || "",
-        id: data.id.toString(),
-        file_id: Number(data.file_id) || 0,
-        status: data.status || "Available",
-      };
-      await updateMenuItemMutation.mutateAsync(updateData);
-      toast.success("Cập nhật món ăn thành công");
-      setIsUpdateDialogOpen(false);
-      setSelectedItem(null);
     } catch (error: any) {
-      toast.error(`${error.message}` || "Có lỗi xảy ra khi cập nhật món ăn");
+      toast.error(`${error.message}` || "Có lỗi xảy ra khi xử lý món ăn");
     }
   };
 
@@ -125,7 +117,7 @@ function ManageMenu() {
               <DialogHeader>
                 <DialogTitle>Thêm món ăn mới</DialogTitle>
               </DialogHeader>
-              <MenuItemForm onSubmit={handleCreate} mode="create" isLoading={false} />
+              <MenuItemForm onSubmit={handleSubmitMenuItem} mode="create" isLoading={false} />
             </DialogContent>
           </Dialog>
 
@@ -155,7 +147,7 @@ function ManageMenu() {
           </DialogHeader>
           {selectedItem && (
             <MenuItemForm
-              onSubmit={handleUpdate}
+              onSubmit={handleSubmitMenuItem}
               initialData={selectedItem}
               mode="update"
               isLoading={false}
