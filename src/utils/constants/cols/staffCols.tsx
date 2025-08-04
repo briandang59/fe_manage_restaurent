@@ -13,6 +13,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { StaffResponse } from "@/types/response/staff";
+import dayjs from "dayjs";
+import { formatNumberWithCommas } from "@/utils/functions/formatNumberWithCommas";
 
 export const createStaffColumns = (
   onEdit: (item: StaffResponse) => void,
@@ -43,7 +45,7 @@ export const createStaffColumns = (
     header: "Ngày sinh",
     cell: ({ row }) => {
       const birthday = row.getValue("birthday") as string;
-      return birthday;
+      return <p>{dayjs(birthday).format("YYYY/MM/DD")}</p>;
     },
   },
   {
@@ -79,7 +81,11 @@ export const createStaffColumns = (
     header: "Ngày tham gia",
     cell: ({ row }) => {
       const join_date = row.getValue("join_date") as string;
-      return <span className="rounded-full px-2 py-1 text-[14px]">{join_date}</span>;
+      return (
+        <span className="rounded-full px-2 py-1 text-[14px]">
+          {dayjs(join_date).format("YYYY/MM/DD")}
+        </span>
+      );
     },
   },
   {
@@ -87,7 +93,11 @@ export const createStaffColumns = (
     header: "Lương cơ bản",
     cell: ({ row }) => {
       const base_salary = row.getValue("base_salary") as number;
-      return <span className="rounded-full px-2 py-1 text-[14px]">{base_salary}</span>;
+      return (
+        <span className="rounded-full px-2 py-1 text-[14px]">
+          {formatNumberWithCommas(base_salary)}
+        </span>
+      );
     },
   },
   {
@@ -95,7 +105,11 @@ export const createStaffColumns = (
     header: "Lương theo giờ",
     cell: ({ row }) => {
       const salary_per_hour = row.getValue("salary_per_hour") as number;
-      return <span className="rounded-full px-2 py-1 text-[14px]">{salary_per_hour}</span>;
+      return (
+        <span className="rounded-full px-2 py-1 text-[14px]">
+          {formatNumberWithCommas(salary_per_hour)}
+        </span>
+      );
     },
   },
   {

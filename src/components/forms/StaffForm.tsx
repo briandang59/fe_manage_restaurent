@@ -96,8 +96,8 @@ function StaffForm({ onSubmit, isLoading, initialData }: StaffFormProps) {
         label="Loại lịch làm việc"
         name="schedule_type"
         options={[
-          { value: "full_time", label: "Toàn thời gian" },
-          { value: "part_time", label: "Bán thời gian" },
+          { value: "FULLTIME", label: "Toàn thời gian" },
+          { value: "PARTTIME", label: "Bán thời gian" },
         ]}
         errors={errors}
         required
