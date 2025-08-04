@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";      
+import { useQuery } from "@tanstack/react-query";
 import { ApiResponse } from "@/types/response/pagination";
 import { RoleResponse } from "@/types/response/roles";
 import roleApis from "@/apis/roleApis";
@@ -11,14 +11,13 @@ export const roleQueryKeys = {
   detail: (id: string) => [...roleQueryKeys.details(), id] as const,
 };
 
-export const useRoles = (page: number, pageSize: number) => {
+export const useRoles = (page: number, pageSize: number, search?: string) => {
   return useQuery({
-    queryKey: [...roleQueryKeys.lists(), page, pageSize],
+    queryKey: [...roleQueryKeys.lists(), page, pageSize, search],
     queryFn: async (): Promise<ApiResponse<RoleResponse>> => {
-      return await roleApis.getRoles(page, pageSize);
+      return await roleApis.getRoles(page, pageSize, search);
     },
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
 };
-

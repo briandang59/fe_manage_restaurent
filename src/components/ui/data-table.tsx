@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   ColumnDef,
   flexRender,
@@ -10,7 +10,7 @@ import {
   SortingState,
   getFilteredRowModel,
   ColumnFiltersState,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -19,21 +19,21 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  page: number
-  pageSize: number
-  setPage: (page: number) => void
-  setPageSize: (pageSize: number) => void
-  totalPages?: number
-  totalItems?: number
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  page: number;
+  pageSize: number;
+  setPage: (page: number) => void;
+  setPageSize: (pageSize: number) => void;
+  totalPages?: number;
+  totalItems?: number;
 }
 
 export function DataTable<TData, TValue>({
@@ -46,8 +46,8 @@ export function DataTable<TData, TValue>({
   totalPages = 1,
   totalItems = 0,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
     data,
@@ -64,21 +64,19 @@ export function DataTable<TData, TValue>({
     // Tắt pagination của React Table vì chúng ta dùng server-side pagination
     manualPagination: true,
     pageCount: totalPages,
-  })
+  });
 
   // Tính toán trạng thái nút pagination
-  const canGoPrevious = page > 0
-  const canGoNext = page < totalPages - 1
+  const canGoPrevious = page > 0;
+  const canGoNext = page < totalPages - 1;
 
   return (
-    <div className="space-y-4">
+    <div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Tìm kiếm món ăn..."
+          placeholder="Tìm kiếm..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
+          onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />
       </div>
@@ -92,12 +90,9 @@ export function DataTable<TData, TValue>({
                     <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                        : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -105,26 +100,17 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   Không có dữ liệu.
                 </TableCell>
               </TableRow>
@@ -133,17 +119,15 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex items-center justify-between space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {totalItems} món ăn
-        </div>
+        <div className="flex-1 text-sm text-muted-foreground">{totalItems} dữ liệu</div>
         <div className="flex items-center space-x-6 lg:space-x-8">
           <div className="flex items-center space-x-2">
             <p className="text-sm font-medium">Hàng mỗi trang</p>
             <select
               value={pageSize}
               onChange={(e) => {
-                setPageSize(Number(e.target.value))
-                setPage(0) // Reset về trang đầu khi thay đổi page size
+                setPageSize(Number(e.target.value));
+                setPage(0); // Reset về trang đầu khi thay đổi page size
               }}
               className="h-8 w-[70px] rounded border border-input bg-background px-3 py-1 text-sm"
             >
@@ -198,5 +182,5 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
     </div>
-  )
-} 
+  );
+}

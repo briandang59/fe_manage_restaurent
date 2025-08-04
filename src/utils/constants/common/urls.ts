@@ -8,5 +8,6 @@ const urls = {
   permissions: "permissions",
   files: "files",
   upload: "upload",
+  employees: "employees",
 };
 export default urls;

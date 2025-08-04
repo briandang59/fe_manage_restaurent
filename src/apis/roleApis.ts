@@ -4,13 +4,18 @@ import { ApiResponse } from "@/types/response/pagination";
 import { RoleResponse } from "@/types/response/roles";
 
 const roleApis = {
-  getRoles: async (page: number, pageSize: number): Promise<ApiResponse<RoleResponse>> => {
+  getRoles: async (
+    page: number,
+    pageSize: number,
+    search?: string
+  ): Promise<ApiResponse<RoleResponse>> => {
     try {
       const response = await axiosInstance.get(`/${urls.api}/${urls.roles}`, {
         params: {
           page,
-          page_size: pageSize
-        }
+          page_size: pageSize,
+          ...(search && { search }),
+        },
       });
       return response.data;
     } catch (error) {
