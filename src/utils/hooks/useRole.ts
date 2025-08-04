@@ -1,23 +1,44 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiResponse } from "@/types/response/pagination";
 import { RoleResponse } from "@/types/response/roles";
 import roleApis from "@/apis/roleApis";
+import { BaseResponse } from "@/types/response/baseResponse";
 
+interface CreateRoleRequest {
+    permission_name: string;
+}
 export const roleQueryKeys = {
-  all: ["role"] as const,
-  lists: () => [...roleQueryKeys.all, "list"] as const,
-  list: (filters: string) => [...roleQueryKeys.lists(), { filters }] as const,
-  details: () => [...roleQueryKeys.all, "detail"] as const,
-  detail: (id: string) => [...roleQueryKeys.details(), id] as const,
+    all: ["role"] as const,
+    lists: () => [...roleQueryKeys.all, "list"] as const,
+    list: (filters: string) => [...roleQueryKeys.lists(), { filters }] as const,
+    details: () => [...roleQueryKeys.all, "detail"] as const,
+    detail: (id: string) => [...roleQueryKeys.details(), id] as const,
 };
 
 export const useRoles = (page: number, pageSize: number, search?: string) => {
-  return useQuery({
-    queryKey: [...roleQueryKeys.lists(), page, pageSize, search],
-    queryFn: async (): Promise<ApiResponse<RoleResponse>> => {
-      return await roleApis.getRoles(page, pageSize, search);
-    },
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-  });
+    return useQuery({
+        queryKey: [...roleQueryKeys.lists(), page, pageSize, search],
+        queryFn: async (): Promise<ApiResponse<RoleResponse>> => {
+            return await roleApis.getRoles(page, pageSize, search);
+        },
+        staleTime: 5 * 60 * 1000,
+        gcTime: 10 * 60 * 1000,
+    });
+};
+
+export const useCreateRoles = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (data: CreateRoleRequest): Promise<BaseResponse<RoleResponse>> => {
+            return await roleApis.createRoles(data);
+        },
+        onSuccess: () => {
+            // Invalidate và refetch danh sách menu
+            queryClient.invalidateQueries({ queryKey: roleQueryKeys.lists() });
+        },
+        onError: (error) => {
+            console.error("Lỗi khi tạo menu item:", error);
+        },
+    });
 };

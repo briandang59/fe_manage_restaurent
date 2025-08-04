@@ -2,6 +2,7 @@ import { axiosInstance } from "@/lib/axiosInstance";
 import urls from "@/utils/constants/common/urls";
 import { ApiResponse } from "@/types/response/pagination";
 import { RoleResponse } from "@/types/response/roles";
+import { BaseResponse } from "@/types/response/baseResponse";
 
 const roleApis = {
     getRoles: async (
@@ -26,7 +27,7 @@ const roleApis = {
         }
     },
 
-    createRoles: async (data: { permission_name: string }): Promise<ApiResponse<RoleResponse>> => {
+    createRoles: async (data: { permission_name: string }): Promise<BaseResponse<RoleResponse>> => {
         try {
             const response = await axiosInstance.post(`/${urls.api}/${urls.roles}`, { data });
             return response.data;
