@@ -11,15 +11,12 @@ const attendanceApis = {
         pageSize: number
     ): Promise<ApiResponse<AttendanceResponse>> => {
         try {
-            const response = await axiosInstance.get(
-                `/${urls.api}/${urls.attendances}?populate[file]=true`,
-                {
-                    params: {
-                        page,
-                        page_size: pageSize,
-                    },
-                }
-            );
+            const response = await axiosInstance.get(`/${urls.api}/${urls.attendances}`, {
+                params: {
+                    page,
+                    page_size: pageSize,
+                },
+            });
             return response.data;
         } catch (error) {
             throw error;

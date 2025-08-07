@@ -11,15 +11,12 @@ const availibilitiesApis = {
         pageSize: number
     ): Promise<ApiResponse<AvailibilitiesResponse>> => {
         try {
-            const response = await axiosInstance.get(
-                `/${urls.api}/${urls.availibilities}?populate[file]=true`,
-                {
-                    params: {
-                        page,
-                        page_size: pageSize,
-                    },
-                }
-            );
+            const response = await axiosInstance.get(`/${urls.api}/${urls.availibilities}`, {
+                params: {
+                    page,
+                    page_size: pageSize,
+                },
+            });
             return response.data;
         } catch (error) {
             throw error;

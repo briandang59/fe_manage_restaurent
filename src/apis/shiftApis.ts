@@ -8,15 +8,12 @@ import { ShiftResponse } from "@/types/response/shift";
 const shiftApis = {
     getShift: async (page: number, pageSize: number): Promise<ApiResponse<ShiftResponse>> => {
         try {
-            const response = await axiosInstance.get(
-                `/${urls.api}/${urls.shifts}?populate[file]=true`,
-                {
-                    params: {
-                        page,
-                        page_size: pageSize,
-                    },
-                }
-            );
+            const response = await axiosInstance.get(`/${urls.api}/${urls.shifts}`, {
+                params: {
+                    page,
+                    page_size: pageSize,
+                },
+            });
             return response.data;
         } catch (error) {
             throw error;

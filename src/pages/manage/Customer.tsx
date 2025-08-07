@@ -1,26 +1,31 @@
 import Error from "@/components/common/Error";
 import Loading from "@/components/common/Loading";
-import TableForm from "@/components/forms/TableForm";
+import CustomerForm from "@/components/forms/CustomerForm";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { createTableColumns } from "@/utils/constants/cols/tableCols";
-import { useTables, useCreateTable, useUpdateTable, useDeleteTable } from "@/utils/hooks/useTable";
+import { createCustomerColumns } from "@/utils/constants/cols/customerCols";
+import {
+    useCustomers,
+    useCreateCustomer,
+    useUpdateCustomer,
+    useDeleteCustomer,
+} from "@/utils/hooks/useCustomer";
 import { useState } from "react";
-import { TableResponse } from "@/types/response/table";
+import { CustomerResponse } from "@/types/response/customer";
 import { toast } from "sonner";
 
-function Table() {
+function Customer() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-    const [selectedItem, setSelectedItem] = useState<TableResponse | null>(null);
+    const [selectedItem, setSelectedItem] = useState<CustomerResponse | null>(null);
     const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
-    const { data: tableData, isLoading, error } = useTables(page, pageSize);
-    const createMutation = useCreateTable();
-    const updateMutation = useUpdateTable();
-    const deleteMutation = useDeleteTable();
-    const tableItem = tableData?.data || [];
-    const paginationData = tableData?.pagination;
+    const { data: customerData, isLoading, error } = useCustomers(page, pageSize);
+    const createMutation = useCreateCustomer();
+    const updateMutation = useUpdateCustomer();
+    const deleteMutation = useDeleteCustomer();
+    const customerItem = customerData?.data || [];
+    const paginationData = customerData?.pagination;
     const totalPages = paginationData
         ? Math.ceil(paginationData.total / paginationData.page_size)
         : 1;
@@ -34,8 +39,8 @@ function Table() {
         return <Error />;
     }
 
-    const handleSubmitTable = async (data: Partial<TableResponse>) => {
-        if (!data.name) {
+    const handleSubmitCustomer = async (data: Partial<CustomerResponse>) => {
+        if (!data.name || !data.email || !data.phone) {
             toast.error("Vui lòng điền đầy đủ thông tin");
             return;
         }
@@ -43,6 +48,8 @@ function Table() {
         try {
             const commonData = {
                 name: data.name,
+                email: data.email,
+                phone: data.phone,
             };
 
             if (data.id) {
@@ -51,67 +58,67 @@ function Table() {
                     ...commonData,
                     id: data.id.toString(),
                 });
-                toast.success("Cập nhật bàn thành công");
+                toast.success("Cập nhật khách hàng thành công");
                 setIsUpdateDialogOpen(false);
                 setSelectedItem(null);
             } else {
                 // Tạo mới
                 await createMutation.mutateAsync(commonData);
-                toast.success("Tạo bàn thành công");
+                toast.success("Tạo khách hàng thành công");
             }
         } catch (error: any) {
-            toast.error(error.message || "Có lỗi xảy ra khi xử lý bàn");
+            toast.error(error.message || "Có lỗi xảy ra khi xử lý khách hàng");
         }
     };
 
-    const handleDeleteTable = async (id: string) => {
+    const handleDeleteCustomer = async (id: string) => {
         try {
             await deleteMutation.mutateAsync(id);
-            toast.success("Xóa bàn thành công");
+            toast.success("Xóa khách hàng thành công");
         } catch (error: any) {
-            toast.error(error.message || "Có lỗi xảy ra khi xóa bàn");
+            toast.error(error.message || "Có lỗi xảy ra khi xóa khách hàng");
         }
     };
 
-    const tableCols = createTableColumns(
+    const customerCols = createCustomerColumns(
         (item) => {
             setSelectedItem(item);
             setIsUpdateDialogOpen(true);
         },
-        handleDeleteTable,
+        handleDeleteCustomer,
         deleteMutation.isPending
     );
 
     return (
         <div className="space-y-6 rounded-lg bg-white p-4 shadow-md">
             <div className="flex items-center justify-between gap-2">
-                <h1 className="text-[20px] font-bold">Quản lý bàn</h1>
+                <h1 className="text-[20px] font-bold">Quản lý khách hàng</h1>
                 <Sheet>
                     <SheetTrigger>
                         <Button>Thêm mới</Button>
                     </SheetTrigger>
                     <SheetContent>
                         <SheetHeader>
-                            <SheetTitle>Tạo bàn mới</SheetTitle>
+                            <SheetTitle>Tạo khách hàng mới</SheetTitle>
                         </SheetHeader>
-                        <TableForm
+                        <CustomerForm
                             mode="create"
-                            onSubmit={handleSubmitTable}
+                            onSubmit={handleSubmitCustomer}
                             isLoading={createMutation.isPending}
                         />
                     </SheetContent>
                 </Sheet>
             </div>
 
-            {/* Dialog cập nhật bàn */}
+            {/* Dialog cập nhật khách hàng */}
             <Sheet open={isUpdateDialogOpen} onOpenChange={setIsUpdateDialogOpen}>
                 <SheetContent>
                     <SheetHeader>
-                        <SheetTitle>Cập nhật bàn</SheetTitle>
+                        <SheetTitle>Cập nhật khách hàng</SheetTitle>
                     </SheetHeader>
-                    <TableForm
+                    <CustomerForm
                         mode="update"
-                        onSubmit={handleSubmitTable}
+                        onSubmit={handleSubmitCustomer}
                         initialData={selectedItem || undefined}
                         isLoading={updateMutation.isPending}
                     />
@@ -119,8 +126,8 @@ function Table() {
             </Sheet>
 
             <DataTable
-                columns={tableCols}
-                data={tableItem}
+                columns={customerCols}
+                data={customerItem}
                 page={page - 1}
                 pageSize={pageSize}
                 setPage={(newPage) => setPage(newPage + 1)}
@@ -132,4 +139,4 @@ function Table() {
     );
 }
 
-export default Table;
+export default Customer;

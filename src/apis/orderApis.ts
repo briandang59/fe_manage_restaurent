@@ -8,15 +8,12 @@ import { OrderResponse } from "@/types/response/order";
 const orderApis = {
     getOrder: async (page: number, pageSize: number): Promise<ApiResponse<OrderResponse>> => {
         try {
-            const response = await axiosInstance.get(
-                `/${urls.api}/${urls.orders}?populate[file]=true`,
-                {
-                    params: {
-                        page,
-                        page_size: pageSize,
-                    },
-                }
-            );
+            const response = await axiosInstance.get(`/${urls.api}/${urls.orders}`, {
+                params: {
+                    page,
+                    page_size: pageSize,
+                },
+            });
             return response.data;
         } catch (error) {
             throw error;

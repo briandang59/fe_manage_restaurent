@@ -8,15 +8,12 @@ import { TableResponse } from "@/types/response/table";
 const tableApis = {
     getTable: async (page: number, pageSize: number): Promise<ApiResponse<TableResponse>> => {
         try {
-            const response = await axiosInstance.get(
-                `/${urls.api}/${urls.tables}?populate[file]=true`,
-                {
-                    params: {
-                        page,
-                        page_size: pageSize,
-                    },
-                }
-            );
+            const response = await axiosInstance.get(`/${urls.api}/${urls.tables}`, {
+                params: {
+                    page,
+                    page_size: pageSize,
+                },
+            });
             return response.data;
         } catch (error) {
             throw error;

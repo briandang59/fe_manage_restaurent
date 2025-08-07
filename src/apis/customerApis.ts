@@ -8,15 +8,12 @@ import { CustomerResponse } from "@/types/response/customer";
 const customerApis = {
     getCustomer: async (page: number, pageSize: number): Promise<ApiResponse<CustomerResponse>> => {
         try {
-            const response = await axiosInstance.get(
-                `/${urls.api}/${urls.customers}?populate[file]=true`,
-                {
-                    params: {
-                        page,
-                        page_size: pageSize,
-                    },
-                }
-            );
+            const response = await axiosInstance.get(`/${urls.api}/${urls.customers}`, {
+                params: {
+                    page,
+                    page_size: pageSize,
+                },
+            });
             return response.data;
         } catch (error) {
             throw error;
