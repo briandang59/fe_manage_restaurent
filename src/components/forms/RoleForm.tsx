@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
 import { usePermissions } from "@/utils/hooks/usePermission";
 import { RoleResponse } from "@/types/response/roles";
-import { FormSelectWithPagination } from "../forms-component/FormSelectWithPagination";
+import { Checkbox } from "../ui/checkbox";
 
 interface RoleFormProps {
     onSubmit: (data: Partial<RoleResponse>) => void;
@@ -14,6 +14,10 @@ interface RoleFormProps {
 }
 
 function RoleForm({ onSubmit, initialData, isLoading }: RoleFormProps) {
+    const [selectedPermissions, setSelectedPermissions] = useState<number[]>(() => {
+        if (!initialData?.permissions) return [];
+        return initialData.permissions.map((p) => (typeof p === "number" ? p : p.id));
+    });
     const {
         handleSubmit,
         control,
@@ -28,49 +32,67 @@ function RoleForm({ onSubmit, initialData, isLoading }: RoleFormProps) {
 
     useEffect(() => {
         if (initialData) {
-            reset(initialData);
+            reset({
+                ...initialData,
+                permissions: initialData.permissions || [],
+            });
+            const newPermissions = initialData.permissions
+                ? initialData.permissions.map((p) => (typeof p === "number" ? p : p.id))
+                : [];
+            setSelectedPermissions(newPermissions);
         }
     }, [initialData, reset]);
 
-    const [permissionPage, setPermissionPage] = useState<number>(1);
-    const [rolePageSize] = useState<number>(10);
-    const { data: permissionData } = usePermissions(permissionPage, rolePageSize);
+    const { data: permissionData } = usePermissions(1, 100);
+
+    const handlePermissionChange = (permissionId: number, checked: boolean) => {
+        setSelectedPermissions((prev) => {
+            if (checked) {
+                return [...prev, permissionId];
+            } else {
+                return prev.filter((id) => id !== permissionId);
+            }
+        });
+    };
+
+    const handleFormSubmit = (data: RoleResponse) => {
+        onSubmit({
+            ...data,
+            permissions: selectedPermissions,
+        });
+    };
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
             <FormInput
                 control={control}
-                label="Họ và tên"
+                label="Tên vai trò"
                 name="role_name"
                 errors={errors}
                 required
             />
 
-            <FormSelectWithPagination
-                control={control}
-                label="Vai trò"
-                name="permissions"
-                options={
-                    permissionData?.data.map((item) => ({
-                        label: item.permission_name,
-                        value: item.id.toString(),
-                    })) || []
-                }
-                errors={errors}
-                required
-                searchable={true}
-                hasMore={
-                    permissionData?.pagination
-                        ? permissionPage <
-                          Math.ceil(
-                              permissionData.pagination.total / permissionData.pagination.page_size
-                          )
-                        : false
-                }
-                isLoading={false}
-                onLoadMore={(page) => {
-                    setPermissionPage(page);
-                }}
-            />
+            <div className="max-h-[600px] space-y-2 overflow-y-auto">
+                <label className="font-medium">Quyền hạn</label>
+                <div className="grid grid-cols-2 gap-4">
+                    {permissionData?.data.map((permission) => (
+                        <div key={permission.id} className="flex items-center space-x-2">
+                            <Checkbox
+                                id={`permission-${permission.id}`}
+                                checked={selectedPermissions.includes(permission.id)}
+                                onCheckedChange={(checked) =>
+                                    handlePermissionChange(permission.id, checked as boolean)
+                                }
+                            />
+                            <label
+                                htmlFor={`permission-${permission.id}`}
+                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                                {permission.permission_name}
+                            </label>
+                        </div>
+                    ))}
+                </div>
+            </div>
 
             <div className="flex justify-end space-x-2 pt-4">
                 <Button type="submit" disabled={isLoading}>

@@ -12,15 +12,14 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { RoleResponse } from "@/types/response/roles";
-import dayjs from "dayjs";
 import { PermissionResponse } from "@/types/response/permission";
+import dayjs from "dayjs";
 
-export const createRoleColumns = (
-    onEdit?: (item: RoleResponse) => void,
+export const createPermissionColumns = (
+    onEdit?: (item: PermissionResponse) => void,
     onDelete?: (id: string) => void,
     isDeleting?: boolean
-): ColumnDef<RoleResponse>[] => [
+): ColumnDef<PermissionResponse>[] => [
     {
         accessorKey: "index",
         header: "STT",
@@ -29,22 +28,8 @@ export const createRoleColumns = (
         },
     },
     {
-        accessorKey: "role_name",
-        header: "Tên vai trò",
-    },
-    {
-        accessorKey: "permissions",
-        header: "Quyền hạn",
-        cell: ({ row }) => {
-            const permissions = row.getValue("permissions") as PermissionResponse[];
-            return (
-                <div className="flex flex-col gap-2">
-                    {permissions.map((permission) => (
-                        <p key={permission.id}>{permission.permission_name}</p>
-                    ))}
-                </div>
-            );
-        },
+        accessorKey: "permission_name",
+        header: "Tên quyền",
     },
     {
         accessorKey: "created_at",
@@ -66,16 +51,11 @@ export const createRoleColumns = (
         id: "actions",
         header: "Thao tác",
         cell: ({ row }) => {
-            const menuItem = row.original;
+            const permissionItem = row.original;
 
             return (
                 <div className="flex gap-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => onEdit?.(menuItem)}
-                        disabled={!onEdit}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => onEdit?.(permissionItem)}>
                         <Edit className="h-4 w-4" />
                     </Button>
 
@@ -89,16 +69,16 @@ export const createRoleColumns = (
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Bạn có chắc chắn muốn xóa vai trò "{menuItem.role_name}"? Hành
-                                    động này không thể hoàn tác.
+                                    Bạn có chắc chắn muốn xóa quyền "
+                                    {permissionItem.permission_name}"? Hành động này không thể hoàn
+                                    tác.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Hủy</AlertDialogCancel>
                                 <AlertDialogAction
-                                    onClick={() => onDelete?.(menuItem.id.toString())}
+                                    onClick={() => onDelete?.(permissionItem.id.toString())}
                                     className="bg-red-600 hover:bg-red-700"
-                                    disabled={!onDelete}
                                 >
                                     Xóa
                                 </AlertDialogAction>

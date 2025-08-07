@@ -27,32 +27,31 @@ const roleApis = {
         }
     },
 
-    createRoles: async (data: { permission_name: string }): Promise<BaseResponse<RoleResponse>> => {
+    createRole: async (data: {
+        role_name: string;
+        permissions: number[];
+    }): Promise<BaseResponse<RoleResponse>> => {
         try {
-            const response = await axiosInstance.post(`/${urls.api}/${urls.roles}`, { data });
+            const response = await axiosInstance.post(`/${urls.api}/${urls.roles}`, data);
             return response.data;
         } catch (error) {
             throw error;
         }
     },
 
-    updateRoles: async (
-        data: {
-            permission_name: string;
-        },
-        id: string
-    ): Promise<ApiResponse<RoleResponse>> => {
+    updateRole: async (
+        id: string,
+        data: { role_name: string; permissions: number[] }
+    ): Promise<BaseResponse<RoleResponse>> => {
         try {
-            const response = await axiosInstance.patch(`/${urls.api}/${urls.roles}/${id}`, {
-                data,
-            });
+            const response = await axiosInstance.patch(`/${urls.api}/${urls.roles}/${id}`, data);
             return response.data;
         } catch (error) {
             throw error;
         }
     },
 
-    deleteRoles: async (id: string): Promise<ApiResponse<RoleResponse>> => {
+    deleteRole: async (id: string): Promise<BaseResponse<RoleResponse>> => {
         try {
             const response = await axiosInstance.delete(`/${urls.api}/${urls.roles}/${id}`);
             return response.data;
