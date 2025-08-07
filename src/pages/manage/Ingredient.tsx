@@ -48,7 +48,7 @@ function Ingredient() {
         try {
             const commonData = {
                 name: data.name,
-                quantity: data.quantity,
+                quantity: Number(data.quantity),
             };
 
             if (data.id) {

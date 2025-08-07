@@ -15,12 +15,6 @@ import {
 import { ShiftResponse } from "@/types/response/shift";
 import dayjs from "dayjs";
 
-type ShiftColumnParams = {
-    onEdit?: (item: ShiftResponse) => void;
-    onDelete?: (id: string) => void;
-    isDeleting?: boolean;
-};
-
 export const createShiftColumns = (
     onEdit?: (item: ShiftResponse) => void,
     onDelete?: (id: string) => void,
@@ -42,7 +36,7 @@ export const createShiftColumns = (
         header: "Thời gian bắt đầu",
         cell: ({ row }) => {
             const start_time = row.getValue("start_time") as string;
-            return <p>{dayjs(start_time).format("HH:mm")}</p>;
+            return <p>{start_time}</p>;
         },
     },
     {
@@ -50,7 +44,7 @@ export const createShiftColumns = (
         header: "Thời gian kết thúc",
         cell: ({ row }) => {
             const end_time = row.getValue("end_time") as string;
-            return <p>{dayjs(end_time).format("HH:mm")}</p>;
+            return <p>{end_time}</p>;
         },
     },
     {

@@ -40,7 +40,7 @@ const Sidebar = () => {
             children: [
                 { to: PATHS.MANAGE.DASHBOARD, label: "Thống kê", icon: <ChartArea size={14} /> },
                 { to: PATHS.MANAGE.STAFFS, label: "Nhân viên", icon: <User size={14} /> },
-                { to: PATHS.MANAGE.WAREHOUSE, label: "Nguyên liệu", icon: <Ham size={14} /> },
+                { to: PATHS.MANAGE.INGREDIENTS, label: "Nguyên liệu", icon: <Ham size={14} /> },
                 { to: PATHS.MANAGE.ORDERS, label: "Đơn hàng", icon: <ClipboardList size={14} /> },
                 { to: PATHS.MANAGE.MENU, label: "Thực đơn", icon: <Utensils size={14} /> },
                 { to: PATHS.MANAGE.ATTACHMENTS, label: "Tài liệu", icon: <File size={14} /> },
@@ -53,7 +53,7 @@ const Sidebar = () => {
             key: "shift",
             children: [
                 {
-                    to: PATHS.MANAGE.SCHEDULES,
+                    to: PATHS.MANAGE.SHIFTS,
                     label: "Lịch làm việc",
                     icon: <Calendar size={14} />,
                 },

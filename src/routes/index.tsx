@@ -14,12 +14,12 @@ const Role = lazy(() => import("@/pages/role-permission/Role"));
 const Permission = lazy(() => import("@/pages/role-permission/Permission"));
 const AccountPermission = lazy(() => import("@/pages/role-permission/AccountPermisison"));
 const Attendance = lazy(() => import("@/pages/manage/Attendance"));
-const Schedules = lazy(() => import("@/pages/manage/Schedules"));
 const Orders = lazy(() => import("@/pages/manage/Orders"));
-const Warehouse = lazy(() => import("@/pages/manage/Warehouse"));
 const Staff = lazy(() => import("@/pages/manage/Staff"));
 const Table = lazy(() => import("@/pages/manage/Table"));
 const Avaibilities = lazy(() => import("@/pages/manage/Avaibilities"));
+const Ingredient = lazy(() => import("@/pages/manage/Ingredient"));
+const Shift = lazy(() => import("@/pages/manage/Shift"));
 
 const LoadingFallback = () => (
     <div className="flex h-screen items-center justify-center">Loading...</div>
@@ -99,26 +99,10 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: PATHS.MANAGE.SCHEDULES,
-                element: (
-                    <Suspense fallback={<LoadingFallback />}>
-                        <Schedules />
-                    </Suspense>
-                ),
-            },
-            {
                 path: PATHS.MANAGE.ORDERS,
                 element: (
                     <Suspense fallback={<LoadingFallback />}>
                         <Orders />
-                    </Suspense>
-                ),
-            },
-            {
-                path: PATHS.MANAGE.WAREHOUSE,
-                element: (
-                    <Suspense fallback={<LoadingFallback />}>
-                        <Warehouse />
                     </Suspense>
                 ),
             },
@@ -143,6 +127,22 @@ export const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<LoadingFallback />}>
                         <Avaibilities />
+                    </Suspense>
+                ),
+            },
+            {
+                path: PATHS.MANAGE.INGREDIENTS,
+                element: (
+                    <Suspense fallback={<LoadingFallback />}>
+                        <Ingredient />
+                    </Suspense>
+                ),
+            },
+            {
+                path: PATHS.MANAGE.SHIFTS,
+                element: (
+                    <Suspense fallback={<LoadingFallback />}>
+                        <Shift />
                     </Suspense>
                 ),
             },
