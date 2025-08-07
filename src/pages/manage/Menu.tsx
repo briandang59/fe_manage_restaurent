@@ -19,6 +19,8 @@ import {
 import { MenuItemForm } from "@/components/forms/MenuItemForm";
 import { MenuItemResponse } from "@/types/response/menuItem";
 import toast from "react-hot-toast";
+import Loading from "@/components/common/Loading";
+import Error from "@/components/common/Error";
 
 function ManageMenu() {
   const [page, setPage] = useState(1);
@@ -86,19 +88,11 @@ function ManageMenu() {
   const menuColumns = createMenuColumns(handleEditClick, handleDelete, deleteMutation.isPending);
 
   if (isLoading) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <div className="text-lg">Đang tải dữ liệu...</div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <div className="text-lg text-red-600">Có lỗi xảy ra khi tải dữ liệu</div>
-      </div>
-    );
+    return <Error />;
   }
 
   return (
