@@ -35,14 +35,17 @@ function Table() {
     }
 
     const handleSubmitTable = async (data: Partial<TableResponse>) => {
-        if (!data.name) {
+        if (!data.table_name) {
             toast.error("Vui lòng điền đầy đủ thông tin");
             return;
         }
 
         try {
             const commonData = {
-                name: data.name,
+                table_name: data.table_name,
+                position: data.position,
+                seats: Number(data.seats),
+                memo: data.memo,
             };
 
             if (data.id) {

@@ -15,12 +15,6 @@ import {
 import { TableResponse } from "@/types/response/table";
 import dayjs from "dayjs";
 
-type TableColumnParams = {
-    onEdit?: (item: TableResponse) => void;
-    onDelete?: (id: string) => void;
-    isDeleting?: boolean;
-};
-
 export const createTableColumns = (
     onEdit?: (item: TableResponse) => void,
     onDelete?: (id: string) => void,
@@ -34,7 +28,7 @@ export const createTableColumns = (
         },
     },
     {
-        accessorKey: "name",
+        accessorKey: "table_name",
         header: "Tên bàn",
     },
     {
@@ -75,8 +69,8 @@ export const createTableColumns = (
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Bạn có chắc chắn muốn xóa bàn "{tableItem.name}"? Hành động này
-                                    không thể hoàn tác.
+                                    Bạn có chắc chắn muốn xóa bàn "{tableItem.table_name}"? Hành
+                                    động này không thể hoàn tác.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>

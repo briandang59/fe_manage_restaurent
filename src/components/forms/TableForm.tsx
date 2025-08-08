@@ -19,7 +19,10 @@ function TableForm({ onSubmit, initialData, isLoading }: TableFormProps) {
         formState: { errors },
     } = useForm<TableResponse>({
         defaultValues: {
-            name: "",
+            table_name: "",
+            position: "",
+            seats: 0,
+            memo: "",
         },
     });
 
@@ -31,7 +34,26 @@ function TableForm({ onSubmit, initialData, isLoading }: TableFormProps) {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <FormInput control={control} label="Tên bàn" name="name" errors={errors} required />
+            <FormInput
+                control={control}
+                label="Tên bàn"
+                name="table_name"
+                errors={errors}
+                required
+            />
+
+            <FormInput control={control} label="Vị trí" name="position" errors={errors} required />
+
+            <FormInput
+                control={control}
+                label="Số lượng ghế"
+                name="seats"
+                errors={errors}
+                type="number"
+                required
+            />
+
+            <FormInput control={control} label="Ghi chú" name="memo" errors={errors} />
 
             <div className="flex justify-end space-x-2 pt-4">
                 <Button type="submit" disabled={isLoading}>

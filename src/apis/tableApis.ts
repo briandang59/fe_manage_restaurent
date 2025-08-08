@@ -1,9 +1,9 @@
 import { axiosInstance } from "@/lib/axiosInstance";
 import urls from "@/utils/constants/common/urls";
 import { BaseResponse } from "@/types/response/baseResponse";
-import { CreateMenuItemRequest } from "@/utils/hooks/useMenuItem";
 import { ApiResponse } from "@/types/response/pagination";
 import { TableResponse } from "@/types/response/table";
+import { TableRequest } from "@/utils/hooks/useTable";
 
 const tableApis = {
     getTable: async (page: number, pageSize: number): Promise<ApiResponse<TableResponse>> => {
@@ -29,7 +29,7 @@ const tableApis = {
         }
     },
 
-    createTable: async (data: CreateMenuItemRequest): Promise<BaseResponse<TableResponse>> => {
+    createTable: async (data: TableRequest): Promise<BaseResponse<TableResponse>> => {
         try {
             const response = await axiosInstance.post(`/${urls.api}/${urls.tables}`, data);
             return response.data;
@@ -40,7 +40,7 @@ const tableApis = {
 
     updateTable: async (
         id: string,
-        data: Partial<CreateMenuItemRequest>
+        data: Partial<TableRequest>
     ): Promise<BaseResponse<TableResponse>> => {
         try {
             const response = await axiosInstance.patch(`/${urls.api}/${urls.tables}/${id}`, data);

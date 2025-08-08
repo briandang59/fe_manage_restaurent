@@ -4,8 +4,8 @@ import { TableResponse } from "@/types/response/table";
 import tableApis from "@/apis/tableApis";
 import { BaseResponse } from "@/types/response/baseResponse";
 
-interface TableRequest {
-    name: string;
+export interface TableRequest {
+    table_name: string;
 }
 
 export const tableQueryKeys = {
