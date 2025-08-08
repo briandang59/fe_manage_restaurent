@@ -38,13 +38,41 @@ const Sidebar = () => {
             icon: <LayoutDashboard className="size-4" />,
             key: "management",
             children: [
-                { to: PATHS.MANAGE.DASHBOARD, label: "Thống kê", icon: <ChartArea size={14} /> },
-                { to: PATHS.MANAGE.STAFFS, label: "Nhân viên", icon: <User size={14} /> },
-                { to: PATHS.MANAGE.INGREDIENTS, label: "Nguyên liệu", icon: <Ham size={14} /> },
-                { to: PATHS.MANAGE.ORDERS, label: "Đơn hàng", icon: <ClipboardList size={14} /> },
-                { to: PATHS.MANAGE.MENU, label: "Thực đơn", icon: <Utensils size={14} /> },
-                { to: PATHS.MANAGE.ATTACHMENTS, label: "Tài liệu", icon: <File size={14} /> },
-                { to: PATHS.MANAGE.TABLES, label: "Bàn", icon: <Table size={14} /> },
+                {
+                    to: `/${PATHS.MANAGE.DASHBOARD}`,
+                    label: "Thống kê",
+                    icon: <ChartArea size={14} />,
+                },
+                {
+                    to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.STAFFS}`,
+                    label: "Nhân viên",
+                    icon: <User size={14} />,
+                },
+                {
+                    to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.INGREDIENTS}`,
+                    label: "Nguyên liệu",
+                    icon: <Ham size={14} />,
+                },
+                {
+                    to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.ORDERS}`,
+                    label: "Đơn hàng",
+                    icon: <ClipboardList size={14} />,
+                },
+                {
+                    to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.MENU}`,
+                    label: "Thực đơn",
+                    icon: <Utensils size={14} />,
+                },
+                {
+                    to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.ATTACHMENTS}`,
+                    label: "Tài liệu",
+                    icon: <File size={14} />,
+                },
+                {
+                    to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.TABLES}`,
+                    label: "Bàn",
+                    icon: <Table size={14} />,
+                },
             ],
         },
         {
@@ -53,13 +81,17 @@ const Sidebar = () => {
             key: "shift",
             children: [
                 {
-                    to: PATHS.MANAGE.SHIFTS,
+                    to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.SHIFTS}`,
                     label: "Lịch làm việc",
                     icon: <Calendar size={14} />,
                 },
-                { to: PATHS.MANAGE.ATTENDANCE, label: "Chấm công", icon: <Timer size={14} /> },
                 {
-                    to: PATHS.MANAGE.AVAILIBILITIES,
+                    to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.ATTENDANCE}`,
+                    label: "Chấm công",
+                    icon: <Timer size={14} />,
+                },
+                {
+                    to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.AVAILIBILITIES}`,
                     label: "Lịch rảnh",
                     icon: <Calendar size={14} />,
                 },
@@ -70,14 +102,18 @@ const Sidebar = () => {
             icon: <LayoutDashboard className="size-4" />,
             key: "role-permission",
             children: [
-                { to: PATHS.ROLE_PERMISSION.ROLE, label: "Vai trò", icon: <ChartArea size={14} /> },
                 {
-                    to: PATHS.ROLE_PERMISSION.PERMISSION,
+                    to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.ROLE}`,
+                    label: "Vai trò",
+                    icon: <ChartArea size={14} />,
+                },
+                {
+                    to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.PERMISSION}`,
                     label: "Quyền hạn",
                     icon: <User size={14} />,
                 },
                 {
-                    to: PATHS.ROLE_PERMISSION.ACCOUNT_PERMISSION,
+                    to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.ACCOUNT_PERMISSION}`,
                     label: "Tài khoản",
                     icon: <User size={14} />,
                 },

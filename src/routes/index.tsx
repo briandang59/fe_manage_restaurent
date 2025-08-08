@@ -3,23 +3,24 @@ import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "@/layouts/MainLayout";
 import RequireAuth from "@/components/common/RquiredAuth";
 import RedirectIfAuthenticated from "@/components/common/RedirectIfAuthenticated";
+import AuthWrapper from "@/components/common/AuthWrapper";
 import { PATHS } from "@/utils/constants/common/paths";
 
-const Home = lazy(() => import("@/pages/Home"));
-const Dashboard = lazy(() => import("@/pages/Dashboard"));
+const Home = lazy(() => import("@/pages/normal/Home"));
+const Dashboard = lazy(() => import("@/pages/dashboard/Dashboard"));
 const Login = lazy(() => import("@/pages/Login"));
-const ManageMenu = lazy(() => import("@/pages/manage/Menu"));
-const Attachments = lazy(() => import("@/pages/manage/Attachments"));
+const Menu = lazy(() => import("@/pages/dashboard/Menu"));
+const Attachments = lazy(() => import("@/pages/dashboard/Attachments"));
 const Role = lazy(() => import("@/pages/role-permission/Role"));
 const Permission = lazy(() => import("@/pages/role-permission/Permission"));
 const AccountPermission = lazy(() => import("@/pages/role-permission/AccountPermisison"));
-const Attendance = lazy(() => import("@/pages/manage/Attendance"));
-const Orders = lazy(() => import("@/pages/manage/Orders"));
-const Staff = lazy(() => import("@/pages/manage/Staff"));
-const Table = lazy(() => import("@/pages/manage/Table"));
-const Avaibilities = lazy(() => import("@/pages/manage/Avaibilities"));
-const Ingredient = lazy(() => import("@/pages/manage/Ingredient"));
-const Shift = lazy(() => import("@/pages/manage/Shift"));
+const Attendance = lazy(() => import("@/pages/dashboard/Attendance"));
+const Orders = lazy(() => import("@/pages/dashboard/Orders"));
+const Staff = lazy(() => import("@/pages/dashboard/Staff"));
+const Table = lazy(() => import("@/pages/dashboard/Table"));
+const Avaibilities = lazy(() => import("@/pages/dashboard/Avaibilities"));
+const Ingredient = lazy(() => import("@/pages/dashboard/Ingredient"));
+const Shift = lazy(() => import("@/pages/dashboard/Shift"));
 
 const LoadingFallback = () => (
     <div className="flex h-screen items-center justify-center">Loading...</div>
@@ -29,21 +30,23 @@ export const router = createBrowserRouter([
     {
         path: "/",
         element: (
+            <AuthWrapper>
+                <Suspense fallback={<LoadingFallback />}>
+                    <Home />
+                </Suspense>
+            </AuthWrapper>
+        ),
+    },
+    {
+        path: `/${PATHS.MANAGE.DASHBOARD}`,
+        element: (
             <RequireAuth>
                 <MainLayout />
             </RequireAuth>
         ),
         children: [
             {
-                index: true,
-                element: (
-                    <Suspense fallback={<LoadingFallback />}>
-                        <Home />
-                    </Suspense>
-                ),
-            },
-            {
-                path: PATHS.MANAGE.DASHBOARD,
+                path: "",
                 element: (
                     <Suspense fallback={<LoadingFallback />}>
                         <Dashboard />
@@ -51,15 +54,15 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: PATHS.MANAGE.MENU,
+                path: `${PATHS.MANAGE.MENU}`,
                 element: (
                     <Suspense fallback={<LoadingFallback />}>
-                        <ManageMenu />
+                        <Menu />
                     </Suspense>
                 ),
             },
             {
-                path: PATHS.MANAGE.ATTACHMENTS,
+                path: `${PATHS.MANAGE.ATTACHMENTS}`,
                 element: (
                     <Suspense fallback={<LoadingFallback />}>
                         <Attachments />
@@ -67,7 +70,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: PATHS.ROLE_PERMISSION.ROLE,
+                path: `${PATHS.MANAGE.ROLE}`,
                 element: (
                     <Suspense fallback={<LoadingFallback />}>
                         <Role />
@@ -75,7 +78,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: PATHS.ROLE_PERMISSION.PERMISSION,
+                path: `${PATHS.MANAGE.PERMISSION}`,
                 element: (
                     <Suspense fallback={<LoadingFallback />}>
                         <Permission />
@@ -83,7 +86,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: PATHS.ROLE_PERMISSION.ACCOUNT_PERMISSION,
+                path: `${PATHS.MANAGE.ACCOUNT_PERMISSION}`,
                 element: (
                     <Suspense fallback={<LoadingFallback />}>
                         <AccountPermission />
@@ -91,7 +94,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: PATHS.MANAGE.ATTENDANCE,
+                path: `${PATHS.MANAGE.ATTENDANCE}`,
                 element: (
                     <Suspense fallback={<LoadingFallback />}>
                         <Attendance />
@@ -99,7 +102,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: PATHS.MANAGE.ORDERS,
+                path: `${PATHS.MANAGE.ORDERS}`,
                 element: (
                     <Suspense fallback={<LoadingFallback />}>
                         <Orders />
@@ -107,7 +110,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: PATHS.MANAGE.STAFFS,
+                path: `${PATHS.MANAGE.STAFFS}`,
                 element: (
                     <Suspense fallback={<LoadingFallback />}>
                         <Staff />
@@ -115,7 +118,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: PATHS.MANAGE.TABLES,
+                path: `${PATHS.MANAGE.TABLES}`,
                 element: (
                     <Suspense fallback={<LoadingFallback />}>
                         <Table />
@@ -123,7 +126,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: PATHS.MANAGE.AVAILIBILITIES,
+                path: `${PATHS.MANAGE.AVAILIBILITIES}`,
                 element: (
                     <Suspense fallback={<LoadingFallback />}>
                         <Avaibilities />
@@ -131,7 +134,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: PATHS.MANAGE.INGREDIENTS,
+                path: `${PATHS.MANAGE.INGREDIENTS}`,
                 element: (
                     <Suspense fallback={<LoadingFallback />}>
                         <Ingredient />
@@ -139,7 +142,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: PATHS.MANAGE.SHIFTS,
+                path: `${PATHS.MANAGE.SHIFTS}`,
                 element: (
                     <Suspense fallback={<LoadingFallback />}>
                         <Shift />
@@ -151,11 +154,13 @@ export const router = createBrowserRouter([
     {
         path: "/login",
         element: (
-            <RedirectIfAuthenticated>
-                <Suspense fallback={<LoadingFallback />}>
-                    <Login />
-                </Suspense>
-            </RedirectIfAuthenticated>
+            <AuthWrapper>
+                <RedirectIfAuthenticated>
+                    <Suspense fallback={<LoadingFallback />}>
+                        <Login />
+                    </Suspense>
+                </RedirectIfAuthenticated>
+            </AuthWrapper>
         ),
     },
 ]);
