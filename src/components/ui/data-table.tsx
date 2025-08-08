@@ -1,4 +1,7 @@
+<<<<<<< HEAD
+=======
 "use client";
+>>>>>>> 962762f00528fc610aed249294081753330d3faa
 
 import * as React from "react";
 import {
