@@ -4,6 +4,7 @@ import TableForm from "@/components/forms/TableForm";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Plus } from "lucide-react";
 import { createTableColumns } from "@/utils/constants/cols/tableCols";
 import { useTables, useCreateTable, useUpdateTable, useDeleteTable } from "@/utils/hooks/useTable";
 import { useState } from "react";
@@ -35,7 +36,7 @@ function Table() {
     }
 
     const handleSubmitTable = async (data: Partial<TableResponse>) => {
-        if (!data.table_name) {
+        if (!data.table_name || !data.position || !data.seats) {
             toast.error("Vui lòng điền đầy đủ thông tin");
             return;
         }
@@ -90,8 +91,11 @@ function Table() {
             <div className="flex items-center justify-between gap-2">
                 <h1 className="text-[20px] font-bold">Quản lý bàn</h1>
                 <Sheet>
-                    <SheetTrigger>
-                        <Button>Thêm mới</Button>
+                    <SheetTrigger asChild>
+                        <Button>
+                            <Plus className="mr-2 h-4 w-4" />
+                            <span>Thêm mới</span>
+                        </Button>
                     </SheetTrigger>
                     <SheetContent>
                         <SheetHeader>
