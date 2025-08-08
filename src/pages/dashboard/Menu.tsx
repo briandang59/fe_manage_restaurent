@@ -6,8 +6,9 @@ import {
     useDeleteMenuItem,
     useCreateMenuItem,
     useUpdateMenuItem,
+    useImportMenuItems,
 } from "@/utils/hooks/useMenuItem";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { createMenuColumns } from "@/utils/constants/cols";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { MenuItemForm } from "@/components/forms/MenuItemForm";
@@ -22,11 +23,13 @@ function ManageMenu() {
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
     const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<MenuItemResponse | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const { data: menuData, isLoading, error } = useMenuItems(page, pageSize);
     const deleteMutation = useDeleteMenuItem();
     const createMenuItemMutation = useCreateMenuItem();
     const updateMenuItemMutation = useUpdateMenuItem();
+    const importMenuItemsMutation = useImportMenuItems();
     const paginationData = menuData?.pagination;
     const totalPages = paginationData
         ? Math.ceil(paginationData.total / paginationData.page_size)
@@ -79,6 +82,37 @@ function ManageMenu() {
         }
     };
 
+    const handleImportClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        // Kiểm tra định dạng file
+        const allowedTypes = [
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
+            "application/vnd.ms-excel", // .xls
+        ];
+
+        if (!allowedTypes.includes(file.type)) {
+            toast.error("Chỉ hỗ trợ file Excel (.xlsx, .xls)");
+            return;
+        }
+
+        try {
+            await importMenuItemsMutation.mutateAsync(file);
+            toast.success("Import menu items thành công!");
+            // Reset file input
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
+        } catch (error: any) {
+            toast.error(error.message || "Có lỗi xảy ra khi import file");
+        }
+    };
+
     const menuColumns = createMenuColumns(handleEditClick, handleDelete, deleteMutation.isPending);
 
     if (isLoading) {
@@ -113,10 +147,25 @@ function ManageMenu() {
                         </SheetContent>
                     </Sheet>
 
-                    <Button variant="outline">
+                    <Button
+                        variant="outline"
+                        onClick={handleImportClick}
+                        disabled={importMenuItemsMutation.isPending}
+                    >
                         <File className="mr-2 h-4 w-4" />
-                        <span>Nhập từ Excel</span>
+                        <span>
+                            {importMenuItemsMutation.isPending ? "Đang import..." : "Nhập từ Excel"}
+                        </span>
                     </Button>
+
+                    {/* Hidden file input */}
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept=".xlsx,.xls"
+                        onChange={handleFileChange}
+                        style={{ display: "none" }}
+                    />
                 </div>
             </div>
 

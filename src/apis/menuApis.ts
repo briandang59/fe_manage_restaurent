@@ -63,6 +63,19 @@ const menuApis = {
             throw error;
         }
     },
+    importMenuItems: async (file: File): Promise<BaseResponse<void>> => {
+        const formData = new FormData();
+        formData.append("file", file);
+        try {
+            const response = await axiosInstance.post(
+                `/${urls.api}/${urls.menuItems}/${urls.import_excel}`,
+                formData
+            );
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
 };
 
 export default menuApis;

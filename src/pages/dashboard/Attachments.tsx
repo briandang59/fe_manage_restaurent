@@ -86,13 +86,11 @@ function Attachments() {
         console.log("Display URL:", displayUrl);
         console.log("Download URL:", downloadUrl);
 
-        // Kiểm tra nếu URL hiển thị là external URL
         const isExternalUrl =
             displayUrl.includes("cloudinary.com") ||
             (displayUrl.includes("http") && !displayUrl.includes(import.meta.env.VITE_API_URL));
 
         if (isExternalUrl) {
-            // Với external URL, thử download qua API
             try {
                 const response = await fetch(downloadUrl, {
                     headers: {
@@ -112,7 +110,6 @@ function Attachments() {
                     window.URL.revokeObjectURL(url);
                     toast.success("Tải xuống thành công!");
                 } else {
-                    // Fallback: Mở trong tab mới
                     window.open(displayUrl, "_blank");
                     toast.success("Đang mở file...");
                 }
