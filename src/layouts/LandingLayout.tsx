@@ -8,7 +8,7 @@ interface LandingLayoutProps {
 const LandingLayout = ({ children }: LandingLayoutProps) => {
     return (
         <div className="flex min-h-screen">
-            <div className="flex flex-1 flex-col">
+            <div className="flex flex-1 flex-col gap-2">
                 <Header />
                 <main className="min-h-screen overflow-auto bg-white p-6">{children}</main>
                 <Footer />

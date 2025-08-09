@@ -9,7 +9,7 @@ function Header() {
     const user = getUser();
     const role = getRole();
     return (
-        <header className="container sticky top-[10px] z-50 mx-auto rounded-[10px] border border-gray-100 bg-[#E7CEAC] p-4">
+        <header className="container sticky top-[10px] z-50 mx-auto rounded-[20px] border border-[#E7CEAC] bg-[#E7CEAC] p-4">
             <div className="flex items-center justify-between gap-2">
                 <Image
                     src={images.logo}
