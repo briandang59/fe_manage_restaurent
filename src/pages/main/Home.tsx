@@ -6,7 +6,7 @@ const Home = () => {
     const role = getRole();
 
     return (
-        <div className="space-y-6 rounded-lg bg-white p-4 shadow-md">
+        <div className="container mx-auto">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold">Trang chủ</h1>
                 <div className="text-sm text-gray-600">

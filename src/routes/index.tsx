@@ -5,8 +5,9 @@ import RequireAuth from "@/components/common/RquiredAuth";
 import RedirectIfAuthenticated from "@/components/common/RedirectIfAuthenticated";
 import AuthWrapper from "@/components/common/AuthWrapper";
 import { PATHS } from "@/utils/constants/common/paths";
+import LandingLayout from "@/layouts/LandingLayout";
 
-const Home = lazy(() => import("@/pages/normal/Home"));
+const Home = lazy(() => import("@/pages/main/Home"));
 const Dashboard = lazy(() => import("@/pages/dashboard/Dashboard"));
 const Login = lazy(() => import("@/pages/Login"));
 const Menu = lazy(() => import("@/pages/dashboard/Menu"));
@@ -31,9 +32,11 @@ export const router = createBrowserRouter([
         path: "/",
         element: (
             <AuthWrapper>
-                <Suspense fallback={<LoadingFallback />}>
-                    <Home />
-                </Suspense>
+                <LandingLayout>
+                    <Suspense fallback={<LoadingFallback />}>
+                        <Home />
+                    </Suspense>
+                </LandingLayout>
             </AuthWrapper>
         ),
     },
