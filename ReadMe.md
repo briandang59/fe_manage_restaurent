@@ -188,7 +188,9 @@ pnpm run dev
 
 Tạo 1 file .env ở thư mục gốc và dán cái dưới vào
 
+```bash
 VITE_API_URL=http://localhost:5123
+```
 
 Backend: (sau khi cài đặt docker)
 
@@ -198,6 +200,7 @@ docker compose -d --build
 
 Tạo 1 file .env ở thư mục gốc và dán cái dưới vào
 
+```bash
 DB_HOST=db
 DB_PORT=5432
 DB_USER=postgres
@@ -208,3 +211,4 @@ BE_PORT=5000
 CLOUDINARY_CLOUD_NAME=dbuulcdnd
 CLOUDINARY_API_KEY=183415744639643
 CLOUDINARY_API_SECRET=S6VZQROGWMwE_jbkHWTHYzjq6Jo
+```
