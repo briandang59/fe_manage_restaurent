@@ -8,12 +8,15 @@ import { AccountResponse } from "@/types/response/account";
 const accountApis = {
     getAccount: async (page: number, pageSize: number): Promise<ApiResponse<AccountResponse>> => {
         try {
-            const response = await axiosInstance.get(`/${urls.api}/${urls.accounts}`, {
-                params: {
-                    page,
-                    page_size: pageSize,
-                },
-            });
+            const response = await axiosInstance.get(
+                `/${urls.api}/${urls.accounts}?page=${page}&page_size=${pageSize}&populate[role]`,
+                {
+                    params: {
+                        page,
+                        page_size: pageSize,
+                    },
+                }
+            );
             return response.data;
         } catch (error) {
             throw error;

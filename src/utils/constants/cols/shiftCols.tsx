@@ -32,6 +32,10 @@ export const createShiftColumns = (
         header: "Tên ca làm việc",
     },
     {
+        accessorKey: "code",
+        header: "Mã ca làm việc",
+    },
+    {
         accessorKey: "start_time",
         header: "Thời gian bắt đầu",
         cell: ({ row }) => {

@@ -15,12 +15,6 @@ import {
 import { AttendanceResponse } from "@/types/response/attendance";
 import dayjs from "dayjs";
 
-type AttendanceColumnParams = {
-    onEdit?: (item: AttendanceResponse) => void;
-    onDelete?: (id: string) => void;
-    isDeleting?: boolean;
-};
-
 export const createAttendanceColumns = (
     onEdit?: (item: AttendanceResponse) => void,
     onDelete?: (id: string) => void,

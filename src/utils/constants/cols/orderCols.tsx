@@ -15,12 +15,6 @@ import {
 import { OrderResponse } from "@/types/response/order";
 import dayjs from "dayjs";
 
-type OrderColumnParams = {
-    onEdit?: (item: OrderResponse) => void;
-    onDelete?: (id: string) => void;
-    isDeleting?: boolean;
-};
-
 export const createOrderColumns = (
     onEdit?: (item: OrderResponse) => void,
     onDelete?: (id: string) => void,

@@ -15,12 +15,6 @@ import {
 import { CustomerResponse } from "@/types/response/customer";
 import dayjs from "dayjs";
 
-type CustomerColumnParams = {
-    onEdit?: (item: CustomerResponse) => void;
-    onDelete?: (id: string) => void;
-    isDeleting?: boolean;
-};
-
 export const createCustomerColumns = (
     onEdit?: (item: CustomerResponse) => void,
     onDelete?: (id: string) => void,

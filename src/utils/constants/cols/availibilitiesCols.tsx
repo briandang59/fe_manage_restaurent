@@ -15,12 +15,6 @@ import {
 import { AvailibilitiesResponse } from "@/types/response/availibilities";
 import dayjs from "dayjs";
 
-type AvailibilitiesColumnParams = {
-    onEdit?: (item: AvailibilitiesResponse) => void;
-    onDelete?: (id: string) => void;
-    isDeleting?: boolean;
-};
-
 export const createAvailibilitiesColumns = (
     onEdit?: (item: AvailibilitiesResponse) => void,
     onDelete?: (id: string) => void,

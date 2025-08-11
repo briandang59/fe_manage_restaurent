@@ -14,12 +14,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { AccountResponse } from "@/types/response/account";
 import dayjs from "dayjs";
-
-type AccountColumnParams = {
-    onEdit?: (item: AccountResponse) => void;
-    onDelete?: (id: string) => void;
-    isDeleting?: boolean;
-};
+import { RoleResponse } from "@/types/response/roles";
 
 export const createAccountColumns = (
     onEdit?: (item: AccountResponse) => void,
@@ -38,8 +33,12 @@ export const createAccountColumns = (
         header: "Tên người dùng",
     },
     {
-        accessorKey: "role_id",
-        header: "ID Vai trò",
+        accessorKey: "role",
+        header: "Vai trò",
+        cell: ({ row }) => {
+            const role = row.getValue("role") as RoleResponse;
+            return role ? <p>{role.role_name}</p> : <p>Không có</p>;
+        },
     },
     {
         accessorKey: "created_at",

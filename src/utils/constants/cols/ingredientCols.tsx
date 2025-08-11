@@ -15,12 +15,6 @@ import {
 import { IngredientResponse } from "@/types/response/ingredients";
 import dayjs from "dayjs";
 
-type IngredientColumnParams = {
-    onEdit?: (item: IngredientResponse) => void;
-    onDelete?: (id: string) => void;
-    isDeleting?: boolean;
-};
-
 export const createIngredientColumns = (
     onEdit?: (item: IngredientResponse) => void,
     onDelete?: (id: string) => void,

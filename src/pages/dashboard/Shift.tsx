@@ -9,6 +9,7 @@ import { useShifts, useCreateShift, useUpdateShift, useDeleteShift } from "@/uti
 import { useState } from "react";
 import { ShiftResponse } from "@/types/response/shift";
 import { toast } from "sonner";
+import { toSlug } from "@/utils/functions/toSlug";
 
 function Shift() {
     const [page, setPage] = useState(1);
@@ -43,6 +44,7 @@ function Shift() {
         try {
             const commonData = {
                 shift_name: data.shift_name,
+                code: toSlug(data.shift_name),
                 start_time: data.start_time,
                 end_time: data.end_time,
             };
