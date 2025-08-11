@@ -38,9 +38,14 @@ export const createRoleColumns = (
         cell: ({ row }) => {
             const permissions = row.getValue("permissions") as PermissionResponse[];
             return (
-                <div className="flex flex-col gap-2">
+                <div className="flex max-w-[300px] flex-wrap items-center gap-2">
                     {permissions.map((permission) => (
-                        <p key={permission.id}>{permission.permission_name}</p>
+                        <p
+                            key={permission.id}
+                            className="w-fit rounded-full bg-[#5D4037] p-1 text-sm text-white"
+                        >
+                            {permission.permission_name}
+                        </p>
                     ))}
                 </div>
             );
