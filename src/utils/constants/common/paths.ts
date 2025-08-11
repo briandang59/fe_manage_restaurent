@@ -15,4 +15,7 @@ export const PATHS = {
         PERMISSION: "permission",
         ACCOUNT_PERMISSION: "account-permission",
     },
+    PUBLIC: {
+        MENU: "menu-public",
+    },
 };

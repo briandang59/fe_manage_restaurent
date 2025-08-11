@@ -11,6 +11,7 @@ const Home = lazy(() => import("@/pages/main/Home"));
 const Dashboard = lazy(() => import("@/pages/dashboard/Dashboard"));
 const Login = lazy(() => import("@/pages/Login"));
 const Menu = lazy(() => import("@/pages/dashboard/Menu"));
+const MenuPublic = lazy(() => import("@/pages/main/Menu"));
 const Attachments = lazy(() => import("@/pages/dashboard/Attachments"));
 const Role = lazy(() => import("@/pages/role-permission/Role"));
 const Permission = lazy(() => import("@/pages/role-permission/Permission"));
@@ -39,6 +40,12 @@ export const router = createBrowserRouter([
                 </LandingLayout>
             </AuthWrapper>
         ),
+        children: [
+            {
+                path: `/${PATHS.PUBLIC.MENU}`,
+                element: <MenuPublic />,
+            },
+        ],
     },
     {
         path: `/${PATHS.MANAGE.DASHBOARD}`,
