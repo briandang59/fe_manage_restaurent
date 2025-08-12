@@ -3,4 +3,5 @@ export interface OrderListProps {
     image: string;
     price: number;
     quantity: number;
+    tableId: string;
 }

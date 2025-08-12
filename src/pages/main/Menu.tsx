@@ -17,53 +17,92 @@ function MenuPublic() {
     const { data: menuItems } = useMenuItems(1, 10);
     const [selectedTable, setSelectedTable] = useState<TableResponse | null>(null);
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedMenuList, setSelectedMenuList] = useState<OrderListProps[]>([]);
+    // Thay đổi state để lưu trữ món ăn theo từng bàn
+    const [tableMenuItems, setTableMenuItems] = useState<Record<string, OrderListProps[]>>({});
 
     const handleOpenSheet = (record?: TableResponse) => {
         setSelectedTable(record || null);
         setIsOpen(true);
     };
+
     const handleCloseSheet = () => {
         setIsOpen(false);
         setSelectedTable(null);
     };
 
+    // Lấy danh sách món ăn của bàn hiện tại
+    const getCurrentTableMenuItems = () => {
+        if (!selectedTable?.id) return [];
+        return tableMenuItems[selectedTable.id.toString()] || [];
+    };
+
     const handleSelectMenuItem = (menuItem: MenuItemResponse) => {
-        const isExist = selectedMenuList.find((item) => item.name === menuItem.name);
+        if (!selectedTable?.id) return;
+
+        const tableId = selectedTable.id.toString();
+        const currentTableItems = tableMenuItems[tableId] || [];
+
+        const isExist = currentTableItems.find((item) => item.name === menuItem.name);
+
         if (isExist) {
-            setSelectedMenuList((prev) =>
-                prev.map((item) =>
-                    item.name === menuItem.name ? { ...item, quantity: item.quantity + 1 } : item
-                )
-            );
-        } else {
-            setSelectedMenuList((prev) => [
+            setTableMenuItems((prev) => ({
                 ...prev,
-                {
-                    name: menuItem.name,
-                    image: menuItem.file.url,
-                    price: menuItem.price,
-                    quantity: 1,
-                },
-            ]);
+                [tableId]: prev[tableId].map((item) =>
+                    item.name === menuItem.name ? { ...item, quantity: item.quantity + 1 } : item
+                ),
+            }));
+        } else {
+            setTableMenuItems((prev) => ({
+                ...prev,
+                [tableId]: [
+                    ...(prev[tableId] || []),
+                    {
+                        name: menuItem.name,
+                        image: menuItem.file.url,
+                        price: menuItem.price,
+                        quantity: 1,
+                        tableId: tableId,
+                    },
+                ],
+            }));
         }
     };
 
     const handleQuantityChange = (quantity: number, menuItemName: string) => {
+        if (!selectedTable?.id) return;
+
+        const tableId = selectedTable.id.toString();
+
         if (quantity === 0) {
-            setSelectedMenuList((prev) => prev.filter((item) => item.name !== menuItemName));
+            setTableMenuItems((prev) => ({
+                ...prev,
+                [tableId]: prev[tableId].filter((item) => item.name !== menuItemName),
+            }));
         } else {
-            setSelectedMenuList((prev) =>
-                prev.map((item) =>
+            setTableMenuItems((prev) => ({
+                ...prev,
+                [tableId]: prev[tableId].map((item) =>
                     item.name === menuItemName ? { ...item, quantity: quantity } : item
-                )
-            );
+                ),
+            }));
         }
-        setSelectedMenuList((prev) =>
-            prev.map((item) =>
-                item.name === menuItemName ? { ...item, quantity: quantity } : item
-            )
-        );
+    };
+
+    // Xóa tất cả món ăn của bàn hiện tại
+    const handleClearTableMenu = () => {
+        if (!selectedTable?.id) return;
+
+        const tableId = selectedTable.id.toString();
+        setTableMenuItems((prev) => ({
+            ...prev,
+            [tableId]: [],
+        }));
+    };
+
+    // Lấy tổng tiền của bàn hiện tại
+    const getCurrentTableTotal = () => {
+        const currentItems = getCurrentTableMenuItems();
+        return currentItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
     };
 
     return (
@@ -97,16 +136,16 @@ function MenuPublic() {
                             <Button
                                 variant="outline"
                                 size="icon"
-                                onClick={() => setSelectedMenuList([])}
-                                disabled={selectedMenuList.length === 0}
+                                onClick={handleClearTableMenu}
+                                disabled={getCurrentTableMenuItems().length === 0}
                                 className="hover:bg-red-500 hover:text-white"
                             >
                                 <Trash />
                             </Button>
                         </div>
                         <div className="flex flex-col gap-2">
-                            {selectedMenuList.length > 0 ? (
-                                selectedMenuList.map((menuItem, index) => (
+                            {selectedTable && getCurrentTableMenuItems().length > 0 ? (
+                                getCurrentTableMenuItems().map((menuItem, index) => (
                                     <OrderUI
                                         key={index}
                                         orderList={menuItem}
@@ -127,13 +166,7 @@ function MenuPublic() {
                             <div className="flex items-center gap-2">
                                 <p className="text-sm font-medium"> Tổng tiền: </p>
                                 <p className="text-md font-medium text-red-500">
-                                    {formatNumberWithCommas(
-                                        selectedMenuList.reduce(
-                                            (acc, item) => acc + item.price * item.quantity,
-                                            0
-                                        )
-                                    )}
-                                    đ
+                                    {formatNumberWithCommas(getCurrentTableTotal())}đ
                                 </p>
                             </div>
                             <div className="flex items-center gap-2">
