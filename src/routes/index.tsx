@@ -33,20 +33,29 @@ export const router = createBrowserRouter([
         path: "/",
         element: (
             <AuthWrapper>
-                <LandingLayout>
-                    <Suspense fallback={<LoadingFallback />}>
-                        <Home />
-                    </Suspense>
-                </LandingLayout>
+                <LandingLayout />
             </AuthWrapper>
         ),
         children: [
             {
-                path: `/${PATHS.PUBLIC.MENU}`,
-                element: <MenuPublic />,
+                path: "",
+                element: (
+                    <Suspense fallback={<LoadingFallback />}>
+                        <Home />
+                    </Suspense>
+                ),
+            },
+            {
+                path: `${PATHS.PUBLIC.MENU}`,
+                element: (
+                    <Suspense fallback={<LoadingFallback />}>
+                        <MenuPublic />
+                    </Suspense>
+                ),
             },
         ],
     },
+
     {
         path: `/${PATHS.MANAGE.DASHBOARD}`,
         element: (

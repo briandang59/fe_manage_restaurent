@@ -21,7 +21,7 @@ const Home = () => {
     ];
 
     return (
-        <div className="container mx-auto min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50">
             {/* Hero section */}
             <section
                 className="relative h-[500px] bg-cover bg-center"

@@ -3,13 +3,17 @@ import { UtensilsCrossed } from "lucide-react";
 
 interface TableUIProps {
     record: TableResponse;
+    onClick?: () => void;
 }
-function TableUI({ record }: TableUIProps) {
+function TableUI({ record, onClick }: TableUIProps) {
     return (
-        <div className="flex h-[200px] w-[200px] flex-col items-center justify-center gap-2 rounded-md border border-gray-300 bg-blue-200">
+        <button
+            className="flex h-[100px] cursor-pointer flex-col items-center justify-center gap-2 rounded-md border border-gray-300 bg-gray-200 duration-300 hover:bg-gray-100"
+            onClick={onClick}
+        >
             <UtensilsCrossed className="text-2xl" />
             <p className="text-sm font-medium">{record?.table_name}</p>
-        </div>
+        </button>
     );
 }
 

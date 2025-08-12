@@ -8,12 +8,15 @@ import { ApiResponse } from "@/types/response/pagination";
 const menuApis = {
     getMenu: async (page: number, pageSize: number): Promise<ApiResponse<MenuItemResponse>> => {
         try {
-            const response = await axiosInstance.get(`/${urls.api}/${urls.menuItems}`, {
-                params: {
-                    page,
-                    page_size: pageSize,
-                },
-            });
+            const response = await axiosInstance.get(
+                `/${urls.api}/${urls.menuItems}?page=${page}&page_size=${pageSize}&populate[file]`,
+                {
+                    params: {
+                        page,
+                        page_size: pageSize,
+                    },
+                }
+            );
             return response.data;
         } catch (error) {
             throw error;
