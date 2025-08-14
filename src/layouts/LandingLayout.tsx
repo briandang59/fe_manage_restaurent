@@ -5,9 +5,9 @@ import { Outlet } from "react-router-dom";
 const LandingLayout = () => {
     return (
         <div className="flex min-h-screen">
-            <div className="flex flex-1 flex-col gap-2">
+            <div className="flex flex-1 flex-col">
                 <Header />
-                <main className="min-h-screen overflow-auto bg-white py-6">
+                <main className="min-h-screen overflow-auto bg-white pt-6">
                     <Outlet />
                 </main>
                 <Footer />
