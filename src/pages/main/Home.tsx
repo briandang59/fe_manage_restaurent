@@ -48,11 +48,11 @@ function Home() {
 
             <div className="container mx-auto flex flex-col gap-4 p-[96px_32px]">
                 <h2 className="text-center text-[32px] font-bold">
-                    An Authentic Vietnamese Experience
+                    Trải Nghiệm Việt Nam Đích Thực
                 </h2>
                 <p className="mx-auto mt-2 w-[700px] text-center text-[20px] font-normal text-gray-700">
-                    Immerse yourself in the rich culture of Vietnam with every bite. Our carefully
-                    curated ambiance is designed to make your dining experience unforgettable.
+                    Hãy đắm mình trong nền văn hóa phong phú của Việt Nam qua từng miếng ăn. Không
+                    gian được chúng tôi chăm chút kỹ lưỡng để mang đến trải nghiệm ẩm thực khó quên.
                 </p>
                 <div className="mt-4 grid grid-cols-3 gap-4">
                     <BlogLanding />
@@ -63,10 +63,10 @@ function Home() {
 
             <div className="min-h-[500px] bg-[#FFFBEB] p-[96px_32px]">
                 <div className="container mx-auto flex flex-col gap-4">
-                    <h3 className="text-center text-[32px] font-bold">Signature Dishes</h3>
+                    <h3 className="text-center text-[32px] font-bold">Món Ăn Đặc Sắc</h3>
                     <p className="mx-auto w-[700px] text-center text-[22px] text-gray-700">
-                        Discover our most beloved dishes, each crafted with authentic Vietnamese
-                        techniques and the freshest ingredients.
+                        Khám phá những món ăn được yêu thích nhất, mỗi món đều được chế biến với kỹ
+                        thuật Việt Nam truyền thống và nguyên liệu tươi ngon nhất.
                     </p>
                     <div className="mt-8 grid grid-cols-3 gap-4">
                         {menuItems?.data?.map((menuItem) => (
@@ -83,7 +83,9 @@ function Home() {
 
             <div className="min-h-[500px] bg-white p-[96px_32px]">
                 <div className="container mx-auto flex flex-col gap-4">
-                    <h3 className="text-center text-[32px] font-bold">What Our Customers Say</h3>
+                    <h3 className="text-center text-[32px] font-bold">
+                        Khách Hàng Nói Gì Về Chúng Tôi
+                    </h3>
                     <div className="mt-8 grid grid-cols-3 gap-4">
                         <CustomerReview />
                         <CustomerReview />
@@ -95,7 +97,9 @@ function Home() {
             <div className="bg-orange-600 p-[96px_32px]">
                 <div className="container mx-auto grid grid-cols-2 gap-4">
                     <div>
-                        <h3 className="text-[32px] font-bold text-white">Visit Us Today</h3>
+                        <h3 className="text-[32px] font-bold text-white">
+                            Hãy Ghé Thăm Chúng Tôi Hôm Nay
+                        </h3>
                         <div className="mt-8 flex flex-col gap-4">
                             <InformationSections />
                             <InformationSections />
