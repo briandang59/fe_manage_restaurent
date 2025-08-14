@@ -1,4 +1,4 @@
-import { Footer } from "react-day-picker";
+import Footer from "./Footer";
 import Header from "./Header";
 import { Outlet } from "react-router-dom";
 
@@ -7,7 +7,7 @@ const LandingLayout = () => {
         <div className="flex min-h-screen">
             <div className="flex flex-1 flex-col gap-2">
                 <Header />
-                <main className="container mx-auto min-h-screen overflow-auto bg-white py-6">
+                <main className="min-h-screen overflow-auto bg-white py-6">
                     <Outlet />
                 </main>
                 <Footer />

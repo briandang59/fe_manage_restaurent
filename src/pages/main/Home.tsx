@@ -1,89 +1,118 @@
-const Home = () => {
-    const dishes = [
-        {
-            name: "Phở Bò Truyền Thống",
-            description: "Nước dùng hầm từ xương bò 12 tiếng, thơm ngon đậm vị.",
-            price: "50,000đ",
-            img: "https://images.unsplash.com/photo-1604908176997-27b3f24f1a0a",
-        },
-        {
-            name: "Bún Chả Hà Nội",
-            description: "Thịt nướng than hoa, bún tươi, nước chấm chua ngọt.",
-            price: "45,000đ",
-            img: "https://images.unsplash.com/photo-1608032278350-dc0c32d25d9e",
-        },
-        {
-            name: "Gỏi Cuốn Tôm Thịt",
-            description: "Cuốn tươi, chấm mắm nêm đặc trưng.",
-            price: "30,000đ",
-            img: "https://images.unsplash.com/photo-1625941414204-9b5f63a07e4f",
-        },
-    ];
+import images from "@/assets/images";
+import BlogLanding from "@/components/common/BlogLanding";
+import CustomerReview from "@/components/common/CustomerReview";
+import InformationSections from "@/components/common/InformationSection";
+import MenuUI from "@/components/common/MenuUI";
+import { Button } from "@/components/ui/button";
+import Image from "@/components/ui/image";
+import { useMenuItems } from "@/utils/hooks/useMenuItem";
 
+function Home() {
+    const { data: menuItems } = useMenuItems(1, 6);
     return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Hero section */}
-            <section
-                className="relative h-[500px] bg-cover bg-center"
-                style={{
-                    backgroundImage:
-                        "url('https://images.unsplash.com/photo-1555992336-03a23c4a4f91')",
-                }}
-            >
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 p-4 text-center text-white">
-                    <h1 className="mb-4 text-5xl font-bold">Nhà Hàng Mộc Quán</h1>
-                    <p className="max-w-2xl text-lg">
-                        Thưởng thức hương vị ẩm thực Việt Nam truyền thống, chế biến từ những nguyên
-                        liệu tươi ngon nhất.
-                    </p>
-                    <button className="mt-6 rounded-full bg-red-500 px-6 py-3 text-lg text-white shadow-lg transition hover:bg-red-600">
-                        Đặt bàn ngay
-                    </button>
-                </div>
-            </section>
-
-            {/* About section */}
-            <section className="container mx-auto px-4 py-16">
-                <h2 className="mb-6 text-center text-3xl font-bold">Về Chúng Tôi</h2>
-                <p className="mx-auto max-w-3xl text-center text-gray-700">
-                    Nhà hàng Hương Việt mang đến cho thực khách những món ăn đặc trưng của ẩm thực
-                    Việt Nam, với không gian ấm cúng và dịch vụ chu đáo. Chúng tôi luôn đặt chất
-                    lượng và trải nghiệm của khách hàng lên hàng đầu.
-                </p>
-            </section>
-
-            {/* Menu section */}
-            <section className="container mx-auto px-4 py-16">
-                <h2 className="mb-10 text-center text-3xl font-bold">Thực Đơn Nổi Bật</h2>
-                <div className="grid gap-8 md:grid-cols-3">
-                    {dishes.map((dish, index) => (
-                        <div
-                            key={index}
-                            className="overflow-hidden rounded-lg bg-white shadow-lg transition hover:shadow-2xl"
-                        >
-                            <img
-                                src={dish.img}
-                                alt={dish.name}
-                                className="h-56 w-full object-cover"
-                            />
-                            <div className="p-4">
-                                <h3 className="text-xl font-semibold">{dish.name}</h3>
-                                <p className="mt-2 text-gray-600">{dish.description}</p>
-                                <div className="mt-4 flex items-center justify-between">
-                                    <span className="text-lg font-bold text-red-500">
-                                        {dish.price}
-                                    </span>
-                                    <button className="rounded-full bg-green-500 px-4 py-2 text-white transition hover:bg-green-600">
-                                        Đặt món
-                                    </button>
-                                </div>
-                            </div>
+        <div>
+            <div className="grid min-h-[700px] bg-gradient-to-tr from-orange-600 to-amber-500 p-[96px_32px]">
+                <div className="container mx-auto grid grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-8">
+                        <h2 className="text-[40px] font-bold text-white">
+                            Trải nghiệm cái tâm của Việt Nam
+                        </h2>
+                        <span className="text-[18px] text-white">
+                            Hãy thưởng thức hương vị chính thống trong một không gian ấm áp và chào
+                            đón, nơi mỗi món ăn đều kể một câu chuyện về truyền thống ẩm thực Việt
+                            Nam. Từ những tô phở thơm lừng buổi sáng, bát bún riêu đậm đà buổi trưa,
+                            cho đến những món ăn đường phố dân dã nhưng đầy tinh tế, tất cả đều được
+                            chế biến từ nguyên liệu tươi ngon và tâm huyết của người đầu bếp. Chúng
+                            tôi tin rằng ẩm thực không chỉ là món ăn, mà còn là ký ức, cảm xúc và sự
+                            kết nối giữa con người với con người. Hãy đến để cảm nhận trọn vẹn nét
+                            đẹp văn hóa và hương vị đậm đà của quê hương Việt Nam.
+                        </span>
+                        <div className="flex items-center gap-4">
+                            <Button className="bg-white text-orange-600 hover:bg-white">
+                                Đặt bàn
+                            </Button>
+                            <Button className="border border-white bg-transparent text-white hover:bg-transparent">
+                                Xem menu
+                            </Button>
                         </div>
-                    ))}
+                    </div>
+                    <div className="flex items-center justify-center">
+                        <Image
+                            src={images.banner}
+                            alt="banner"
+                            className="h-[500px] rounded-[10px]"
+                        />
+                    </div>
                 </div>
-            </section>
+            </div>
+
+            <div className="container mx-auto flex flex-col gap-4 p-[96px_32px]">
+                <h2 className="text-center text-[32px] font-bold">
+                    An Authentic Vietnamese Experience
+                </h2>
+                <p className="mx-auto mt-2 w-[700px] text-center text-[20px] font-normal text-gray-700">
+                    Immerse yourself in the rich culture of Vietnam with every bite. Our carefully
+                    curated ambiance is designed to make your dining experience unforgettable.
+                </p>
+                <div className="mt-4 grid grid-cols-3 gap-4">
+                    <BlogLanding />
+                    <BlogLanding />
+                    <BlogLanding />
+                </div>
+            </div>
+
+            <div className="min-h-[500px] bg-[#FFFBEB] p-[96px_32px]">
+                <div className="container mx-auto flex flex-col gap-4">
+                    <h3 className="text-center text-[32px] font-bold">Signature Dishes</h3>
+                    <p className="mx-auto w-[700px] text-center text-[22px] text-gray-700">
+                        Discover our most beloved dishes, each crafted with authentic Vietnamese
+                        techniques and the freshest ingredients.
+                    </p>
+                    <div className="mt-8 grid grid-cols-3 gap-4">
+                        {menuItems?.data?.map((menuItem) => (
+                            <MenuUI key={menuItem.id} menuItem={menuItem} type="home" />
+                        ))}
+                    </div>
+                    <div className="mt-8 flex items-center justify-center">
+                        <Button className="bg-orange-600 text-white hover:bg-orange-600">
+                            Xem thực đơn
+                        </Button>
+                    </div>
+                </div>
+            </div>
+
+            <div className="min-h-[500px] bg-white p-[96px_32px]">
+                <div className="container mx-auto flex flex-col gap-4">
+                    <h3 className="text-center text-[32px] font-bold">What Our Customers Say</h3>
+                    <div className="mt-8 grid grid-cols-3 gap-4">
+                        <CustomerReview />
+                        <CustomerReview />
+                        <CustomerReview />
+                    </div>
+                </div>
+            </div>
+
+            <div className="bg-orange-600 p-[96px_32px]">
+                <div className="container mx-auto grid grid-cols-2 gap-4">
+                    <div>
+                        <h3 className="text-[32px] font-bold text-white">Visit Us Today</h3>
+                        <div className="mt-8 flex flex-col gap-4">
+                            <InformationSections />
+                            <InformationSections />
+                            <InformationSections />
+                        </div>
+                    </div>
+                    <div className="flex items-center justify-center">
+                        <Image
+                            src={images.banner}
+                            alt="map"
+                            className="ratio-3 h-[400px] w-[300px] rounded-[10px]"
+                        />
+                    </div>
+                </div>
+            </div>
         </div>
     );
-};
+}
 
 export default Home;
