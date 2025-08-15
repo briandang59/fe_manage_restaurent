@@ -1,9 +1,15 @@
 import { axiosInstance } from "@/lib/axiosInstance";
 import urls from "@/utils/constants/common/urls";
 import { BaseResponse } from "@/types/response/baseResponse";
-import { CreateMenuItemRequest } from "@/utils/hooks/useMenuItem";
 import { ApiResponse } from "@/types/response/pagination";
 import { AvailibilitiesResponse } from "@/types/response/availibilities";
+
+interface AvailibilitiesRequest {
+    shift_id: number;
+    employee_id: number;
+    date: string;
+    status: string;
+}
 
 const availibilitiesApis = {
     getAvailibilities: async (
@@ -33,7 +39,7 @@ const availibilitiesApis = {
     },
 
     createAvailibilities: async (
-        data: CreateMenuItemRequest
+        data: AvailibilitiesRequest
     ): Promise<BaseResponse<AvailibilitiesResponse>> => {
         try {
             const response = await axiosInstance.post(`/${urls.api}/${urls.availibilities}`, data);
@@ -45,7 +51,7 @@ const availibilitiesApis = {
 
     updateAvailibilities: async (
         id: string,
-        data: Partial<CreateMenuItemRequest>
+        data: Partial<AvailibilitiesRequest>
     ): Promise<BaseResponse<AvailibilitiesResponse>> => {
         try {
             const response = await axiosInstance.patch(

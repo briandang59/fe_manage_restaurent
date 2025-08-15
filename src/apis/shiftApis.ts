@@ -1,9 +1,14 @@
 import { axiosInstance } from "@/lib/axiosInstance";
 import urls from "@/utils/constants/common/urls";
 import { BaseResponse } from "@/types/response/baseResponse";
-import { CreateMenuItemRequest } from "@/utils/hooks/useMenuItem";
 import { ApiResponse } from "@/types/response/pagination";
 import { ShiftResponse } from "@/types/response/shift";
+
+interface ShiftRequest {
+    shift_name: string;
+    start_time: string;
+    end_time: string;
+}
 
 const shiftApis = {
     getShift: async (page: number, pageSize: number): Promise<ApiResponse<ShiftResponse>> => {
@@ -29,7 +34,7 @@ const shiftApis = {
         }
     },
 
-    createShift: async (data: CreateMenuItemRequest): Promise<BaseResponse<ShiftResponse>> => {
+    createShift: async (data: ShiftRequest): Promise<BaseResponse<ShiftResponse>> => {
         try {
             const response = await axiosInstance.post(`/${urls.api}/${urls.shifts}`, data);
             return response.data;
@@ -40,7 +45,7 @@ const shiftApis = {
 
     updateShift: async (
         id: string,
-        data: Partial<CreateMenuItemRequest>
+        data: Partial<ShiftRequest>
     ): Promise<BaseResponse<ShiftResponse>> => {
         try {
             const response = await axiosInstance.patch(`/${urls.api}/${urls.shifts}/${id}`, data);

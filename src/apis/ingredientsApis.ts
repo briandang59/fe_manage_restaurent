@@ -1,9 +1,13 @@
 import { axiosInstance } from "@/lib/axiosInstance";
 import urls from "@/utils/constants/common/urls";
 import { BaseResponse } from "@/types/response/baseResponse";
-import { CreateMenuItemRequest } from "@/utils/hooks/useMenuItem";
 import { ApiResponse } from "@/types/response/pagination";
 import { IngredientResponse } from "@/types/response/ingredients";
+
+interface IngredientRequest {
+    name: string;
+    quantity: number;
+}
 
 const ingredientApis = {
     getIngredient: async (
@@ -33,7 +37,7 @@ const ingredientApis = {
     },
 
     createIngredient: async (
-        data: CreateMenuItemRequest
+        data: IngredientRequest
     ): Promise<BaseResponse<IngredientResponse>> => {
         try {
             const response = await axiosInstance.post(`/${urls.api}/${urls.ingredients}`, data);
@@ -45,11 +49,11 @@ const ingredientApis = {
 
     updateIngredient: async (
         id: string,
-        data: Partial<CreateMenuItemRequest>
+        data: Partial<IngredientRequest>
     ): Promise<BaseResponse<IngredientResponse>> => {
         try {
             const response = await axiosInstance.patch(
-                `/${urls.api}/${urls.availibilities}/${id}`,
+                `/${urls.api}/${urls.ingredients}/${id}`,
                 data
             );
             return response.data;

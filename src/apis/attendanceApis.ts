@@ -1,9 +1,14 @@
 import { axiosInstance } from "@/lib/axiosInstance";
 import urls from "@/utils/constants/common/urls";
 import { BaseResponse } from "@/types/response/baseResponse";
-import { CreateMenuItemRequest } from "@/utils/hooks/useMenuItem";
 import { ApiResponse } from "@/types/response/pagination";
 import { AttendanceResponse } from "@/types/response/attendance";
+
+interface AttendanceRequest {
+    employee_id: number;
+    date: string;
+    status: string;
+}
 
 const attendanceApis = {
     getAttendance: async (
@@ -33,7 +38,7 @@ const attendanceApis = {
     },
 
     createAttendance: async (
-        data: CreateMenuItemRequest
+        data: AttendanceRequest
     ): Promise<BaseResponse<AttendanceResponse>> => {
         try {
             const response = await axiosInstance.post(`/${urls.api}/${urls.attendances}`, data);
@@ -45,7 +50,7 @@ const attendanceApis = {
 
     updateAttendance: async (
         id: string,
-        data: Partial<CreateMenuItemRequest>
+        data: Partial<AttendanceRequest>
     ): Promise<BaseResponse<AttendanceResponse>> => {
         try {
             const response = await axiosInstance.patch(

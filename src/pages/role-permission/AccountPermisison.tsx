@@ -15,6 +15,15 @@ import { useState } from "react";
 import { AccountResponse } from "@/types/response/account";
 import { toast } from "sonner";
 
+interface AccountRequest {
+    user_name: string;
+    role_id: number;
+}
+
+interface AccountFormData extends AccountRequest {
+    id?: number;
+}
+
 function AccountPermission() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -39,8 +48,8 @@ function AccountPermission() {
         return <Error />;
     }
 
-    const handleSubmitAccount = async (data: Partial<AccountResponse>) => {
-        if (!data.user_name || !data.role_id) {
+    const handleSubmitAccount = async (data: AccountFormData) => {
+        if (!data.user_name || data.role_id === undefined) {
             toast.error("Vui lòng điền đầy đủ thông tin");
             return;
         }
@@ -88,6 +97,15 @@ function AccountPermission() {
         deleteMutation.isPending
     );
 
+    // Convert response data to request data for the form
+    const getFormData = (account: AccountResponse): AccountFormData => {
+        return {
+            id: account.id,
+            user_name: account.user_name,
+            role_id: typeof account.role_id === "object" ? account.role_id.id : account.role_id,
+        };
+    };
+
     return (
         <div className="space-y-6 rounded-lg bg-white p-4 shadow-md">
             <div className="flex items-center justify-between gap-2">
@@ -118,7 +136,7 @@ function AccountPermission() {
                     <AccountForm
                         mode="update"
                         onSubmit={handleSubmitAccount}
-                        initialData={selectedItem || undefined}
+                        initialData={selectedItem ? getFormData(selectedItem) : undefined}
                         isLoading={updateMutation.isPending}
                     />
                 </SheetContent>

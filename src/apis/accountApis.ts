@@ -1,9 +1,13 @@
 import { axiosInstance } from "@/lib/axiosInstance";
 import urls from "@/utils/constants/common/urls";
 import { BaseResponse } from "@/types/response/baseResponse";
-import { CreateMenuItemRequest } from "@/utils/hooks/useMenuItem";
 import { ApiResponse } from "@/types/response/pagination";
 import { AccountResponse } from "@/types/response/account";
+
+interface AccountRequest {
+    user_name: string;
+    role_id: number;
+}
 
 const accountApis = {
     getAccount: async (page: number, pageSize: number): Promise<ApiResponse<AccountResponse>> => {
@@ -32,7 +36,7 @@ const accountApis = {
         }
     },
 
-    createAccount: async (data: CreateMenuItemRequest): Promise<BaseResponse<AccountResponse>> => {
+    createAccount: async (data: AccountRequest): Promise<BaseResponse<AccountResponse>> => {
         try {
             const response = await axiosInstance.post(`/${urls.api}/${urls.accounts}`, data);
             return response.data;
@@ -43,7 +47,7 @@ const accountApis = {
 
     updateAccount: async (
         id: string,
-        data: Partial<CreateMenuItemRequest>
+        data: Partial<AccountRequest>
     ): Promise<BaseResponse<AccountResponse>> => {
         try {
             const response = await axiosInstance.patch(`/${urls.api}/${urls.accounts}/${id}`, data);

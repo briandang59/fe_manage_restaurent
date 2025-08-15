@@ -2,11 +2,19 @@ import { useEffect } from "react";
 import { FormInput } from "../forms-component/FormInput";
 import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
-import { AccountResponse } from "@/types/response/account";
+
+interface AccountRequest {
+    user_name: string;
+    role_id: number;
+}
+
+interface AccountFormData extends AccountRequest {
+    id?: number;
+}
 
 interface AccountFormProps {
-    onSubmit: (data: Partial<AccountResponse>) => void;
-    initialData?: Partial<AccountResponse>;
+    onSubmit: (data: AccountFormData) => void;
+    initialData?: Partial<AccountFormData>;
     isLoading?: boolean;
     mode: "create" | "update";
 }
@@ -17,7 +25,7 @@ function AccountForm({ onSubmit, initialData, isLoading }: AccountFormProps) {
         control,
         reset,
         formState: { errors },
-    } = useForm<AccountResponse>({
+    } = useForm<AccountFormData>({
         defaultValues: {
             user_name: "",
             role_id: 0,

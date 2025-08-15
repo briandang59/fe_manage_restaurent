@@ -1,9 +1,14 @@
 import { axiosInstance } from "@/lib/axiosInstance";
 import urls from "@/utils/constants/common/urls";
 import { BaseResponse } from "@/types/response/baseResponse";
-import { CreateMenuItemRequest } from "@/utils/hooks/useMenuItem";
 import { ApiResponse } from "@/types/response/pagination";
 import { CustomerResponse } from "@/types/response/customer";
+
+interface CustomerRequest {
+    name: string;
+    email: string;
+    phone: string;
+}
 
 const customerApis = {
     getCustomer: async (page: number, pageSize: number): Promise<ApiResponse<CustomerResponse>> => {
@@ -30,7 +35,7 @@ const customerApis = {
     },
 
     createCustomer: async (
-        data: CreateMenuItemRequest
+        data: CustomerRequest
     ): Promise<BaseResponse<CustomerResponse>> => {
         try {
             const response = await axiosInstance.post(`/${urls.api}/${urls.customers}`, data);
@@ -42,7 +47,7 @@ const customerApis = {
 
     updateCustomer: async (
         id: string,
-        data: Partial<CreateMenuItemRequest>
+        data: Partial<CustomerRequest>
     ): Promise<BaseResponse<CustomerResponse>> => {
         try {
             const response = await axiosInstance.patch(
