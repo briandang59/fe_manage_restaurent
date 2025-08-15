@@ -17,5 +17,6 @@ export const PATHS = {
     },
     PUBLIC: {
         MENU: "menu-public",
+        BOOKING: "booking",
     },
 };

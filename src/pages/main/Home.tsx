@@ -1,10 +1,11 @@
 import images from "@/assets/images";
 import BlogLanding from "@/components/common/BlogLanding";
 import CustomerReview from "@/components/common/CustomerReview";
-import InformationSections from "@/components/common/InformationSection";
+import InformationSection from "@/components/common/InformationSection";
 import MenuUI from "@/components/common/MenuUI";
 import { Button } from "@/components/ui/button";
 import Image from "@/components/ui/image";
+import { INFORMATION } from "@/utils/constants/common/information";
 import { useMenuItems } from "@/utils/hooks/useMenuItem";
 
 function Home() {
@@ -101,9 +102,9 @@ function Home() {
                             Hãy Ghé Thăm Chúng Tôi Hôm Nay
                         </h3>
                         <div className="mt-8 flex flex-col gap-4">
-                            <InformationSections />
-                            <InformationSections />
-                            <InformationSections />
+                            {INFORMATION.map((info) => (
+                                <InformationSection key={info.title} {...info} />
+                            ))}
                         </div>
                     </div>
                     <div className="flex items-center justify-center">

@@ -39,7 +39,6 @@ function AccountForm({ onSubmit, initialData, isLoading }: AccountFormProps) {
                 errors={errors}
                 required
             />
-
             <FormInput
                 control={control}
                 label="ID Vai trò"

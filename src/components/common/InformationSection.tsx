@@ -1,12 +1,19 @@
-import { Locate } from "lucide-react";
+interface InformationSectionProps {
+    icon: React.ReactNode;
+    title: string;
+    description: string;
+}
 
-function InformationSections() {
+function InformationSection({ icon, title, description }: InformationSectionProps) {
     return (
-        <div className="flex items-center gap-4">
-            <Locate className="h-6 w-6 text-amber-300" />
-            <p className="text-[20px] font-bold text-amber-300">123 Đường Phố, Quận 1, TP.HCM</p>
+        <div className="flex items-start gap-4">
+            <div className="flex items-center justify-center">{icon}</div>
+            <div className="flex flex-col gap-2">
+                <p className="text-[18px] font-bold">{title}</p>
+                <p className="text-[16px] text-gray-500">{description}</p>
+            </div>
         </div>
     );
 }
 
-export default InformationSections;
+export default InformationSection;
