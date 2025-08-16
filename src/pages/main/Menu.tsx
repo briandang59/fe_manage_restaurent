@@ -1,3 +1,4 @@
+import images from "@/assets/images";
 import MenuUI from "@/components/common/MenuUI";
 import OrderUI from "@/components/common/OrderUI";
 import TableUI from "@/components/common/TableUI";
@@ -13,8 +14,8 @@ import { Trash } from "lucide-react";
 import { useState } from "react";
 
 function MenuPublic() {
-    const { data: tables } = useTables(1, 10);
-    const { data: menuItems } = useMenuItems(1, 10);
+    const { data: tables } = useTables(1, 100);
+    const { data: menuItems } = useMenuItems(1, 1000);
     const [selectedTable, setSelectedTable] = useState<TableResponse | null>(null);
     const [isOpen, setIsOpen] = useState(false);
     // Thay đổi state để lưu trữ món ăn theo từng bàn
@@ -58,7 +59,7 @@ function MenuPublic() {
                     ...(prev[tableId] || []),
                     {
                         name: menuItem.name,
-                        image: menuItem.file.url,
+                        image: menuItem?.file?.url || images.banner,
                         price: menuItem.price,
                         quantity: 1,
                         tableId: tableId,
@@ -106,7 +107,7 @@ function MenuPublic() {
     };
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="container mx-auto flex flex-col gap-4">
             <div className="grid grid-cols-5 gap-4">
                 {tables?.data?.map((table) => (
                     <TableUI key={table.id} record={table} onClick={() => handleOpenSheet(table)} />
@@ -120,7 +121,7 @@ function MenuPublic() {
                     <div className="my-4 flex max-h-[800px] flex-col gap-4 overflow-y-auto">
                         <div className="flex min-h-[500px] flex-col gap-4">
                             <h3 className="text-lg font-medium">Thực đơn món</h3>
-                            <div className="grid h-fit w-fit grid-cols-4 gap-4 overflow-y-auto rounded-md p-2 shadow-sm">
+                            <div className="grid h-fit w-fit grid-cols-3 gap-4 overflow-y-auto rounded-md p-2 shadow-sm">
                                 {menuItems?.data?.map((menuItem) => (
                                     <MenuUI
                                         key={menuItem.id}

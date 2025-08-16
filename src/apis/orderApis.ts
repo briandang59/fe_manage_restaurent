@@ -5,9 +5,9 @@ import { ApiResponse } from "@/types/response/pagination";
 import { OrderResponse } from "@/types/response/order";
 
 interface OrderRequest {
-    employee_id: number;
-    date: string;
-    status: string;
+    table_id: number;
+    amount: string;
+    memo: string;
 }
 
 const orderApis = {
@@ -48,10 +48,7 @@ const orderApis = {
         data: Partial<OrderRequest>
     ): Promise<BaseResponse<OrderResponse>> => {
         try {
-            const response = await axiosInstance.patch(
-                `/${urls.api}/${urls.orders}/${id}`,
-                data
-            );
+            const response = await axiosInstance.patch(`/${urls.api}/${urls.orders}/${id}`, data);
             return response.data;
         } catch (error) {
             throw error;

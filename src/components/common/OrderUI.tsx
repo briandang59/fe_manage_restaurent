@@ -17,7 +17,7 @@ function OrderUI({ orderList, onQuantityChange }: OrderUIProps) {
                     alt={orderList.name}
                     width={100}
                     height={100}
-                    className="rounded-md"
+                    className="h-[100px] w-[100px] rounded-md"
                 />
                 <div className="flex flex-col gap-2">
                     <p className="text-sm font-medium">{orderList.name}</p>

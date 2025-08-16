@@ -6,10 +6,16 @@ import MenuUI from "@/components/common/MenuUI";
 import { Button } from "@/components/ui/button";
 import Image from "@/components/ui/image";
 import { INFORMATION } from "@/utils/constants/common/information";
+import { PATHS } from "@/utils/constants/common/paths";
 import { useMenuItems } from "@/utils/hooks/useMenuItem";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
     const { data: menuItems } = useMenuItems(1, 6);
+    const navigate = useNavigate();
+    const NavigateBooking = () => {
+        navigate(`/${PATHS.PUBLIC.BOOKING}`);
+    };
     return (
         <div>
             <div className="grid min-h-[700px] bg-gradient-to-tr from-orange-600 to-amber-500 p-[96px_32px]">
@@ -29,7 +35,10 @@ function Home() {
                             đẹp văn hóa và hương vị đậm đà của quê hương Việt Nam.
                         </span>
                         <div className="flex items-center gap-4">
-                            <Button className="bg-white text-orange-600 hover:bg-white">
+                            <Button
+                                className="bg-white text-orange-600 hover:bg-white"
+                                onClick={NavigateBooking}
+                            >
                                 Đặt bàn
                             </Button>
                             <Button className="border border-white bg-transparent text-white hover:bg-transparent">

@@ -118,7 +118,7 @@ export const createStaffColumns = (
         header: "Tài khoản",
         cell: ({ row }) => {
             const account = row.getValue("account") as AccountResponse;
-            return <span className="rounded-full px-2 py-1 text-[14px]">{account.user_name}</span>;
+            return <span className="rounded-full px-2 py-1 text-[14px]">{account?.user_name}</span>;
         },
     },
     {

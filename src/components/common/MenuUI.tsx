@@ -26,15 +26,15 @@ function MenuUI({ menuItem, onClick, type }: MenuUIProps) {
 
     return (
         <button
-            className="flex h-[150px] cursor-pointer flex-col items-center justify-center gap-2 rounded-md border border-gray-200 p-2 shadow-sm"
+            className="flex min-h-[150px] cursor-pointer flex-col items-center justify-center gap-2 rounded-md border border-gray-200 p-2 shadow-sm"
             onClick={() => onClick?.(menuItem)}
         >
             <Image
-                src={menuItem.file.url}
+                src={menuItem?.file?.url || images.banner}
                 alt={menuItem.name}
                 width={100}
                 height={100}
-                className="rounded-md"
+                className="h-[100px] w-[100px] rounded-md"
             />
             <p className="text-sm font-medium">{menuItem.name}</p>
             <p className="text-md text-gray-500">{formatNumberWithCommas(menuItem.price)}</p>
