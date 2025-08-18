@@ -5,9 +5,8 @@ import orderApis from "@/apis/orderApis";
 import { BaseResponse } from "@/types/response/baseResponse";
 
 interface OrderRequest {
-    employee_id: number;
-    date: string;
-    status: string;
+    table_id: number;
+    status?: string;
 }
 
 export const orderQueryKeys = {
@@ -84,5 +83,18 @@ export const useDeleteOrder = (): UseMutationResult<BaseResponse<void>, Error, s
         onError: (error) => {
             console.error("Lỗi khi xóa đơn hàng:", error);
         },
+    });
+};
+
+export const useOrderByTableId = (tableId?: string) => {
+    return useQuery({
+        queryKey: orderQueryKeys.detail(`table-${tableId}`),
+        queryFn: async (): Promise<BaseResponse<OrderResponse>> => {
+            if (!tableId) throw new Error("tableId is required");
+            return await orderApis.getOrderByTableId(tableId);
+        },
+        enabled: !!tableId, // chỉ gọi khi có tableId
+        staleTime: 5 * 60 * 1000,
+        gcTime: 10 * 60 * 1000,
     });
 };

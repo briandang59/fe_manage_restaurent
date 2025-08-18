@@ -18,5 +18,7 @@ const urls = {
     customers: "customers",
     tables: "tables",
     import_excel: "import-excel",
+    table: "table",
+    order: "order",
 };
 export default urls;

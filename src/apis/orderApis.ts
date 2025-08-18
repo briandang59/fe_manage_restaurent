@@ -3,10 +3,12 @@ import urls from "@/utils/constants/common/urls";
 import { BaseResponse } from "@/types/response/baseResponse";
 import { ApiResponse } from "@/types/response/pagination";
 import { OrderResponse } from "@/types/response/order";
+import { OrderRequestType } from "@/types/request/order";
 
 interface OrderRequest {
     table_id: number;
     amount: string;
+    status?: string;
     memo: string;
 }
 
@@ -33,8 +35,17 @@ const orderApis = {
             throw error;
         }
     },
-
-    createOrder: async (data: OrderRequest): Promise<BaseResponse<OrderResponse>> => {
+    getOrderByTableId: async (id: string): Promise<BaseResponse<OrderResponse>> => {
+        try {
+            const response = await axiosInstance.get(
+                `/${urls.api}/${urls.orders}/${urls.table}/${id}`
+            );
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+    createOrder: async (data: OrderRequestType): Promise<BaseResponse<OrderResponse>> => {
         try {
             const response = await axiosInstance.post(`/${urls.api}/${urls.orders}`, data);
             return response.data;

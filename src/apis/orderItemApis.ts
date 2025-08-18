@@ -1,9 +1,9 @@
 import { axiosInstance } from "@/lib/axiosInstance";
 import urls from "@/utils/constants/common/urls";
 import { BaseResponse } from "@/types/response/baseResponse";
-import { CreateMenuItemRequest } from "@/utils/hooks/useMenuItem";
 import { ApiResponse } from "@/types/response/pagination";
 import { OrderItemResponse } from "@/types/response/orderItem";
+import { OrderItemRequestType } from "@/types/request/order";
 
 const orderItemApis = {
     getOrderItem: async (
@@ -23,7 +23,7 @@ const orderItemApis = {
         }
     },
 
-    getOrderItemById: async (id: string): Promise<BaseResponse<OrderItemResponse>> => {
+    getOrderItemById: async (id: string): Promise<BaseResponse<OrderItemResponse[]>> => {
         try {
             const response = await axiosInstance.get(`/${urls.api}/${urls.orderitems}/${id}`);
             return response.data;
@@ -31,9 +31,19 @@ const orderItemApis = {
             throw error;
         }
     },
+    getOrderItemByOrderId: async (id: string): Promise<BaseResponse<OrderItemResponse[]>> => {
+        try {
+            const response = await axiosInstance.get(
+                `/${urls.api}/${urls.orderitems}/${urls.order}/${id}`
+            );
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
 
     createOrderItem: async (
-        data: CreateMenuItemRequest
+        data: OrderItemRequestType
     ): Promise<BaseResponse<OrderItemResponse>> => {
         try {
             const response = await axiosInstance.post(`/${urls.api}/${urls.orderitems}`, data);
@@ -45,7 +55,7 @@ const orderItemApis = {
 
     updateOrderItem: async (
         id: string,
-        data: Partial<CreateMenuItemRequest>
+        data: OrderItemRequestType & { id: string }
     ): Promise<BaseResponse<OrderItemResponse>> => {
         try {
             const response = await axiosInstance.patch(

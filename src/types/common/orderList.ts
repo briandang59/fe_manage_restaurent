@@ -1,4 +1,5 @@
 export interface OrderListProps {
+    menuId: number;
     name: string;
     image: string;
     price: number;
