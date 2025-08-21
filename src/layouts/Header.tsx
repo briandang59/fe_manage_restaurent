@@ -21,6 +21,16 @@ function Header() {
             name: "Thực đơn",
             path: `/${PATHS.PUBLIC.MENU}`,
         },
+        {
+            key: "booking",
+            name: "Đặt bàn",
+            path: `/${PATHS.PUBLIC.BOOKING}`,
+        },
+        {
+            key: "kitchen",
+            name: "Bếp",
+            path: `/${PATHS.PUBLIC.KITCHEN}`,
+        },
     ];
     return (
         <header className="container sticky top-[10px] z-50 mx-auto rounded-[20px] border border-[#E7CEAC] bg-[#E7CEAC] p-4">

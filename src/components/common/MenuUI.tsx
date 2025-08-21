@@ -34,7 +34,7 @@ function MenuUI({ menuItem, onClick, type }: MenuUIProps) {
                 alt={menuItem.name}
                 width={100}
                 height={100}
-                className="h-[100px] w-[100px] rounded-md"
+                className="min-h-[100px] w-[100px] rounded-md"
             />
             <p className="text-sm font-medium">{menuItem.name}</p>
             <p className="text-md text-gray-500">{formatNumberWithCommas(menuItem.price)}</p>

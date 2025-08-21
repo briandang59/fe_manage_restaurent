@@ -141,6 +141,12 @@ function MenuPublic() {
                 );
             }
 
+            // ✅ Xóa danh sách món tạm ở bàn hiện tại
+            setTableMenuItems((prev) => ({
+                ...prev,
+                [tableId]: [],
+            }));
+
             toast.success("Cập nhật order thành công");
         } catch (error) {
             toast.error(`${error}`);
@@ -183,7 +189,7 @@ function MenuPublic() {
                         {/* Menu */}
                         <div className="mt-4 flex flex-col gap-4">
                             <h3 className="text-lg font-medium">Thực đơn món</h3>
-                            <div className="grid grid-cols-3 gap-4">
+                            <div className="grid max-h-[500px] grid-cols-3 gap-4 overflow-y-auto">
                                 {menuItems?.data?.map((menuItem) => (
                                     <MenuUI
                                         key={menuItem.id}
