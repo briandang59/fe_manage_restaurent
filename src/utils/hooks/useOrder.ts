@@ -4,7 +4,7 @@ import { OrderResponse } from "@/types/response/order";
 import orderApis from "@/apis/orderApis";
 import { BaseResponse } from "@/types/response/baseResponse";
 
-interface OrderRequest {
+export interface OrderRequest {
     table_id: number;
     status?: string;
 }

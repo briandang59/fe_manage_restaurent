@@ -4,10 +4,9 @@ import { CustomerResponse } from "@/types/response/customer";
 import customerApis from "@/apis/customerApis";
 import { BaseResponse } from "@/types/response/baseResponse";
 
-interface CustomerRequest {
-    name: string;
-    email: string;
-    phone: string;
+export interface CustomerRequest {
+    full_name: string;
+    phone_number: string;
 }
 
 export const customerQueryKeys = {

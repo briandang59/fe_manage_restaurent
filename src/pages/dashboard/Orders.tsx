@@ -1,11 +1,11 @@
 import Error from "@/components/common/Error";
 import Loading from "@/components/common/Loading";
-import OrderForm from "@/components/forms/OrderForm";
+// import OrderForm from "@/components/forms/OrderForm";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { createOrderColumns } from "@/utils/constants/cols/orderCols";
-import { useOrders, useCreateOrder, useUpdateOrder, useDeleteOrder } from "@/utils/hooks/useOrder";
+import { useOrders, useDeleteOrder } from "@/utils/hooks/useOrder";
 import { useState } from "react";
 import { OrderResponse } from "@/types/response/order";
 import { toast } from "sonner";
@@ -13,11 +13,11 @@ import { toast } from "sonner";
 function Orders() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-    const [selectedItem, setSelectedItem] = useState<OrderResponse | null>(null);
+    const [, setSelectedItem] = useState<OrderResponse | null>(null);
     const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
     const { data: orderData, isLoading, error } = useOrders(page, pageSize);
-    const createMutation = useCreateOrder();
-    const updateMutation = useUpdateOrder();
+    // const createMutation = useCreateOrder();
+    // const updateMutation = useUpdateOrder();
     const deleteMutation = useDeleteOrder();
     const orderItem = orderData?.data || [];
     const paginationData = orderData?.pagination;
@@ -34,37 +34,37 @@ function Orders() {
         return <Error />;
     }
 
-    const handleSubmitOrder = async (data: Partial<OrderResponse>) => {
-        if (!data.employee_id || !data.date || !data.status) {
-            toast.error("Vui lòng điền đầy đủ thông tin");
-            return;
-        }
+    // const handleSubmitOrder = async (data: Partial<OrderResponse>) => {
+    //     if (!data.employee_id || !data.date || !data.status) {
+    //         toast.error("Vui lòng điền đầy đủ thông tin");
+    //         return;
+    //     }
 
-        try {
-            const commonData = {
-                employee_id: data.employee_id,
-                date: data.date,
-                status: data.status,
-            };
+    //     try {
+    //         const commonData = {
+    //             employee_id: data.employee_id,
+    //             date: data.date,
+    //             status: data.status,
+    //         };
 
-            if (data.id) {
-                // Cập nhật
-                await updateMutation.mutateAsync({
-                    ...commonData,
-                    id: data.id.toString(),
-                });
-                toast.success("Cập nhật đơn hàng thành công");
-                setIsUpdateDialogOpen(false);
-                setSelectedItem(null);
-            } else {
-                // Tạo mới
-                await createMutation.mutateAsync(commonData);
-                toast.success("Tạo đơn hàng thành công");
-            }
-        } catch (error: any) {
-            toast.error(error.message || "Có lỗi xảy ra khi xử lý đơn hàng");
-        }
-    };
+    //         if (data.id) {
+    //             // Cập nhật
+    //             await updateMutation.mutateAsync({
+    //                 ...commonData,
+    //                 id: data.id.toString(),
+    //             });
+    //             toast.success("Cập nhật đơn hàng thành công");
+    //             setIsUpdateDialogOpen(false);
+    //             setSelectedItem(null);
+    //         } else {
+    //             // Tạo mới
+    //             await createMutation.mutateAsync(commonData);
+    //             toast.success("Tạo đơn hàng thành công");
+    //         }
+    //     } catch (error: any) {
+    //         toast.error(error.message || "Có lỗi xảy ra khi xử lý đơn hàng");
+    //     }
+    // };
 
     const handleDeleteOrder = async (id: string) => {
         try {
@@ -96,11 +96,11 @@ function Orders() {
                         <SheetHeader>
                             <SheetTitle>Tạo đơn hàng mới</SheetTitle>
                         </SheetHeader>
-                        <OrderForm
+                        {/* <OrderForm
                             mode="create"
                             onSubmit={handleSubmitOrder}
                             isLoading={createMutation.isPending}
-                        />
+                        /> */}
                     </SheetContent>
                 </Sheet>
             </div>
@@ -111,12 +111,12 @@ function Orders() {
                     <SheetHeader>
                         <SheetTitle>Cập nhật đơn hàng</SheetTitle>
                     </SheetHeader>
-                    <OrderForm
+                    {/* <OrderForm
                         mode="update"
                         onSubmit={handleSubmitOrder}
                         initialData={selectedItem || undefined}
                         isLoading={updateMutation.isPending}
-                    />
+                    /> */}
                 </SheetContent>
             </Sheet>
 

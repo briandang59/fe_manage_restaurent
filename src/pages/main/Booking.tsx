@@ -7,15 +7,50 @@ import Image from "@/components/ui/image";
 import images from "@/assets/images";
 import { INFORMATION } from "@/utils/constants/common/information";
 import { useForm } from "react-hook-form";
+import { useCreateBooking } from "@/utils/hooks/useBooking";
+import toast from "react-hot-toast";
+import { BookingRequestType } from "@/types/request/booking";
+import { Button } from "@/components/ui/button";
+import dayjs from "dayjs";
+import { useCreateCustomer } from "@/utils/hooks/useCustomer";
 
+interface BookingFormProps {
+    fullname: string;
+    phone: string;
+    email: string;
+    date: string;
+    time: string;
+    people: number;
+    note: string;
+}
 function Booking() {
+    const createBooking = useCreateBooking();
+    const createCustomer = useCreateCustomer();
     const {
         handleSubmit,
         control,
         formState: { errors },
     } = useForm<any>({});
-    const onSubmit = (data: any) => {
-        console.log(data);
+    const onSubmit = async (data: BookingFormProps) => {
+        try {
+            const payload: BookingRequestType = {
+                booking_date: dayjs(data.date).format("YYYY/MM/DD"),
+                booking_time: data.time,
+                customer_name: data.fullname,
+                email: data.email,
+                memo: data.note,
+                phone_number: data.phone,
+                total_persons: Number(data.people),
+            };
+            await createBooking.mutateAsync(payload);
+            await createCustomer.mutateAsync({
+                full_name: data.fullname,
+                phone_number: data.phone,
+            });
+            toast.success("Đặt bàn thành công");
+        } catch (error) {
+            toast.error(`${error}`);
+        }
     };
     return (
         <div className="min-h-screen bg-[#FFFBEE] p-[96px_32px]">
@@ -83,6 +118,7 @@ function Booking() {
                             required
                             placeholder="Ghi chú"
                         />
+                        <Button type="submit">Xác nhận</Button>
                     </form>
                 </div>
                 <div className="flex flex-col gap-4 rounded-[10px] border border-gray-200 bg-white p-4 shadow-md">

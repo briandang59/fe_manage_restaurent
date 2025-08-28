@@ -47,9 +47,8 @@ function Customer() {
 
         try {
             const commonData = {
-                name: data.name,
-                email: data.email,
-                phone: data.phone,
+                full_name: data.name,
+                phone_number: data.phone,
             };
 
             if (data.id) {
