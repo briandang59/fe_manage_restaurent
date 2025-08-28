@@ -33,8 +33,8 @@ function Header() {
         },
     ];
     return (
-        <header className="container sticky top-[10px] z-50 mx-auto rounded-[20px] border border-[#E7CEAC] bg-[#E7CEAC] p-4">
-            <div className="flex items-center justify-between gap-2">
+        <header className="sticky left-0 right-0 top-0 z-50 mx-auto w-full rounded-[4px] border-b bg-white p-4">
+            <div className="container mx-auto flex items-center justify-between gap-2">
                 <div className="flex items-center gap-8">
                     <Image
                         src={images.logo}
@@ -43,7 +43,7 @@ function Header() {
                         height={50}
                         className="rounded-[10px]"
                     />
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-[40px]">
                         {pages.map((page) => (
                             <Link
                                 key={page.key}
