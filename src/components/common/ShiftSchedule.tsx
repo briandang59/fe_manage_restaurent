@@ -1,19 +1,29 @@
 import { ShiftScheduleResponseType } from "@/types/response/shiftSchedule";
 import { CheckTime } from "@/utils/functions/checkTime";
+import { Calendar, Clock } from "lucide-react";
 
 interface ShiftScheduleProps {
     record: ShiftScheduleResponseType;
 }
 function ShiftSchedule({ record }: ShiftScheduleProps) {
     return (
-        <div className="flex items-center justify-between gap-4 rounded-[10px] border p-4 shadow-sm">
+        <div className="relative flex items-center justify-between rounded-xl border bg-gradient-to-b from-white to-gray-50 p-5 shadow-sm transition hover:shadow-md">
+            {/* Left info */}
             <div className="flex flex-col gap-2">
-                <h3 className="text-[20px] font-semibold">{record?.shift?.shift_name}</h3>
-                <p className="text-[14px] text-gray-500">{record?.date}</p>
+                <div className="flex items-center gap-2 text-gray-500">
+                    <Calendar className="h-5 w-5 text-primary" />
+                    <span className="text-sm">{record.date}</span>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800">{record.shift?.shift_name}</h3>
             </div>
-            <p className="text-[20px] font-medium text-blue-500">
-                {CheckTime(record?.shift?.start_time)} - {CheckTime(record?.shift?.end_time)}
-            </p>
+
+            {/* Right info */}
+            <div className="flex items-center gap-2 rounded-lg bg-blue-50 px-4 py-2">
+                <Clock className="h-5 w-5 text-blue-500" />
+                <span className="text-base font-medium text-blue-600">
+                    {CheckTime(record.shift?.start_time)} - {CheckTime(record.shift?.end_time)}
+                </span>
+            </div>
         </div>
     );
 }
