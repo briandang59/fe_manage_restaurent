@@ -17,6 +17,20 @@ interface LoginResponse {
         id: number;
         role_name: string;
     };
+    employee: {
+        address: string;
+        avatar_file_id: number;
+        base_salary: number;
+        birthday: string;
+        email: string;
+        full_name: string;
+        gender: boolean;
+        id: number;
+        join_date: string;
+        phone_number: string;
+        salary_per_hour: number;
+        schedule_type: string;
+    };
 }
 
 const authApis = {

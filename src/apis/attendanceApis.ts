@@ -5,9 +5,14 @@ import { ApiResponse } from "@/types/response/pagination";
 import { AttendanceResponse } from "@/types/response/attendance";
 
 interface AttendanceRequest {
-    employee_id: number;
-    date: string;
-    status: string;
+    shift_schedule_id: number;
+    actual_start_time: string;
+    actual_end_time: string;
+}
+
+interface AttendanceUpdateRequest {
+    actual_start_time?: string;
+    actual_end_time?: string;
 }
 
 const attendanceApis = {
@@ -16,12 +21,15 @@ const attendanceApis = {
         pageSize: number
     ): Promise<ApiResponse<AttendanceResponse>> => {
         try {
-            const response = await axiosInstance.get(`/${urls.api}/${urls.attendances}`, {
-                params: {
-                    page,
-                    page_size: pageSize,
-                },
-            });
+            const response = await axiosInstance.get(
+                `/${urls.api}/${urls.attendances}?populate[shift]&page=${page}&page_size=${pageSize}`,
+                {
+                    params: {
+                        page,
+                        page_size: pageSize,
+                    },
+                }
+            );
             return response.data;
         } catch (error) {
             throw error;
@@ -50,7 +58,7 @@ const attendanceApis = {
 
     updateAttendance: async (
         id: string,
-        data: Partial<AttendanceRequest>
+        data: AttendanceUpdateRequest
     ): Promise<BaseResponse<AttendanceResponse>> => {
         try {
             const response = await axiosInstance.patch(

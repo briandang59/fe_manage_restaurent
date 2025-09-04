@@ -26,8 +26,10 @@ export const useAuth = () => {
                 localStorage.setItem("role", JSON.stringify(data.data.role));
             }
 
+            if (data.data?.employee) {
+                localStorage.setItem("employee", JSON.stringify(data.data.employee));
+            }
             const roleName = data.data?.role?.role_name;
-            console.log("Role name:", roleName);
             if (roleName === "Admin") {
                 navigate("/dashboard");
             } else {

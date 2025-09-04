@@ -5,9 +5,14 @@ import attendanceApis from "@/apis/attendanceApis";
 import { BaseResponse } from "@/types/response/baseResponse";
 
 interface AttendanceRequest {
-    employee_id: number;
-    date: string;
-    status: string;
+    shift_schedule_id: number;
+    actual_start_time: string;
+    actual_end_time: string;
+}
+
+interface AttendanceUpdateRequest {
+    actual_start_time?: string;
+    actual_end_time?: string;
 }
 
 export const attendanceQueryKeys = {
@@ -52,13 +57,13 @@ export const useCreateAttendance = (): UseMutationResult<
 export const useUpdateAttendance = (): UseMutationResult<
     BaseResponse<AttendanceResponse>,
     Error,
-    AttendanceRequest & { id: string }
+    AttendanceUpdateRequest & { id: string }
 > => {
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: async (
-            data: AttendanceRequest & { id: string }
+            data: AttendanceUpdateRequest & { id: string }
         ): Promise<BaseResponse<AttendanceResponse>> => {
             return await attendanceApis.updateAttendance(data.id, data);
         },

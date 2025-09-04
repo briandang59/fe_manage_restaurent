@@ -25,6 +25,7 @@ const Ingredient = lazy(() => import("@/pages/dashboard/Ingredient"));
 const Shift = lazy(() => import("@/pages/dashboard/Shift"));
 const Booking = lazy(() => import("@/pages/main/Booking"));
 const Kitchen = lazy(() => import("@/pages/main/Kitchen"));
+const Profile = lazy(() => import("@/pages/main/Profile"));
 
 const LoadingFallback = () => (
     <div className="flex h-screen items-center justify-center">Loading...</div>
@@ -68,6 +69,14 @@ export const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<LoadingFallback />}>
                         <Kitchen />
+                    </Suspense>
+                ),
+            },
+            {
+                path: `${PATHS.PUBLIC.PROFILE}`,
+                element: (
+                    <Suspense fallback={<LoadingFallback />}>
+                        <Profile />
                     </Suspense>
                 ),
             },

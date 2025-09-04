@@ -4,11 +4,12 @@ import { BaseResponse } from "@/types/response/baseResponse";
 import { ApiResponse } from "@/types/response/pagination";
 import { AvailibilitiesResponse } from "@/types/response/availibilities";
 
-interface AvailibilitiesRequest {
-    shift_id: number;
+export interface AvailibilitiesRequest {
+    id?: number;
     employee_id: number;
-    date: string;
-    status: string;
+    shift_id: number;
+    day_of_week: string;
+    is_available: boolean;
 }
 
 const availibilitiesApis = {
@@ -17,12 +18,15 @@ const availibilitiesApis = {
         pageSize: number
     ): Promise<ApiResponse<AvailibilitiesResponse>> => {
         try {
-            const response = await axiosInstance.get(`/${urls.api}/${urls.availibilities}`, {
-                params: {
-                    page,
-                    page_size: pageSize,
-                },
-            });
+            const response = await axiosInstance.get(
+                `/${urls.api}/${urls.availibilities}?populate[shift]`,
+                {
+                    params: {
+                        page,
+                        page_size: pageSize,
+                    },
+                }
+            );
             return response.data;
         } catch (error) {
             throw error;

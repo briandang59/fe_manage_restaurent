@@ -1,15 +1,8 @@
 import { useMutation, useQuery, useQueryClient, UseMutationResult } from "@tanstack/react-query";
 import { ApiResponse } from "@/types/response/pagination";
 import { AvailibilitiesResponse } from "@/types/response/availibilities";
-import availibilitiesApis from "@/apis/availibilitiesApis";
+import availibilitiesApis, { AvailibilitiesRequest } from "@/apis/availibilitiesApis";
 import { BaseResponse } from "@/types/response/baseResponse";
-
-interface AvailibilitiesRequest {
-    shift_id: number;
-    employee_id: number;
-    date: string;
-    status: string;
-}
 
 export const availibilitiesQueryKeys = {
     all: ["availibilities"] as const,
@@ -55,15 +48,30 @@ export const useCreateAvailibilities = (): UseMutationResult<
 export const useUpdateAvailibilities = (): UseMutationResult<
     BaseResponse<AvailibilitiesResponse>,
     Error,
-    AvailibilitiesRequest & { id: string }
+    {
+        id: string;
+        is_available: boolean;
+        employee_id: number;
+        shift_id: number;
+        day_of_week: string;
+    }
 > => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (
-            data: AvailibilitiesRequest & { id: string }
-        ): Promise<BaseResponse<AvailibilitiesResponse>> => {
-            return await availibilitiesApis.updateAvailibilities(data.id, data);
+        mutationFn: async (data: {
+            id: string;
+            is_available: boolean;
+            employee_id: number;
+            shift_id: number;
+            day_of_week: string;
+        }): Promise<BaseResponse<AvailibilitiesResponse>> => {
+            return await availibilitiesApis.updateAvailibilities(data.id, {
+                employee_id: data.employee_id,
+                shift_id: data.shift_id,
+                day_of_week: data.day_of_week,
+                is_available: data.is_available,
+            });
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: availibilitiesQueryKeys.lists() });

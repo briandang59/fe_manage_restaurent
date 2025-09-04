@@ -4,12 +4,13 @@ import Image from "@/components/ui/image";
 import { PATHS } from "@/utils/constants/common/paths";
 import { useAuth } from "@/utils/hooks/useAuth";
 import { User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Header() {
     const { getUser, getRole, logout } = useAuth();
     const user = getUser();
     const role = getRole();
+    const navigate = useNavigate();
     const pages = [
         {
             key: "home",
@@ -56,12 +57,15 @@ function Header() {
                     </div>
                 </div>
                 <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
+                    <button
+                        className="flex items-center gap-2"
+                        onClick={() => navigate(PATHS.PUBLIC.PROFILE)}
+                    >
                         <User className="text-[#3B2010]" />
                         <span className="text-sm font-medium text-[#3B2010]">
                             {user?.user_name} - ({role?.role_name})
                         </span>
-                    </div>
+                    </button>
                     <Button variant="outline" onClick={logout}>
                         Đăng xuất
                     </Button>

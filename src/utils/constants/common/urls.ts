@@ -21,5 +21,6 @@ const urls = {
     table: "table",
     order: "order",
     bookings: "bookings",
+    shifts_chedules: "shifts-chedules",
 };
 export default urls;
