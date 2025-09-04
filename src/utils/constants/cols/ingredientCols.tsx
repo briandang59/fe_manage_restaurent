@@ -24,7 +24,7 @@ export const createIngredientColumns = (
         accessorKey: "index",
         header: "STT",
         cell: ({ row }) => {
-            return <div className="text-center">{row.index + 1}</div>;
+            return <div>{row.index + 1}</div>;
         },
     },
     {
@@ -32,12 +32,32 @@ export const createIngredientColumns = (
         header: "Tên nguyên liệu",
     },
     {
+        accessorKey: "description",
+        header: "Mô tả",
+    },
+    {
         accessorKey: "quantity",
         header: "Số lượng",
         cell: ({ row }) => {
             const quantity = row.getValue("quantity") as number;
-            return <p className="text-center">{quantity}</p>;
+            return <p>{quantity}</p>;
         },
+    },
+    {
+        accessorKey: "warning_quantity",
+        header: "Số lượng giới hạn",
+        cell: ({ row }) => {
+            const quantity = row.getValue("warning_quantity") as number;
+            return <p>{quantity}</p>;
+        },
+    },
+    {
+        accessorKey: "unit",
+        header: "Đơn vị",
+    },
+    {
+        accessorKey: "suplier",
+        header: "Nhà cung cấp",
     },
     {
         accessorKey: "created_at",

@@ -49,6 +49,10 @@ function Ingredient() {
             const commonData = {
                 name: data.name,
                 quantity: Number(data.quantity),
+                description: data.description,
+                warning_quantity: Number(data.warning_quantity),
+                supplier: data.supplier,
+                unit: data.unit,
             };
 
             if (data.id) {
