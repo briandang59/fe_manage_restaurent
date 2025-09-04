@@ -22,5 +22,6 @@ const urls = {
     order: "order",
     bookings: "bookings",
     shifts_chedules: "shifts-chedules",
+    tickets: "tickets",
 };
 export default urls;

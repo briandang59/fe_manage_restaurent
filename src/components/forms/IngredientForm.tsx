@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
 import { IngredientResponse } from "@/types/response/ingredients";
 import { FormSelect } from "../forms-component/FormSelect";
+import { variables } from "@/utils/constants/common/variables";
 
 interface IngredientFormProps {
     onSubmit: (data: Partial<IngredientResponse>) => void;
@@ -34,25 +35,6 @@ function IngredientForm({ onSubmit, initialData, isLoading }: IngredientFormProp
             reset(initialData);
         }
     }, [initialData, reset]);
-
-    const unitOptions = [
-        { value: "kg", label: "Kilogram (kg)" },
-        { value: "g", label: "Gram (g)" },
-        { value: "l", label: "Lít (L)" },
-        { value: "ml", label: "Mililít (ml)" },
-        { value: "cai", label: "Cái" },
-        { value: "qua", label: "Quả" },
-        { value: "con", label: "Con" },
-        { value: "mieng", label: "Miếng" },
-        { value: "phan", label: "Phần" },
-        { value: "hop", label: "Hộp" },
-        { value: "chai", label: "Chai" },
-        { value: "lon", label: "Lon" },
-        { value: "thung", label: "Thùng" },
-        { value: "vi", label: "Vỉ" },
-        { value: "tui", label: "Túi/Bịch" },
-        { value: "bao", label: "Bao" },
-    ];
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -87,7 +69,7 @@ function IngredientForm({ onSubmit, initialData, isLoading }: IngredientFormProp
                 label="Đơn vị"
                 name="unit"
                 errors={errors}
-                options={unitOptions}
+                options={variables.unitOptions}
             />
             <div className="flex justify-end space-x-2 pt-4">
                 <Button type="submit" disabled={isLoading}>

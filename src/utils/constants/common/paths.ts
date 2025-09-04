@@ -20,5 +20,6 @@ export const PATHS = {
         BOOKING: "booking",
         KITCHEN: "kitchen",
         PROFILE: "profile",
+        TICKET: "ticket",
     },
 };

@@ -1,0 +1,20 @@
+export const variables = {
+    unitOptions: [
+        { value: "kg", label: "Kilogram (kg)" },
+        { value: "g", label: "Gram (g)" },
+        { value: "l", label: "Lít (L)" },
+        { value: "ml", label: "Mililít (ml)" },
+        { value: "cai", label: "Cái" },
+        { value: "qua", label: "Quả" },
+        { value: "con", label: "Con" },
+        { value: "mieng", label: "Miếng" },
+        { value: "phan", label: "Phần" },
+        { value: "hop", label: "Hộp" },
+        { value: "chai", label: "Chai" },
+        { value: "lon", label: "Lon" },
+        { value: "thung", label: "Thùng" },
+        { value: "vi", label: "Vỉ" },
+        { value: "tui", label: "Túi/Bịch" },
+        { value: "bao", label: "Bao" },
+    ],
+};
