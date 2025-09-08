@@ -56,7 +56,7 @@ export const createIngredientColumns = (
         header: "Đơn vị",
     },
     {
-        accessorKey: "suplier",
+        accessorKey: "supplier",
         header: "Nhà cung cấp",
     },
     {

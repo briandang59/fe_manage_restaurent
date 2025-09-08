@@ -3,6 +3,7 @@ import { ApiResponse } from "@/types/response/pagination";
 import { BaseResponse } from "@/types/response/baseResponse";
 import { TicketRequestType } from "@/types/request/ticket";
 import ticketApis from "@/apis/ticketApis";
+import { TicketResponseType } from "@/types/response/ticket";
 
 export const ticketQueryKeys = {
     all: ["ticket"] as const,
@@ -39,6 +40,28 @@ export const useCreateTicket = (): UseMutationResult<
         },
         onError: (error) => {
             console.error("Lỗi khi tạo bàn:", error);
+        },
+    });
+};
+
+export const useUpdateTicket = (): UseMutationResult<
+    BaseResponse<TicketResponseType>,
+    Error,
+    TicketRequestType & { id: string }
+> => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (
+            data: TicketRequestType & { id: string }
+        ): Promise<BaseResponse<TicketResponseType>> => {
+            return await ticketApis.updateTicket(data.id, data);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ticketQueryKeys.lists() });
+        },
+        onError: (error) => {
+            console.error("Lỗi khi cập nhật bàn:", error);
         },
     });
 };

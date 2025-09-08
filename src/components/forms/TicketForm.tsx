@@ -72,7 +72,7 @@ function TicketForm({ onSubmit, initialData, isLoading }: TicketFormProps) {
             />
             <FormSelect
                 control={control}
-                label="Tên nguyên vật liệu"
+                label="Đơn vị"
                 name="unit"
                 errors={errors}
                 options={variables.unitOptions}

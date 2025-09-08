@@ -7,12 +7,15 @@ import { BaseResponse } from "@/types/response/baseResponse";
 const ticketApis = {
     getTicket: async (page: number, pageSize: number): Promise<ApiResponse<any>> => {
         try {
-            const response = await axiosInstance.get(`/${urls.api}/${urls.tickets}`, {
-                params: {
-                    page,
-                    page_size: pageSize,
-                },
-            });
+            const response = await axiosInstance.get(
+                `/${urls.api}/${urls.tickets}?populate[ingredient]`,
+                {
+                    params: {
+                        page,
+                        page_size: pageSize,
+                    },
+                }
+            );
             return response.data;
         } catch (error) {
             throw error;
@@ -22,6 +25,15 @@ const ticketApis = {
     createTicket: async (data: TicketRequestType): Promise<BaseResponse<any>> => {
         try {
             const response = await axiosInstance.post(`/${urls.api}/${urls.tickets}`, data);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    updateTicket: async (id: string, data: TicketRequestType): Promise<BaseResponse<any>> => {
+        try {
+            const response = await axiosInstance.patch(`/${urls.api}/${urls.tickets}/${id}`, data);
             return response.data;
         } catch (error) {
             throw error;

@@ -12,7 +12,7 @@ export type TicketResponseType = {
         warning_quantity: number;
         supplier: string;
         unit: string;
-        created_at: string; // ISO datetime string
+        created_at: string;
         updated_at: string;
     };
     created_at: string;
