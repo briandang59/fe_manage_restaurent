@@ -24,6 +24,7 @@ const Avaibilities = lazy(() => import("@/pages/dashboard/Avaibilities"));
 const Ingredient = lazy(() => import("@/pages/dashboard/Ingredient"));
 const Shift = lazy(() => import("@/pages/dashboard/Shift"));
 const Booking = lazy(() => import("@/pages/main/Booking"));
+const BookingManagement = lazy(() => import("@/pages/dashboard/BookingManagement"));
 const Kitchen = lazy(() => import("@/pages/main/Kitchen"));
 const Profile = lazy(() => import("@/pages/main/Profile"));
 const Ticket = lazy(() => import("@/pages/main/Ticket"));
@@ -177,6 +178,14 @@ export const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<LoadingFallback />}>
                         <Table />
+                    </Suspense>
+                ),
+            },
+            {
+                path: `${PATHS.MANAGE.BOOKING_MANAGEMENT}`,
+                element: (
+                    <Suspense fallback={<LoadingFallback />}>
+                        <BookingManagement />
                     </Suspense>
                 ),
             },

@@ -4,20 +4,26 @@ import Loading from "@/components/common/Loading";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { createOrderColumns } from "@/utils/constants/cols/orderCols";
-import { useOrders, useDeleteOrder } from "@/utils/hooks/useOrder";
+import { useOrders, useDeleteOrder, useUpdateOrder } from "@/utils/hooks/useOrder";
 import { useState } from "react";
 import { OrderResponse } from "@/types/response/order";
 import { toast } from "sonner";
+import Invoice from "@/components/common/Invoice";
 
 function Orders() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [, setSelectedItem] = useState<OrderResponse | null>(null);
     const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
+    const [isInvoiceOpen, setIsInvoiceOpen] = useState(false);
+    const [selectedOrderForInvoice, setSelectedOrderForInvoice] = useState<OrderResponse | null>(
+        null
+    );
     const { data: orderData, isLoading, error } = useOrders(page, pageSize);
     // const createMutation = useCreateOrder();
-    // const updateMutation = useUpdateOrder();
+    const updateMutation = useUpdateOrder();
     const deleteMutation = useDeleteOrder();
     const orderItem = orderData?.data || [];
     const paginationData = orderData?.pagination;
@@ -75,12 +81,35 @@ function Orders() {
         }
     };
 
+    const handlePayment = (order: OrderResponse) => {
+        setSelectedOrderForInvoice(order);
+        setIsInvoiceOpen(true);
+    };
+
+    const handleCompletePayment = async () => {
+        if (selectedOrderForInvoice) {
+            try {
+                await updateMutation.mutateAsync({
+                    id: selectedOrderForInvoice.id.toString(),
+                    table_id: 1, // Default table ID
+                    status: "completed",
+                });
+                toast.success("Thanh toán thành công");
+                setIsInvoiceOpen(false);
+                setSelectedOrderForInvoice(null);
+            } catch (error: any) {
+                toast.error(error.message || "Có lỗi xảy ra khi thanh toán");
+            }
+        }
+    };
+
     const orderCols = createOrderColumns(
         (item) => {
             setSelectedItem(item);
             setIsUpdateDialogOpen(true);
         },
         handleDeleteOrder,
+        handlePayment,
         deleteMutation.isPending
     );
 
@@ -130,6 +159,33 @@ function Orders() {
                 totalPages={totalPages}
                 totalItems={totalItems}
             />
+
+            {/* Invoice Dialog */}
+            <Dialog open={isInvoiceOpen} onOpenChange={setIsInvoiceOpen}>
+                <DialogContent className="max-h-[90vh] max-w-6xl overflow-y-auto">
+                    <DialogHeader>
+                        <DialogTitle>Hóa đơn thanh toán</DialogTitle>
+                    </DialogHeader>
+                    {selectedOrderForInvoice && (
+                        <Invoice
+                            order={selectedOrderForInvoice}
+                            onClose={() => {
+                                setIsInvoiceOpen(false);
+                                setSelectedOrderForInvoice(null);
+                            }}
+                        />
+                    )}
+                    <div className="mt-4 flex justify-end gap-2">
+                        <Button
+                            onClick={handleCompletePayment}
+                            disabled={updateMutation.isPending}
+                            className="bg-green-600 hover:bg-green-700"
+                        >
+                            {updateMutation.isPending ? "Đang xử lý..." : "Hoàn thành thanh toán"}
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

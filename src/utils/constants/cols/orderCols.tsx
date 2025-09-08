@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Trash2, CreditCard } from "lucide-react";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -18,6 +18,7 @@ import dayjs from "dayjs";
 export const createOrderColumns = (
     onEdit?: (item: OrderResponse) => void,
     onDelete?: (id: string) => void,
+    onPayment?: (item: OrderResponse) => void,
     isDeleting?: boolean
 ): ColumnDef<OrderResponse>[] => [
     {
@@ -94,6 +95,17 @@ export const createOrderColumns = (
                     <Button variant="outline" size="sm" onClick={() => onEdit?.(orderItem)}>
                         <Edit className="h-4 w-4" />
                     </Button>
+
+                    {orderItem.status === "pending" && (
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => onPayment?.(orderItem)}
+                            className="bg-green-50 text-green-700 hover:bg-green-100"
+                        >
+                            <CreditCard className="h-4 w-4" />
+                        </Button>
+                    )}
 
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
