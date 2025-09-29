@@ -55,11 +55,11 @@ const orderItemApis = {
 
     updateOrderItem: async (
         id: string,
-        data: OrderItemRequestType & { id: string }
+        data: Partial<OrderItemRequestType>
     ): Promise<BaseResponse<OrderItemResponse>> => {
         try {
             const response = await axiosInstance.patch(
-                `/${urls.api}/${urls.availibilities}/${id}`,
+                `/${urls.api}/${urls.orderitems}/${id}`,
                 data
             );
             return response.data;

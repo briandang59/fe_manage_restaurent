@@ -1,12 +1,13 @@
+import orderItemApis from "@/apis/orderItemApis";
 import OrderCard from "@/components/common/OrderByTable";
 import { useOrderItems } from "@/utils/hooks/useOrderItem";
 
 function Kitchen() {
-    const { data: orders } = useOrderItems(1, 10);
+    const { data: orders, refetch } = useOrderItems(1, 10);
 
-    const handleUpdateStatus = (id: number, status: string) => {
-        console.log(`Update order item ${id} to status ${status}`);
-        // TODO: gọi API update trạng thái ở đây
+    const handleUpdateStatus = async (id: number, status: string) => {
+        await orderItemApis.updateOrderItem(id.toString(), { status });
+        refetch();
     };
 
     return (

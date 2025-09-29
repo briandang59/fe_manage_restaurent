@@ -6,5 +6,6 @@ export type OrderItemRequestType = {
     order_id: number;
     quantity: number;
     menu_item_id: number;
+    status: string;
     memo: string;
 };

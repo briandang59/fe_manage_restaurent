@@ -7,6 +7,9 @@ interface Props {
 }
 
 export default function OrderCard({ orderItem, onUpdateStatus }: Props) {
+    const canShowOnProgressButton = orderItem.status === "Pending";
+    const canShowDoneButton = orderItem.status === "OnProgress";
+
     return (
         <div className="flex flex-col rounded-2xl border bg-white p-4 shadow-md">
             {/* Header */}
@@ -16,7 +19,7 @@ export default function OrderCard({ orderItem, onUpdateStatus }: Props) {
                     className={`rounded-full px-3 py-1 text-xs font-semibold text-white ${
                         orderItem.status === "Pending"
                             ? "bg-red-500"
-                            : orderItem.status === "Cooking"
+                            : orderItem.status === "OnProgress"
                               ? "bg-yellow-500"
                               : "bg-green-600"
                     }`}
@@ -44,20 +47,27 @@ export default function OrderCard({ orderItem, onUpdateStatus }: Props) {
             </div>
 
             {/* Footer */}
-            <div className="mt-auto flex gap-2">
-                <button
-                    onClick={() => onUpdateStatus?.("Cooking")}
-                    className="flex-1 rounded-lg bg-yellow-500 py-2 font-semibold text-white hover:bg-yellow-600"
-                >
-                    Đang nấu
-                </button>
-                <button
-                    onClick={() => onUpdateStatus?.("Served")}
-                    className="flex-1 rounded-lg bg-green-600 py-2 font-semibold text-white hover:bg-green-700"
-                >
-                    Xong
-                </button>
-            </div>
+            {orderItem.status !== "Done" && (
+                <div className="mt-auto flex gap-2">
+                    {canShowOnProgressButton && (
+                        <button
+                            onClick={() => onUpdateStatus?.("OnProgress")}
+                            className="flex-1 rounded-lg bg-yellow-500 py-2 font-semibold text-white hover:bg-yellow-600"
+                        >
+                            Đang nấu
+                        </button>
+                    )}
+
+                    {canShowDoneButton && (
+                        <button
+                            onClick={() => onUpdateStatus?.("Done")}
+                            className="flex-1 rounded-lg bg-green-600 py-2 font-semibold text-white hover:bg-green-700"
+                        >
+                            Xong
+                        </button>
+                    )}
+                </div>
+            )}
         </div>
     );
 }
