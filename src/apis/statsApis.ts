@@ -117,6 +117,12 @@ const statsApis = {
             throw error;
         }
     },
+    getAllSalaries: async (month: string) => {
+        const res = await axiosInstance.get(`/${urls.api}/salary/all`, {
+            params: { month },
+        });
+        return res.data;
+    },
 };
 
 export default statsApis;

@@ -99,3 +99,15 @@ export const useTicketsStats = (fromDate?: string, toDate?: string) => {
         gcTime: 10 * 60 * 1000,
     });
 };
+
+export const useAllSalaries = (month?: string) => {
+    return useQuery({
+        queryKey: ["salaries", month],
+        queryFn: async (): Promise<BaseResponse<any[]>> => {
+            if (!month) return { data: [] } as unknown as BaseResponse<any[]>;
+            return await statsApis.getAllSalaries(month);
+        },
+        enabled: !!month,
+        staleTime: 5 * 60 * 1000,
+    });
+};

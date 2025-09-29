@@ -8,6 +8,7 @@ import {
     useOrdersStats,
     useRevenueStats,
     useTicketsStats,
+    useAllSalaries,
 } from "@/utils/hooks/useStats";
 
 import { useState } from "react";
@@ -25,19 +26,29 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { formatNumberWithCommas } from "@/utils/functions/formatNumberWithCommas";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 const Dashboard = () => {
     const { getUser, getRole } = useAuth();
     const user = getUser();
     const role = getRole();
 
-    // Date range state
+    // Date range state cho các stats khác
     const [dateRange, setDateRange] = useState<DateRange | undefined>({
         from: new Date(),
         to: new Date(),
     });
 
-    // Convert to yyyy-MM-dd string
+    // State chọn tháng cho salary
+    const [selectedMonth, setSelectedMonth] = useState<string>(format(new Date(), "yyyy-MM"));
+
+    // Convert sang string yyyy-MM-dd cho stats
     const fromDateStr = dateRange?.from ? format(dateRange.from, "yyyy-MM-dd") : undefined;
     const toDateStr = dateRange?.to ? format(dateRange.to, "yyyy-MM-dd") : undefined;
 
@@ -65,12 +76,38 @@ const Dashboard = () => {
         toDateStr
     );
 
+    // Fetch all salaries
+    const { data: salariesData, isLoading: salariesLoading } = useAllSalaries(selectedMonth);
+
     return (
         <div className="space-y-6 rounded-lg bg-gray-50 p-6">
             {/* Header */}
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
 
+                {/* Bộ chọn tháng cho salary */}
+                <div className="flex items-center gap-2">
+                    <span className="text-sm text-gray-600">Chọn tháng:</span>
+                    <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+                        <SelectTrigger className="w-[140px]">
+                            <SelectValue placeholder="Chọn tháng" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {Array.from({ length: 12 }).map((_, idx) => {
+                                const d = new Date();
+                                d.setMonth(d.getMonth() - idx);
+                                const val = format(d, "yyyy-MM");
+                                return (
+                                    <SelectItem key={val} value={val}>
+                                        {format(d, "MM/yyyy")}
+                                    </SelectItem>
+                                );
+                            })}
+                        </SelectContent>
+                    </Select>
+                </div>
+
+                {/* Date range picker cho các stats */}
                 <Popover>
                     <PopoverTrigger asChild>
                         <Button
@@ -203,6 +240,30 @@ const Dashboard = () => {
                     <p className="text-2xl font-bold text-pink-600">
                         {ticketsData?.data?.total_tickets || 0}
                     </p>
+                </StatsCard>
+
+                {/* Thêm StatsCard hiển thị tổng lương */}
+                <StatsCard
+                    title="Tổng lương nhân viên"
+                    icon={<DollarSign className="h-5 w-5 text-emerald-600" />}
+                    isLoading={salariesLoading}
+                >
+                    {salariesData?.data?.length ? (
+                        <>
+                            <p className="text-2xl font-bold text-emerald-600">
+                                {formatNumberWithCommas(
+                                    salariesData.data.reduce((sum, s) => sum + s.total_salary, 0)
+                                )}{" "}
+                                VND
+                            </p>
+                            <p className="text-sm text-gray-500">
+                                Số nhân viên:{" "}
+                                <span className="font-medium">{salariesData.data.length}</span>
+                            </p>
+                        </>
+                    ) : (
+                        <p className="text-sm text-gray-400">Chưa có dữ liệu</p>
+                    )}
                 </StatsCard>
             </div>
         </div>
