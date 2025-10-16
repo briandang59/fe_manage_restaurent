@@ -43,7 +43,7 @@ const tableApis = {
         data: Partial<TableRequest>
     ): Promise<BaseResponse<TableResponse>> => {
         try {
-            const response = await axiosInstance.patch(`/${urls.api}/${urls.tables}/${id}`, data);
+            const response = await axiosInstance.put(`/${urls.api}/${urls.tables}/${id}`, data);
             return response.data;
         } catch (error) {
             throw error;

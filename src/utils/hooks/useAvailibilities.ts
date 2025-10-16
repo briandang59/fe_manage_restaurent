@@ -12,11 +12,16 @@ export const availibilitiesQueryKeys = {
     detail: (id: string) => [...availibilitiesQueryKeys.details(), id] as const,
 };
 
-export const useAvailibilities = (page: number, pageSize: number, search?: string) => {
+export const useAvailibilities = (
+    page: number,
+    pageSize: number,
+    search?: string,
+    employee_id?: number
+) => {
     return useQuery({
         queryKey: [...availibilitiesQueryKeys.lists(), page, pageSize, search],
         queryFn: async (): Promise<ApiResponse<AvailibilitiesResponse>> => {
-            return await availibilitiesApis.getAvailibilities(page, pageSize);
+            return await availibilitiesApis.getAvailibilities(page, pageSize, employee_id);
         },
         staleTime: 5 * 60 * 1000,
         gcTime: 10 * 60 * 1000,

@@ -15,18 +15,23 @@ export interface AvailibilitiesRequest {
 const availibilitiesApis = {
     getAvailibilities: async (
         page: number,
-        pageSize: number
+        pageSize: number,
+        employee_id?: number
     ): Promise<ApiResponse<AvailibilitiesResponse>> => {
         try {
-            const response = await axiosInstance.get(
-                `/${urls.api}/${urls.availibilities}?populate[shift]`,
-                {
-                    params: {
-                        page,
-                        page_size: pageSize,
-                    },
-                }
-            );
+            const params: Record<string, any> = {
+                page,
+                page_size: pageSize,
+                "populate[shift]": true,
+            };
+
+            if (employee_id) {
+                params.employee_id = employee_id;
+            }
+
+            const response = await axiosInstance.get(`/${urls.api}/${urls.availibilities}`, {
+                params: params,
+            });
             return response.data;
         } catch (error) {
             throw error;

@@ -10,7 +10,7 @@ interface TableUIProps {
 
 function TableUI({ record, onClick, status = "empty" }: TableUIProps) {
     const statusColors: Record<typeof status, string> = {
-        empty: "bg-green-100 border-green-300 hover:bg-green-200",
+        empty: "bg-[#E7CEAD] border-[#E7CEAD] hover:bg-[#E7CEAD]",
         using: "bg-yellow-100 border-yellow-300 hover:bg-yellow-200",
         paid: "bg-gray-100 border-gray-300 hover:bg-gray-200",
     };

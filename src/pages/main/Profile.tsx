@@ -11,13 +11,16 @@ import {
     useCreateAttendance,
     useUpdateAttendance,
 } from "@/utils/hooks/useAttendance";
+import { useAuth } from "@/utils/hooks/useAuth";
 import { useAvailibilities, useUpdateAvailibilities } from "@/utils/hooks/useAvailibilities";
 import { useShiftSchedule } from "@/utils/hooks/useShiftSchedule";
 import { User } from "lucide-react";
 import toast from "react-hot-toast";
 
 function Profile() {
-    const { data: availibilities } = useAvailibilities(1, 100);
+    const { getUser } = useAuth();
+    const user = getUser();
+    const { data: availibilities } = useAvailibilities(1, 100, undefined, user.id);
     const { data: shiftSchedule } = useShiftSchedule(1, 100, 1);
     const { data: attendances } = useAttendances(1, 100);
     const { employee } = useAppLocalStorage();
@@ -25,8 +28,6 @@ function Profile() {
     const updateAvaibilities = useUpdateAvailibilities();
     const createAttendance = useCreateAttendance();
     const updateAttendance = useUpdateAttendance();
-
-    console.log("attendances", attendances);
 
     // Kiểm tra ca hôm nay
     const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
@@ -344,7 +345,7 @@ function Profile() {
                                 </Button>
                             </div>
 
-                            <div className="mt-8">
+                            <div className="mt-8 max-h-[800px] overflow-y-auto">
                                 {availibilitiesData.map((avai) => (
                                     <div key={avai.name_date} className="mb-4 flex flex-col gap-4">
                                         <h4 className="font-semibold">{avai.name_date}</h4>

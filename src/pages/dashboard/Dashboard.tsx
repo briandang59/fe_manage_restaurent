@@ -1,5 +1,4 @@
 import StatsCard from "@/components/common/StatsCard";
-import { useAuth } from "@/utils/hooks/useAuth";
 import {
     useBookingsStats,
     useCustomersStats,
@@ -35,10 +34,6 @@ import {
 } from "@/components/ui/select";
 
 const Dashboard = () => {
-    const { getUser, getRole } = useAuth();
-    const user = getUser();
-    const role = getRole();
-
     // Date range state cho các stats khác
     const [dateRange, setDateRange] = useState<DateRange | undefined>({
         from: new Date(),
