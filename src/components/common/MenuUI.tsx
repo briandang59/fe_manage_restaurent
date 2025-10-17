@@ -12,7 +12,11 @@ function MenuUI({ menuItem, onClick, type }: MenuUIProps) {
     if (type === "home") {
         return (
             <div className="h-[400px] scale-100 cursor-pointer overflow-hidden rounded-[10px] border border-gray-200 bg-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                <Image src={images.banner} alt="menu item" className="h-[250px] w-full" />
+                <Image
+                    src={menuItem.file.url || images.banner}
+                    alt="menu item"
+                    className="h-[250px] w-full"
+                />
                 <div className="flex h-[50%] flex-col gap-4 p-4">
                     <h3 className="text-[22px] font-bold">{menuItem.name}</h3>
                     <p>{menuItem.description}</p>

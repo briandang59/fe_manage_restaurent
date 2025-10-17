@@ -1,21 +1,23 @@
-import images from "@/assets/images";
 import Image from "../ui/image";
 
-function BlogLanding() {
+// Định nghĩa Props để nhận dữ liệu động
+interface FeatureCardProps {
+    title: string;
+    description: string;
+    imageUrl: string;
+    imageAlt: string;
+}
+
+export default function FeatureCard({ title, description, imageUrl, imageAlt }: FeatureCardProps) {
     return (
         <div className="flex flex-col gap-4 rounded-[10px] border border-gray-200 bg-white p-4 shadow-md">
             <Image
-                src={images.banner}
-                alt="Blog Banner"
+                src={imageUrl}
+                alt={imageAlt}
                 className="h-[300px] w-full rounded-[10px] object-cover"
             />
-            <h3 className="text-center text-[22px] font-bold">Warm Atmosphere</h3>
-            <p className="text-center text-[16px] text-gray-500">
-                Step into our cozy space filled with traditional Vietnamese decor and the aroma of
-                authentic spices.
-            </p>
+            <h3 className="text-center text-[22px] font-bold">{title}</h3>
+            <p className="text-center text-[16px] text-gray-500">{description}</p>
         </div>
     );
 }
-
-export default BlogLanding;

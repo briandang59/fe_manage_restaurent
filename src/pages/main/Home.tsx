@@ -1,5 +1,5 @@
 import images from "@/assets/images";
-import BlogLanding from "@/components/common/BlogLanding";
+import FeatureCard from "@/components/common/BlogLanding";
 import CustomerReview from "@/components/common/CustomerReview";
 import InformationSection from "@/components/common/InformationSection";
 import MenuUI from "@/components/common/MenuUI";
@@ -16,6 +16,33 @@ function Home() {
     const NavigateBooking = () => {
         navigate(`/${PATHS.PUBLIC.BOOKING}`);
     };
+
+    const MOC_QUAN_FEATURES = [
+        {
+            id: 1,
+            title: "Không Gian Ấm Cúng",
+            description:
+                "Bước vào không gian mộc mạc, yên bình, được trang trí theo phong cách truyền thống Việt Nam, nơi lý tưởng để thư giãn.",
+            imageUrl: images.banner, // Thay thế bằng ảnh không gian Mộc Quán thực tế
+            imageAlt: "Không gian nhà hàng Mộc Quán",
+        },
+        {
+            id: 2,
+            title: "Ẩm Thực Đặc Sắc",
+            description:
+                "Thưởng thức các món ăn truyền thống Việt Nam được chế biến từ nguyên liệu tươi ngon, theo công thức gia truyền đặc biệt.",
+            imageUrl: images.banner, // Thay thế bằng ảnh món ăn Mộc Quán
+            imageAlt: "Món ăn đặc sắc Mộc Quán",
+        },
+        {
+            id: 3,
+            title: "Dịch Vụ Tận Tâm",
+            description:
+                "Đội ngũ nhân viên thân thiện, chu đáo, luôn sẵn lòng phục vụ để mang lại trải nghiệm ẩm thực trọn vẹn và thoải mái nhất.",
+            imageUrl: images.banner, // Thay thế bằng ảnh đội ngũ/dịch vụ Mộc Quán
+            imageAlt: "Dịch vụ tận tâm",
+        },
+    ];
     return (
         <div>
             <div className="grid min-h-[700px] bg-gradient-to-tr from-orange-600 to-amber-500 p-[96px_32px]">
@@ -65,9 +92,15 @@ function Home() {
                     gian được chúng tôi chăm chút kỹ lưỡng để mang đến trải nghiệm ẩm thực khó quên.
                 </p>
                 <div className="mt-4 grid grid-cols-3 gap-4">
-                    <BlogLanding />
-                    <BlogLanding />
-                    <BlogLanding />
+                    {MOC_QUAN_FEATURES.map((feature) => (
+                        <FeatureCard
+                            key={feature.id}
+                            title={feature.title}
+                            description={feature.description}
+                            imageUrl={feature.imageUrl}
+                            imageAlt={feature.imageAlt}
+                        />
+                    ))}
                 </div>
             </div>
 

@@ -11,13 +11,7 @@ const shiftScheduleApis = {
     ): Promise<ApiResponse<ShiftScheduleResponseType>> => {
         try {
             const response = await axiosInstance.get(
-                `/${urls.api}/${urls.shifts_chedules}?populate[employee]&populate[shift]&page-${page}&page_size=${pageSize}&employee_id=${employee_id}`,
-                {
-                    params: {
-                        page,
-                        page_size: pageSize,
-                    },
-                }
+                `/${urls.api}/${urls.shifts_chedules}?populate[employee]&populate[shift]&page=${page}&page_size=${pageSize}&employee_id=${employee_id}`
             );
             return response.data;
         } catch (error) {

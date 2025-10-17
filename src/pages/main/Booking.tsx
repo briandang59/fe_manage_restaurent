@@ -53,7 +53,7 @@ function Booking() {
         }
     };
     return (
-        <div className="min-h-screen bg-[#FFFBEE] p-[96px_32px]">
+        <div className="min-h-screen p-[96px_32px]">
             <div className="container mx-auto grid grid-cols-2 gap-4">
                 <div className="h-fit w-full rounded-[10px] border border-gray-300 bg-white p-4 shadow-md">
                     <h3 className="text-[28px] font-bold text-orange-600">Thông Tin Đặt Bàn</h3>
