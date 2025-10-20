@@ -17,28 +17,42 @@ function Header() {
             key: "home",
             name: "Trang chủ",
             path: PATHS.MANAGE.HOME,
+            roles: [
+                "Quản lý",
+                "Thu ngân",
+                "Phục vụ",
+                "Đầu bếp",
+                "Nhân viên bếp",
+                "Nhân viên kho",
+                "Khách hàng",
+            ],
         },
         {
             key: "menu",
             name: "Thực đơn",
             path: `/${PATHS.PUBLIC.MENU}`,
+            roles: ["Quản lý", "Thu ngân", "Phục vụ"],
         },
         {
             key: "booking",
             name: "Đặt bàn",
             path: `/${PATHS.PUBLIC.BOOKING}`,
+            roles: ["Quản lý", "Thu ngân", "Phục vụ", "Khách hàng"],
         },
         {
             key: "kitchen",
             name: "Bếp",
             path: `/${PATHS.PUBLIC.KITCHEN}`,
+            roles: ["Quản lý", "Phục vụ", "Đầu bếp", "Nhân viên bếp", "Khách hàng"],
         },
         {
             key: "ticket",
             name: "Nhập - Xuất nguyên vật liệu",
             path: `/${PATHS.PUBLIC.TICKET}`,
+            roles: ["Quản lý", "Đầu bếp", "Nhân viên bếp", "Nhân viên kho", "Khách hàng"],
         },
     ];
+
     return (
         <header className="sticky left-0 right-0 top-0 z-50 mx-auto w-full rounded-[4px] border-b bg-white p-4">
             <div className="container mx-auto flex items-center justify-between gap-2">
@@ -51,15 +65,17 @@ function Header() {
                         className="rounded-[10px]"
                     />
                     <div className="flex items-center gap-[40px]">
-                        {pages.map((page) => (
-                            <Link
-                                key={page.key}
-                                to={page.path}
-                                className="text-sm font-medium text-[#3B2010] duration-300 hover:text-[#5D4037]"
-                            >
-                                {page.name}
-                            </Link>
-                        ))}
+                        {pages
+                            .filter((page) => page.roles.includes(role?.role_name))
+                            .map((page) => (
+                                <Link
+                                    key={page.key}
+                                    to={page.path}
+                                    className="text-sm font-medium text-[#3B2010] duration-300 hover:text-[#5D4037]"
+                                >
+                                    {page.name}
+                                </Link>
+                            ))}
                     </div>
                 </div>
                 <div className="flex items-center gap-4">
