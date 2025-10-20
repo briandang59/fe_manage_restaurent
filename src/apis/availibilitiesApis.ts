@@ -23,6 +23,7 @@ const availibilitiesApis = {
                 page,
                 page_size: pageSize,
                 "populate[shift]": true,
+                "populate[employee]": true,
             };
 
             if (employee_id) {

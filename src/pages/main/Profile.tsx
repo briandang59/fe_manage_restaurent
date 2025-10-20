@@ -17,6 +17,31 @@ import { useShiftSchedule } from "@/utils/hooks/useShiftSchedule";
 import { User } from "lucide-react";
 import toast from "react-hot-toast";
 
+interface AvailibilitiesResponseItem {
+    id: number;
+    employee_id: number;
+    shift_id: number;
+    day_of_week: string;
+    is_available: boolean;
+    created_at: string;
+    updated_at: string;
+    shifts?: {
+        id: number;
+        shift_name: string;
+        code: string;
+        start_time: string;
+        end_time: string;
+        created_at: string;
+        updated_at: string;
+    };
+}
+
+function isPreloaded(item: AvailibilitiesResponseItem): item is AvailibilitiesResponseItem & {
+    shifts: NonNullable<AvailibilitiesResponseItem["shifts"]>;
+} {
+    return item.shifts !== undefined;
+}
+
 function Profile() {
     const { getEmployee } = useAuth();
     const user = getEmployee();
@@ -24,16 +49,21 @@ function Profile() {
     const { data: shiftSchedule } = useShiftSchedule(1, 100, user.id);
     const { data: attendances } = useAttendances(1, 100, undefined, user.id);
     const { employee } = useAppLocalStorage();
-    const availibilitiesData = groupByDay(availibilities?.data ?? []);
     const updateAvaibilities = useUpdateAvailibilities();
     const createAttendance = useCreateAttendance();
     const updateAttendance = useUpdateAttendance();
 
-    // Kiểm tra ca hôm nay
-    const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+    const sortedAndFilteredAvailibilities = availibilities?.data
+        ? [...(availibilities.data as AvailibilitiesResponseItem[])]
+              .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+              .filter(isPreloaded)
+        : [];
+
+    const availibilitiesData = groupByDay(sortedAndFilteredAvailibilities);
+
+    const today = new Date().toISOString().split("T")[0];
     const todayShift = shiftSchedule?.data?.find((schedule) => schedule.date === today);
 
-    // Kiểm tra xem đã chấm công hôm nay chưa
     const todayAttendance = attendances?.data?.find(
         (att) =>
             att.shift_schedule.date === today && att.shift_schedule.employee_id === employee?.id
@@ -46,7 +76,7 @@ function Profile() {
         todayAttendance.actual_end_time &&
         todayAttendance.actual_end_time !== todayAttendance.actual_start_time;
 
-    // Hàm xử lý vào ca
+    // Hàm xử lý vào ca (Giữ nguyên)
     const handleCheckIn = async () => {
         if (!todayShift) {
             toast.error("Hôm nay bạn không có ca làm việc!");
@@ -72,7 +102,7 @@ function Profile() {
         }
     };
 
-    // Hàm xử lý ra ca
+    // Hàm xử lý ra ca (Giữ nguyên)
     const handleCheckOut = async () => {
         if (!todayAttendance) {
             toast.error("Bạn chưa vào ca hôm nay!");
@@ -96,10 +126,12 @@ function Profile() {
             toast.error("Có lỗi xảy ra khi ra ca!");
         }
     };
+
+    // Hàm handleToggle (Đã sửa lỗi tên biến và sử dụng availibilities gốc)
     const handleToggle = (availibilityId: number, checked: boolean | "indeterminate") => {
         const newVal = checked === true;
 
-        // Find the availability data to get the required fields
+        // Dùng biến 'availibilities' đã khai báo để tìm dữ liệu gốc
         const availabilityData = availibilities?.data?.find((item) => item.id === availibilityId);
 
         if (availabilityData) {

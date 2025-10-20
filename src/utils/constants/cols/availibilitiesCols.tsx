@@ -28,41 +28,57 @@ export const createAvailibilitiesColumns = (
         },
     },
     {
-        accessorKey: "shift_id",
-        header: "ID Ca làm việc",
+        // 🚨 SỬA LỖI: Cột Tên Nhân viên (Hiển thị Tên thay vì ID)
+        accessorKey: "employee.full_name",
+        header: "Tên Nhân viên",
+        cell: ({ row }) => {
+            const fullName = row.original.employee?.full_name;
+            // Nếu preload thành công, hiển thị tên. Nếu không, có thể hiển thị ID
+            return <p>{fullName ?? "N/A"}</p>;
+        },
     },
     {
+        // Cột ID Nhân viên (Giữ lại để dễ debug/tra cứu)
         accessorKey: "employee_id",
         header: "ID Nhân viên",
+        cell: ({ row }) => {
+            return <p>{row.original.employee_id}</p>;
+        },
+    },
+    {
+        // 🚨 SỬA LỖI: Cột ID Ca làm việc (Hiển thị Tên Ca làm việc nếu có)
+        accessorKey: "shifts.shift_name",
+        header: "Tên Ca làm việc",
+        cell: ({ row }) => {
+            const shiftName = row.original.shifts?.shift_name;
+            return <p>{shiftName ?? row.original.shift_id}</p>;
+        },
+    },
+    {
+        accessorKey: "day_of_week",
+        header: "Thứ trong tuần",
     },
     {
         accessorKey: "date",
         header: "Ngày",
         cell: ({ row }) => {
             const date = row.getValue("date") as string;
+            // Giả định date là day_of_week (hoặc bạn có thể dùng day_of_week)
             return <p>{dayjs(date).format("YYYY/MM/DD")}</p>;
         },
     },
     {
-        accessorKey: "status",
+        accessorKey: "is_available", // Cập nhật accessorKey để khớp với dữ liệu JSON
         header: "Trạng thái",
         cell: ({ row }) => {
-            const status = row.getValue("status") as string;
+            // Lấy giá trị boolean từ is_available
+            const isAvailable = row.original.is_available;
+            const statusText = isAvailable ? "Rảnh" : "Bận";
+            const bgColor = isAvailable ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800";
+
             return (
-                <span
-                    className={`rounded-full px-2 py-1 text-xs font-medium ${
-                        status === "available"
-                            ? "bg-green-100 text-green-800"
-                            : status === "unavailable"
-                              ? "bg-red-100 text-red-800"
-                              : "bg-yellow-100 text-yellow-800"
-                    }`}
-                >
-                    {status === "available"
-                        ? "Rảnh"
-                        : status === "unavailable"
-                          ? "Bận"
-                          : "Không xác định"}
+                <span className={`rounded-full px-2 py-1 text-xs font-medium ${bgColor}`}>
+                    {statusText}
                 </span>
             );
         },

@@ -1,4 +1,5 @@
-type Shift = {
+// Định nghĩa các kiểu dữ liệu cơ bản
+export type Shift = {
     id: number;
     shift_name: string;
     code: string;
@@ -8,13 +9,27 @@ type Shift = {
     updated_at: string;
 };
 
-type Schedule = {
-    id: number; // đây chính là Availibility.Id
+// Kiểu dữ liệu nhận được trực tiếp từ API (shifts là tùy chọn)
+export type AvailibilitiesResponse = {
+    id: number;
     employee_id: number;
     shift_id: number;
     day_of_week: string;
     is_available: boolean;
-    shifts: Shift;
+    shifts?: Shift; // Tùy chọn, chỉ có khi được preload
+    created_at: string;
+    updated_at: string;
+};
+
+// 🚨 Kiểu dữ liệu yêu cầu cho hàm groupByDay: Đảm bảo shifts tồn tại
+// Chỉ sử dụng cho dữ liệu đã được lọc/kiểm tra trước đó
+type PreloadedSchedule = {
+    id: number; // Availibility.Id
+    employee_id: number;
+    shift_id: number;
+    day_of_week: string;
+    is_available: boolean;
+    shifts: Shift; // BẮT BUỘC phải có để xử lý
     created_at: string;
     updated_at: string;
 };
@@ -32,7 +47,12 @@ type GroupedResult = {
 
 const daysOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-export function groupByDay(data: Schedule[]): GroupedResult[] {
+/**
+ * Nhóm dữ liệu Availibility đã được preload theo ngày trong tuần và sắp xếp.
+ * * @param data Mảng các Availibility đã được đảm bảo có thuộc tính 'shifts' (PreloadedSchedule[]).
+ * @returns Mảng các đối tượng GroupedResult, được sắp xếp theo thứ tự các ngày trong tuần.
+ */
+export function groupByDay(data: PreloadedSchedule[]): GroupedResult[] {
     const map = new Map<string, ShiftWithAvailibility[]>();
 
     for (const item of data) {
@@ -41,7 +61,8 @@ export function groupByDay(data: Schedule[]): GroupedResult[] {
         }
         const existing = map.get(item.day_of_week)!;
 
-        if (!existing.some((s) => s.availibility_id === item.id)) {
+        // 🚨 THAY ĐỔI TẠI ĐÂY: Kiểm tra nếu SHIFT_ID đã tồn tại cho ngày này
+        if (!existing.some((s) => s.shift.id === item.shift_id)) {
             existing.push({
                 availibility_id: item.id,
                 is_available: item.is_available,
@@ -53,9 +74,11 @@ export function groupByDay(data: Schedule[]): GroupedResult[] {
     return Array.from(map.entries())
         .map(([day, shifts]) => ({
             name_date: day,
-            shifts: shifts.sort((a, b) => a.shift.id - b.shift.id), // Ca 1 → Ca 2 → Ca 3
+            // 3. Sắp xếp các ca trong ngày theo Shift ID (Ca 1 -> Ca 2)
+            shifts: shifts.sort((a, b) => a.shift.id - b.shift.id),
         }))
         .sort(
-            (a, b) => daysOrder.indexOf(a.name_date) - daysOrder.indexOf(b.name_date) // Mon → Sun
+            // 4. Sắp xếp các nhóm theo thứ tự ngày trong tuần (Thứ Hai -> Chủ Nhật)
+            (a, b) => daysOrder.indexOf(a.name_date) - daysOrder.indexOf(b.name_date)
         );
 }

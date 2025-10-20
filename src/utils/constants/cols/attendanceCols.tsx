@@ -29,7 +29,35 @@ export const createAttendanceColumns = (
     },
     {
         accessorKey: "employee_id",
-        header: "ID Nhân viên",
+        header: "Nhân viên",
+        cell: ({ row }) => {
+            const fullname = row.original.shift_schedule.employee.full_name;
+            return <p>{fullname}</p>;
+        },
+    },
+    {
+        accessorKey: "actual_start_time",
+        header: "Giờ vào ca",
+        cell: ({ row }) => {
+            const actual_start_time = row.original.actual_start_time;
+            return <p>{dayjs(actual_start_time).format("YYYY-MM-DD HH:mm")}</p>;
+        },
+    },
+    {
+        accessorKey: "actual_start_time",
+        header: "Giờ ra ca",
+        cell: ({ row }) => {
+            const actual_end_time = row.original.actual_end_time;
+            return <p>{dayjs(actual_end_time).format("YYYY-MM-DD HH:mm")}</p>;
+        },
+    },
+    {
+        accessorKey: "hours",
+        header: "Số giờ làm",
+        cell: ({ row }) => {
+            const hours = row.original.hours;
+            return <p>{hours}</p>;
+        },
     },
     {
         accessorKey: "date",
