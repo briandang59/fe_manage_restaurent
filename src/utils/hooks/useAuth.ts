@@ -100,6 +100,10 @@ export const useAuth = () => {
         return roleStr ? JSON.parse(roleStr) : null;
     };
 
+    const getEmployee = () => {
+        const employeeStr = localStorage.getItem("employee");
+        return employeeStr ? JSON.parse(employeeStr) : null;
+    };
     const isAdmin = () => {
         const role = getRole();
         return role?.role_name === "Admin";
@@ -144,6 +148,7 @@ export const useAuth = () => {
         // Helper functions
         getUser,
         getRole,
+        getEmployee,
         isAdmin,
         checkAuthAndRedirect,
 

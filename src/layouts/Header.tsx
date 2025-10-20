@@ -7,8 +7,9 @@ import { User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 function Header() {
-    const { getUser, getRole, logout } = useAuth();
+    const { getUser, getRole, logout, getEmployee } = useAuth();
     const user = getUser();
+    const employee = getEmployee();
     const role = getRole();
     const navigate = useNavigate();
     const pages = [
@@ -68,7 +69,7 @@ function Header() {
                     >
                         <User className="text-[#3B2010]" />
                         <span className="text-sm font-medium text-[#3B2010]">
-                            {user?.user_name} - ({role?.role_name})
+                            {employee?.full_name} - {user?.user_name} - ({role?.role_name})
                         </span>
                     </button>
                     <Button variant="outline" onClick={logout}>

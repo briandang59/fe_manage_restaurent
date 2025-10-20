@@ -122,6 +122,14 @@ export const createStaffColumns = (
         },
     },
     {
+        accessorKey: "id",
+        header: "ID nhân viên",
+        cell: ({ row }) => {
+            const account = row.getValue("id") as number;
+            return <span className="rounded-full px-2 py-1 text-[14px]">{account}</span>;
+        },
+    },
+    {
         id: "actions",
         header: "Thao tác",
         cell: ({ row }) => {

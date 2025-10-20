@@ -18,11 +18,11 @@ import { User } from "lucide-react";
 import toast from "react-hot-toast";
 
 function Profile() {
-    const { getUser } = useAuth();
-    const user = getUser();
+    const { getEmployee } = useAuth();
+    const user = getEmployee();
     const { data: availibilities } = useAvailibilities(1, 100, undefined, user.id);
     const { data: shiftSchedule } = useShiftSchedule(1, 100, user.id);
-    const { data: attendances } = useAttendances(1, 100);
+    const { data: attendances } = useAttendances(1, 100, undefined, user.id);
     const { employee } = useAppLocalStorage();
     const availibilitiesData = groupByDay(availibilities?.data ?? []);
     const updateAvaibilities = useUpdateAvailibilities();

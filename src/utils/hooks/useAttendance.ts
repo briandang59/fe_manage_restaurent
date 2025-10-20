@@ -23,11 +23,17 @@ export const attendanceQueryKeys = {
     detail: (id: string) => [...attendanceQueryKeys.details(), id] as const,
 };
 
-export const useAttendances = (page: number, pageSize: number, search?: string) => {
+export const useAttendances = (
+    page: number,
+    pageSize: number,
+    search?: string,
+    employee_id?: number
+) => {
     return useQuery({
-        queryKey: [...attendanceQueryKeys.lists(), page, pageSize, search],
+        queryKey: [...attendanceQueryKeys.lists(), page, pageSize, search, employee_id],
+
         queryFn: async (): Promise<ApiResponse<AttendanceResponse>> => {
-            return await attendanceApis.getAttendance(page, pageSize);
+            return await attendanceApis.getAttendance(page, pageSize, employee_id);
         },
         staleTime: 5 * 60 * 1000,
         gcTime: 10 * 60 * 1000,

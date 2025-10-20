@@ -18,18 +18,24 @@ interface AttendanceUpdateRequest {
 const attendanceApis = {
     getAttendance: async (
         page: number,
-        pageSize: number
+        pageSize: number,
+        employee_id?: number
     ): Promise<ApiResponse<AttendanceResponse>> => {
         try {
-            const response = await axiosInstance.get(
-                `/${urls.api}/${urls.attendances}?populate[shift]&page=${page}&page_size=${pageSize}`,
-                {
-                    params: {
-                        page,
-                        page_size: pageSize,
-                    },
-                }
-            );
+            const params: Record<string, any> = {
+                page,
+                page_size: pageSize,
+                "populate[shift]": true,
+            };
+
+            if (employee_id !== undefined) {
+                params.employee_id = employee_id;
+            }
+
+            const response = await axiosInstance.get(`/${urls.api}/${urls.attendances}`, {
+                params,
+            });
+
             return response.data;
         } catch (error) {
             throw error;
