@@ -93,7 +93,7 @@ function Profile() {
             await createAttendance.mutateAsync({
                 shift_schedule_id: todayShift.id,
                 actual_start_time: now,
-                actual_end_time: now, // Tạm thời set bằng start_time
+                actual_end_time: now,
             });
             toast.success("Vào ca thành công!");
         } catch (error) {
@@ -116,11 +116,13 @@ function Profile() {
 
         try {
             const now = new Date().toISOString();
+
             await updateAttendance.mutateAsync({
                 id: String(todayAttendance.id),
                 actual_end_time: now,
             });
-            toast.success("Ra ca thành công!");
+
+            toast.success(`Ra ca thành công!`);
         } catch (error) {
             console.error("Lỗi khi ra ca:", error);
             toast.error("Có lỗi xảy ra khi ra ca!");

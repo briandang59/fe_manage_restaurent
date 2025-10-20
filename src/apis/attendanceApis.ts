@@ -13,6 +13,7 @@ interface AttendanceRequest {
 interface AttendanceUpdateRequest {
     actual_start_time?: string;
     actual_end_time?: string;
+    hours?: number;
 }
 
 const attendanceApis = {

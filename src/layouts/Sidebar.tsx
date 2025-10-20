@@ -113,11 +113,11 @@ const Sidebar = () => {
                     label: "Vai trò",
                     icon: <ChartArea size={14} />,
                 },
-                {
-                    to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.PERMISSION}`,
-                    label: "Quyền hạn",
-                    icon: <User size={14} />,
-                },
+                // {
+                //     to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.PERMISSION}`,
+                //     label: "Quyền hạn",
+                //     icon: <User size={14} />,
+                // },
                 {
                     to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.ACCOUNT_PERMISSION}`,
                     label: "Tài khoản",
