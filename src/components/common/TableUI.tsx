@@ -5,21 +5,16 @@ import { cn } from "@/lib/utils"; // nếu bạn có util merge classNames
 interface TableUIProps {
     record: TableResponse;
     onClick?: () => void;
-    status?: "empty" | "using" | "paid";
 }
 
-function TableUI({ record, onClick, status = "empty" }: TableUIProps) {
-    const statusColors: Record<typeof status, string> = {
-        empty: "bg-[#E7CEAD] border-[#E7CEAD] hover:bg-[#E7CEAD]",
-        using: "bg-yellow-100 border-yellow-300 hover:bg-yellow-200",
-        paid: "bg-gray-100 border-gray-300 hover:bg-gray-200",
-    };
-
+function TableUI({ record, onClick }: TableUIProps) {
     return (
         <button
             className={cn(
                 "flex h-[120px] w-full transform cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border shadow-sm duration-300 hover:scale-105",
-                statusColors[status]
+                record?.is_occupied
+                    ? "border-[#60be78] bg-[#60be78] hover:bg-[#60be78]"
+                    : "border-[#E7CEAD] bg-[#E7CEAD] hover:bg-[#E7CEAD]"
             )}
             onClick={onClick}
         >

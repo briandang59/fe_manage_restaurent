@@ -4,6 +4,7 @@ export interface TableResponse {
     position: string;
     seats: number;
     memo: string;
+    is_occupied: boolean;
     created_at: string;
     updated_at: string;
 }
