@@ -1,3 +1,5 @@
+"use client";
+
 import orderApis from "@/apis/orderApis";
 import images from "@/assets/images";
 import MenuUI from "@/components/common/MenuUI";
@@ -17,9 +19,11 @@ import { useTables } from "@/utils/hooks/useTable";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { FormSelect } from "@/components/forms-component/FormSelect";
+import { useForm } from "react-hook-form";
 
 function MenuPublic() {
-    const { data: tables } = useTables(1, 100);
+    const { data: tables, refetch: refetchTable } = useTables(1, 100);
     const { data: menuItems } = useMenuItems(1, 1000);
 
     const [selectedTable, setSelectedTable] = useState<TableResponse | null>(null);
@@ -30,7 +34,7 @@ function MenuPublic() {
     const { mutateAsync: mutateAsyncOrderItem } = useCreateOrderItem();
     const { mutateAsync: mutateUpdateOrder } = useUpdateOrder();
 
-    // state lưu danh sách món theo từng bàn
+    // State lưu món theo từng bàn
     const [tableMenuItems, setTableMenuItems] = useState<Record<string, OrderListProps[]>>({});
 
     const handleOpenSheet = (record?: TableResponse) => {
@@ -44,13 +48,13 @@ function MenuPublic() {
         setActiveTab("selected");
     };
 
-    // Lấy danh sách món ăn của bàn hiện tại
+    // Lấy danh sách món của bàn hiện tại
     const getCurrentTableMenuItems = () => {
         if (!selectedTable?.id) return [];
         return tableMenuItems[selectedTable.id.toString()] || [];
     };
 
-    // chọn thêm món
+    // Chọn món
     const handleSelectMenuItem = (menuItem: MenuItemResponse) => {
         if (!selectedTable?.id) return;
 
@@ -84,7 +88,7 @@ function MenuPublic() {
         }
     };
 
-    // thay đổi số lượng
+    // Thay đổi số lượng
     const handleQuantityChange = (quantity: number, menuItemName: string) => {
         if (!selectedTable?.id) return;
         const tableId = selectedTable.id.toString();
@@ -104,13 +108,14 @@ function MenuPublic() {
         }
     };
 
-    // lưu order (tạo mới nếu chưa có, thêm item)
+    // Lưu order
     const handleSaveOrder = async () => {
         try {
             if (!selectedTable) return;
             const tableId = selectedTable.id.toString();
 
             let currentOrder: OrderResponse | null = null;
+
             try {
                 const resOrder = await orderApis.getOrderByTableId(tableId);
                 if (resOrder.data && resOrder.data.status === "UnPaid") {
@@ -120,6 +125,7 @@ function MenuPublic() {
                 currentOrder = null;
             }
 
+            // Nếu chưa có order → tạo mới
             if (!currentOrder) {
                 const res = await mutateAsyncOrder({
                     table_id: selectedTable.id,
@@ -127,6 +133,7 @@ function MenuPublic() {
                 currentOrder = res.data;
             }
 
+            // Thêm món
             const currentItems = getCurrentTableMenuItems();
             if (currentItems.length > 0) {
                 await Promise.all(
@@ -141,7 +148,7 @@ function MenuPublic() {
                 );
             }
 
-            // ✅ Xóa danh sách món tạm ở bàn hiện tại
+            // Clear món tạm
             setTableMenuItems((prev) => ({
                 ...prev,
                 [tableId]: [],
@@ -153,7 +160,7 @@ function MenuPublic() {
         }
     };
 
-    // thanh toán bàn
+    // Thanh toán
     const handlePaid = async (orderId: number) => {
         try {
             await mutateUpdateOrder({
@@ -165,6 +172,51 @@ function MenuPublic() {
             handleCloseSheet();
         } catch (error) {
             toast.error(`Thanh toán thất bại: ${error}`);
+        }
+    };
+
+    // FORM chuyển bàn
+    const {
+        handleSubmit,
+        control,
+        reset,
+        formState: { errors },
+    } = useForm<any>({
+        defaultValues: {
+            table_id: "",
+        },
+    });
+
+    const handleSubmitTable = async (data: { table_id: string }) => {
+        try {
+            if (!selectedTable?.id) return;
+
+            const res = await orderApis.getOrderByTableId(selectedTable.id.toString());
+            if (!res.data || res.data.status !== "UnPaid") {
+                toast.error("Không tìm thấy order để chuyển bàn");
+                return;
+            }
+
+            const currentOrder = res.data;
+
+            await mutateUpdateOrder({
+                id: currentOrder.id.toString(),
+                table_id: Number(data.table_id),
+            });
+            refetchTable();
+            toast.success("Chuyển bàn thành công");
+
+            // Xóa món tạm bàn cũ
+            setTableMenuItems((prev) => {
+                const updated = { ...prev };
+                delete updated[selectedTable.id.toString()];
+                return updated;
+            });
+
+            reset();
+            handleCloseSheet();
+        } catch (error: any) {
+            toast.error(error.message || "Có lỗi xảy ra khi chuyển bàn");
         }
     };
 
@@ -184,11 +236,11 @@ function MenuPublic() {
                         <SheetTitle>{selectedTable?.table_name}</SheetTitle>
                     </SheetHeader>
 
-                    {/* Nội dung chính scroll được */}
                     <div className="flex-1 overflow-y-auto pr-2">
                         {/* Menu */}
                         <div className="mt-4 flex flex-col gap-4">
                             <h3 className="text-lg font-medium">Thực đơn món</h3>
+
                             <div className="grid max-h-[500px] grid-cols-3 gap-4 overflow-y-auto">
                                 {menuItems?.data?.map((menuItem) => (
                                     <MenuUI
@@ -200,13 +252,15 @@ function MenuPublic() {
                             </div>
                         </div>
 
-                        {/* Tabs */}
+                        {/* TABS */}
                         <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-4">
-                            <TabsList className="grid w-full grid-cols-2">
+                            <TabsList className="grid w-full grid-cols-3">
                                 <TabsTrigger value="selected">Danh sách đã chọn</TabsTrigger>
                                 <TabsTrigger value="payment">Thanh toán</TabsTrigger>
+                                <TabsTrigger value="change-table">Chuyển bàn</TabsTrigger>
                             </TabsList>
 
+                            {/* SELECTED */}
                             <TabsContent value="selected">
                                 <div className="mt-4 flex flex-col gap-2">
                                     {selectedTable && getCurrentTableMenuItems().length > 0 ? (
@@ -227,15 +281,48 @@ function MenuPublic() {
                                 </div>
                             </TabsContent>
 
+                            {/* PAYMENT */}
                             <TabsContent value="payment">
                                 <div className="mt-4 flex flex-col gap-2">
                                     <PaymentTab tableId={selectedTable?.id} />
                                 </div>
                             </TabsContent>
+
+                            {/* CHANGE TABLE */}
+                            <TabsContent value="change-table">
+                                <div className="mt-4 flex flex-col gap-2">
+                                    <form
+                                        onSubmit={handleSubmit(handleSubmitTable)}
+                                        className="mt-4 space-y-4"
+                                    >
+                                        <FormSelect
+                                            control={control}
+                                            label="Bàn muốn chuyển"
+                                            name="table_id"
+                                            errors={errors}
+                                            options={
+                                                tables?.data
+                                                    .filter((t) => t.id !== selectedTable?.id)
+                                                    .map((item) => ({
+                                                        label: item.table_name,
+                                                        value: String(item.id),
+                                                    })) || []
+                                            }
+                                            required
+                                        />
+
+                                        <div className="flex justify-end">
+                                            <Button type="submit" variant="default">
+                                                Chuyển bàn
+                                            </Button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </TabsContent>
                         </Tabs>
                     </div>
 
-                    {/* Footer cố định */}
+                    {/* FOOTER */}
                     <SheetFooter className="mt-2 border-t pt-3">
                         <div className="flex w-full items-center justify-end">
                             <div className="flex items-center gap-2">
