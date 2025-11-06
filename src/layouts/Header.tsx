@@ -51,6 +51,20 @@ function Header() {
             path: `/${PATHS.PUBLIC.TICKET}`,
             roles: ["Quản lý", "Đầu bếp", "Nhân viên bếp", "Nhân viên kho", "Khách hàng"],
         },
+        {
+            key: "recruitment",
+            name: "Tuyển dụng",
+            path: `/${PATHS.PUBLIC.RECRUITMENT}`,
+            roles: [
+                "Quản lý",
+                "Thu ngân",
+                "Phục vụ",
+                "Đầu bếp",
+                "Nhân viên bếp",
+                "Nhân viên kho",
+                "Khách hàng",
+            ],
+        },
     ];
 
     return (

@@ -15,6 +15,7 @@ export const PATHS = {
         PERMISSION: "permission",
         ACCOUNT_PERMISSION: "account-permission",
         BOOKING_MANAGEMENT: "booking-management",
+        RECRUITMENT: "recruitment",
     },
     PUBLIC: {
         MENU: "menu-public",
@@ -22,5 +23,6 @@ export const PATHS = {
         KITCHEN: "kitchen",
         PROFILE: "profile",
         TICKET: "ticket",
+        RECRUITMENT: "recruitment",
     },
 };

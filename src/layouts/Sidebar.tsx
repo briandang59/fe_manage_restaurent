@@ -17,6 +17,7 @@ import {
     File,
     Table,
     BookOpen,
+    MonitorCheckIcon,
 } from "lucide-react";
 import useLogout from "@/utils/hooks/useLogout";
 import images from "@/assets/images";
@@ -78,6 +79,11 @@ const Sidebar = () => {
                     to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.BOOKING_MANAGEMENT}`,
                     label: "Đặt bàn",
                     icon: <BookOpen size={14} />,
+                },
+                {
+                    to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.RECRUITMENT}`,
+                    label: "Tuyển dụng",
+                    icon: <MonitorCheckIcon size={14} />,
                 },
             ],
         },

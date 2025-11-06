@@ -23,5 +23,7 @@ const urls = {
     bookings: "bookings",
     shifts_chedules: "shifts-chedules",
     tickets: "tickets",
+    recruitments: "recruitments",
+    apply_recruitment: "apply-recruitments",
 };
 export default urls;
