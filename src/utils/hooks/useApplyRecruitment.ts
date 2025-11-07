@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient, UseMutationResult } from "@tanst
 import { ApiResponse } from "@/types/response/pagination";
 import { BaseResponse } from "@/types/response/baseResponse";
 import recruitmentApis from "@/apis/applyRecruitmentApis";
-import { RecruitmentResponseType } from "@/types/response/recruitment";
+import { ApplyRecruitmentResponseType } from "@/types/response/applyRecruitment";
 
 export interface ApplyRecruitmentPayload {
     recruitment_id: number;
@@ -24,7 +24,7 @@ export const applyRecruitmentQueryKeys = {
 export const useApplyRecruitments = (page: number, pageSize: number, search?: string) => {
     return useQuery({
         queryKey: [...applyRecruitmentQueryKeys.lists(), page, pageSize, search],
-        queryFn: async (): Promise<ApiResponse<RecruitmentResponseType>> => {
+        queryFn: async (): Promise<ApiResponse<ApplyRecruitmentResponseType>> => {
             return await recruitmentApis.getApplyRecruitments(page, pageSize, search);
         },
         staleTime: 5 * 60 * 1000,
@@ -34,7 +34,7 @@ export const useApplyRecruitments = (page: number, pageSize: number, search?: st
 
 // ✅ CREATE
 export const useCreateApplyRecruitment = (): UseMutationResult<
-    BaseResponse<RecruitmentResponseType>,
+    BaseResponse<ApplyRecruitmentResponseType>,
     Error,
     ApplyRecruitmentPayload
 > => {
@@ -43,7 +43,7 @@ export const useCreateApplyRecruitment = (): UseMutationResult<
     return useMutation({
         mutationFn: async (
             data: ApplyRecruitmentPayload
-        ): Promise<BaseResponse<RecruitmentResponseType>> => {
+        ): Promise<BaseResponse<ApplyRecruitmentResponseType>> => {
             return await recruitmentApis.createApplyRecruitments(data);
         },
         onSuccess: () => {
@@ -57,7 +57,7 @@ export const useCreateApplyRecruitment = (): UseMutationResult<
 
 // ✅ UPDATE
 export const useUpdateApplyRecruitment = (): UseMutationResult<
-    BaseResponse<RecruitmentResponseType>,
+    BaseResponse<ApplyRecruitmentResponseType>,
     Error,
     ApplyRecruitmentPayload & { id: string }
 > => {
@@ -66,7 +66,7 @@ export const useUpdateApplyRecruitment = (): UseMutationResult<
     return useMutation({
         mutationFn: async (
             data: ApplyRecruitmentPayload & { id: string }
-        ): Promise<BaseResponse<RecruitmentResponseType>> => {
+        ): Promise<BaseResponse<ApplyRecruitmentResponseType>> => {
             return await recruitmentApis.updateApplyRecruitments(data.id, data);
         },
         onSuccess: () => {

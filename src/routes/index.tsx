@@ -30,6 +30,7 @@ const Profile = lazy(() => import("@/pages/main/Profile"));
 const Ticket = lazy(() => import("@/pages/main/Ticket"));
 const RecruitmentMainPage = lazy(() => import("@/pages/main/Recruitment"));
 const RecruitmentDashboard = lazy(() => import("@/pages/dashboard/Recruitment"));
+const ApplyRecruitmentDashboard = lazy(() => import("@/pages/dashboard/ApplyRecruitment"));
 
 const LoadingFallback = () => (
     <div className="flex h-screen items-center justify-center">Loading...</div>
@@ -228,6 +229,14 @@ export const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<LoadingFallback />}>
                         <RecruitmentDashboard />
+                    </Suspense>
+                ),
+            },
+            {
+                path: `${PATHS.MANAGE.APPLY_RECRUITMENT}`,
+                element: (
+                    <Suspense fallback={<LoadingFallback />}>
+                        <ApplyRecruitmentDashboard />
                     </Suspense>
                 ),
             },
