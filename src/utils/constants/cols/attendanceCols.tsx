@@ -31,7 +31,7 @@ export const createAttendanceColumns = (
         accessorKey: "employee_id",
         header: "Nhân viên",
         cell: ({ row }) => {
-            const fullname = row.original.shift_schedule.employee.full_name;
+            const fullname = row.original?.shift_schedule?.employee?.full_name;
             return <p>{fullname}</p>;
         },
     },
