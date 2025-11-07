@@ -13,7 +13,7 @@ import { ColumnDef } from "@tanstack/react-table";
 //     AlertDialogTitle,
 //     AlertDialogTrigger,
 // } from "@/components/ui/alert-dialog";
-// import dayjs from "dayjs";
+import dayjs from "dayjs";
 import { ApplyRecruitmentResponseType } from "@/types/response/applyRecruitment"; // Giả sử type này tồn tại dựa trên API
 import { normalizeCvUrl } from "@/utils/functions/normalizeCvUrl";
 

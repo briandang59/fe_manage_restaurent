@@ -25,5 +25,9 @@ const urls = {
     tickets: "tickets",
     recruitments: "recruitments",
     apply_recruitment: "apply-recruitments",
+    stats: "stats",
+    salary: "salary",
+    all: "all",
+    revenue: "revenue",
 };
 export default urls;

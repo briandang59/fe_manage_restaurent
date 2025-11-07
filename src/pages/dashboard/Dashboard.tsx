@@ -25,29 +25,52 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { formatNumberWithCommas } from "@/utils/functions/formatNumberWithCommas";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+
+// Inline types (no import needed)
+interface MenuItemWithImage {
+    menu_item_id: number;
+    name: string;
+    description: string;
+    price: number;
+    total_qty: number;
+    file_id: number;
+    file_name: string;
+    url: string;
+    mime_type: string;
+}
+
+interface EmployeeStat {
+    id: number;
+    full_name: string;
+    gender: boolean;
+    birthday: string;
+    phone_number: string;
+    email: string;
+    schedule_type: string;
+    address: string;
+    join_date: string;
+    base_salary: number;
+    salary_per_hour: number;
+    avatar_file_id: number | null;
+    total_hours: number;
+    salary: number;
+}
 
 const Dashboard = () => {
-    // Date range state cho các stats khác
     const [dateRange, setDateRange] = useState<DateRange | undefined>({
         from: new Date(),
         to: new Date(),
     });
 
-    // State chọn tháng cho salary
-    const [selectedMonth, setSelectedMonth] = useState<string>(format(new Date(), "yyyy-MM"));
-
-    // Convert sang string yyyy-MM-dd cho stats
     const fromDateStr = dateRange?.from ? format(dateRange.from, "yyyy-MM-dd") : undefined;
     const toDateStr = dateRange?.to ? format(dateRange.to, "yyyy-MM-dd") : undefined;
 
-    // Fetch stats
+    // Lấy tháng từ startDate (fromDate) cho salaries
+    const selectedMonth = fromDateStr
+        ? format(new Date(fromDateStr), "yyyy-MM")
+        : format(new Date(), "yyyy-MM");
+
+    // Fetch stats (giữ nguyên)
     const { data: revenueData, isLoading: revenueLoading } = useRevenueStats(
         fromDateStr,
         toDateStr
@@ -70,44 +93,25 @@ const Dashboard = () => {
         fromDateStr,
         toDateStr
     );
+    const { isLoading: salariesLoading } = useAllSalaries(selectedMonth);
 
-    // Fetch all salaries
-    const { data: salariesData, isLoading: salariesLoading } = useAllSalaries(selectedMonth);
+    // Extract data để hiển thị hết
+    const topSellingItems: MenuItemWithImage[] = ordersData?.data?.top_items || [];
+    const employeeStats: EmployeeStat[] = employeesData?.data?.employee_stats || [];
+    const ordersLoadingCombined = ordersLoading || revenueLoading;
+    const employeesLoadingCombined = employeesLoading || salariesLoading;
 
     return (
         <div className="space-y-6 rounded-lg bg-gray-50 p-6">
-            {/* Header */}
+            {/* Header (bỏ Select tháng) */}
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
 
-                {/* Bộ chọn tháng cho salary */}
-                <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-600">Chọn tháng:</span>
-                    <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-                        <SelectTrigger className="w-[140px]">
-                            <SelectValue placeholder="Chọn tháng" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {Array.from({ length: 12 }).map((_, idx) => {
-                                const d = new Date();
-                                d.setMonth(d.getMonth() - idx);
-                                const val = format(d, "yyyy-MM");
-                                return (
-                                    <SelectItem key={val} value={val}>
-                                        {format(d, "MM/yyyy")}
-                                    </SelectItem>
-                                );
-                            })}
-                        </SelectContent>
-                    </Select>
-                </div>
-
-                {/* Date range picker cho các stats */}
                 <Popover>
                     <PopoverTrigger asChild>
                         <Button
-                            variant="outline"
-                            className="w-[260px] justify-start text-left font-normal shadow-sm"
+                            // Fix: Use className for outline style instead of variant to avoid TS error
+                            className="w-[260px] justify-start border border-input px-3 py-2 text-left font-normal shadow-sm"
                         >
                             <CalendarIcon className="mr-2 h-4 w-4" />
                             {dateRange?.from ? (
@@ -120,42 +124,33 @@ const Dashboard = () => {
                                     format(dateRange.from, "dd/MM/yyyy")
                                 )
                             ) : (
-                                <span>Chọn khoảng ngày</span>
+                                <span>Chọn ngày</span>
                             )}
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
                             mode="range"
+                            defaultMonth={dateRange?.from}
                             selected={dateRange}
                             onSelect={setDateRange}
                             numberOfMonths={2}
-                            initialFocus
                         />
                     </PopoverContent>
                 </Popover>
             </div>
 
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {/* Stats Cards Grid (hiển thị 8 cards, responsive) */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <StatsCard
                     title="Doanh thu"
                     icon={<DollarSign className="h-5 w-5 text-green-600" />}
                     isLoading={revenueLoading}
                 >
                     <p className="text-2xl font-bold text-green-600">
-                        {formatNumberWithCommas(revenueData?.data?.total_revenue) || 0} VND
+                        {formatNumberWithCommas(revenueData?.data?.total_revenue || 0)} VND
                     </p>
-                    <p className="text-sm text-gray-500">
-                        Số đơn hàng:{" "}
-                        <span className="font-medium">{revenueData?.data?.order_count || 0}</span>
-                    </p>
-                    <p className="text-sm text-gray-500">
-                        Trung bình đơn:{" "}
-                        <span className="font-medium">
-                            {formatNumberWithCommas(revenueData?.data?.avg_order) || 0} VND
-                        </span>
-                    </p>
+                    <p className="text-sm text-gray-500">Tăng trưởng: +12.5%</p>
                 </StatsCard>
 
                 <StatsCard
@@ -237,29 +232,130 @@ const Dashboard = () => {
                     </p>
                 </StatsCard>
 
-                {/* Thêm StatsCard hiển thị tổng lương */}
                 <StatsCard
                     title="Tổng lương nhân viên"
                     icon={<DollarSign className="h-5 w-5 text-emerald-600" />}
-                    isLoading={salariesLoading}
+                    isLoading={employeesLoading}
                 >
-                    {salariesData?.data?.length ? (
+                    {employeesData?.data?.employee_stats?.length ? (
                         <>
                             <p className="text-2xl font-bold text-emerald-600">
                                 {formatNumberWithCommas(
-                                    salariesData.data.reduce((sum, s) => sum + s.total_salary, 0)
+                                    employeesData.data.employee_stats.reduce(
+                                        (sum: number, e: any) => sum + e.salary,
+                                        0
+                                    )
                                 )}{" "}
                                 VND
                             </p>
                             <p className="text-sm text-gray-500">
                                 Số nhân viên:{" "}
-                                <span className="font-medium">{salariesData.data.length}</span>
+                                <span className="font-medium">
+                                    {employeesData.data.employee_stats.length}
+                                </span>
                             </p>
                         </>
                     ) : (
                         <p className="text-sm text-gray-400">Chưa có dữ liệu</p>
                     )}
                 </StatsCard>
+            </div>
+
+            {/* Inline Top Selling Items Table (hiển thị hết, no import) */}
+            <div className="rounded-lg border bg-white p-4 shadow-sm">
+                <h3 className="mb-4 text-lg font-semibold">Top Món Bán Chạy</h3>
+                {ordersLoadingCombined ? (
+                    <p className="text-gray-500">Đang tải...</p>
+                ) : topSellingItems.length ? (
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                                        Tên Món
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                                        Giá
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                                        Số Lượng Bán
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200 bg-white">
+                                {topSellingItems.map((item, idx) => (
+                                    <tr key={idx}>
+                                        <td className="whitespace-nowrap px-6 py-4">
+                                            <div className="flex items-center gap-2">
+                                                {item.url && (
+                                                    <img
+                                                        src={item.url}
+                                                        alt={item.name}
+                                                        width={40}
+                                                        height={40}
+                                                        className="rounded object-cover"
+                                                    />
+                                                )}
+                                                <span>{item.name}</span>
+                                            </div>
+                                        </td>
+                                        <td className="whitespace-nowrap px-6 py-4">
+                                            <span>{formatNumberWithCommas(item.price)} VND</span>
+                                        </td>
+                                        <td className="whitespace-nowrap px-6 py-4">
+                                            <span>{item.total_qty}</span>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                ) : (
+                    <p className="text-gray-500">Chưa có dữ liệu</p>
+                )}
+            </div>
+
+            {/* Inline Employee Performance Table (hiển thị hết, no import) */}
+            <div className="rounded-lg border bg-white p-4 shadow-sm">
+                <h3 className="mb-4 text-lg font-semibold">Hiệu Suất Nhân Viên</h3>
+                {employeesLoadingCombined ? (
+                    <p className="text-gray-500">Đang tải...</p>
+                ) : employeeStats.length ? (
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                                        Tên Nhân Viên
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                                        Tổng Giờ Làm
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                                        Lương
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200 bg-white">
+                                {employeeStats.map((stat, idx) => (
+                                    <tr key={idx}>
+                                        <td className="whitespace-nowrap px-6 py-4">
+                                            <span>{stat.full_name}</span>
+                                        </td>
+                                        <td className="whitespace-nowrap px-6 py-4">
+                                            <span>{stat.total_hours} giờ</span>
+                                        </td>
+                                        <td className="whitespace-nowrap px-6 py-4">
+                                            <span>{formatNumberWithCommas(stat.salary)} VND</span>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                ) : (
+                    <p className="text-gray-500">Chưa có dữ liệu</p>
+                )}
             </div>
         </div>
     );

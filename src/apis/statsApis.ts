@@ -12,7 +12,7 @@ const statsApis = {
         toDate?: string
     ): Promise<BaseResponse<StatsResponse>> => {
         try {
-            const response = await axiosInstance.get(`/${urls.api}/stats/revenue`, {
+            const response = await axiosInstance.get(`/${urls.api}/${urls.stats}/${urls.revenue}`, {
                 params: {
                     from_date: fromDate,
                     to_date: toDate,
@@ -26,7 +26,9 @@ const statsApis = {
 
     getIngredientsStats: async (): Promise<BaseResponse<StatsResponse>> => {
         try {
-            const response = await axiosInstance.get(`/${urls.api}/stats/ingredients`);
+            const response = await axiosInstance.get(
+                `/${urls.api}/${urls.stats}/${urls.ingredients}`
+            );
             return response.data;
         } catch (error) {
             throw error;
@@ -38,12 +40,15 @@ const statsApis = {
         toDate?: string
     ): Promise<BaseResponse<StatsResponse>> => {
         try {
-            const response = await axiosInstance.get(`/${urls.api}/stats/employees`, {
-                params: {
-                    from_date: fromDate,
-                    to_date: toDate,
-                },
-            });
+            const response = await axiosInstance.get(
+                `/${urls.api}/${urls.stats}/${urls.employees}`,
+                {
+                    params: {
+                        from_date: fromDate,
+                        to_date: toDate,
+                    },
+                }
+            );
             return response.data;
         } catch (error) {
             throw error;
@@ -55,7 +60,7 @@ const statsApis = {
         toDate?: string
     ): Promise<BaseResponse<StatsResponse>> => {
         try {
-            const response = await axiosInstance.get(`/${urls.api}/stats/orders`, {
+            const response = await axiosInstance.get(`/${urls.api}/${urls.stats}/${urls.orders}`, {
                 params: {
                     from_date: fromDate,
                     to_date: toDate,
@@ -72,12 +77,15 @@ const statsApis = {
         toDate?: string
     ): Promise<BaseResponse<StatsResponse>> => {
         try {
-            const response = await axiosInstance.get(`/${urls.api}/stats/bookings`, {
-                params: {
-                    from_date: fromDate,
-                    to_date: toDate,
-                },
-            });
+            const response = await axiosInstance.get(
+                `/${urls.api}/${urls.stats}/${urls.bookings}`,
+                {
+                    params: {
+                        from_date: fromDate,
+                        to_date: toDate,
+                    },
+                }
+            );
             return response.data;
         } catch (error) {
             throw error;
@@ -89,12 +97,15 @@ const statsApis = {
         toDate?: string
     ): Promise<BaseResponse<StatsResponse>> => {
         try {
-            const response = await axiosInstance.get(`/${urls.api}/stats/customers`, {
-                params: {
-                    from_date: fromDate,
-                    to_date: toDate,
-                },
-            });
+            const response = await axiosInstance.get(
+                `/${urls.api}/${urls.stats}/${urls.customers}`,
+                {
+                    params: {
+                        from_date: fromDate,
+                        to_date: toDate,
+                    },
+                }
+            );
             return response.data;
         } catch (error) {
             throw error;
@@ -106,7 +117,7 @@ const statsApis = {
         toDate?: string
     ): Promise<BaseResponse<StatsResponse>> => {
         try {
-            const response = await axiosInstance.get(`/${urls.api}/stats/tickets`, {
+            const response = await axiosInstance.get(`/${urls.api}/${urls.stats}/${urls.tickets}`, {
                 params: {
                     from_date: fromDate,
                     to_date: toDate,
@@ -118,7 +129,7 @@ const statsApis = {
         }
     },
     getAllSalaries: async (month: string) => {
-        const res = await axiosInstance.get(`/${urls.api}/salary/all`, {
+        const res = await axiosInstance.get(`/${urls.api}/${urls.salary}/${urls.all}`, {
             params: { month },
         });
         return res.data;
