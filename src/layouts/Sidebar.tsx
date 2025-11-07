@@ -18,6 +18,7 @@ import {
     Table,
     BookOpen,
     MonitorCheckIcon,
+    MonitorDown,
 } from "lucide-react";
 import useLogout from "@/utils/hooks/useLogout";
 import images from "@/assets/images";
@@ -82,8 +83,13 @@ const Sidebar = () => {
                 },
                 {
                     to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.RECRUITMENT}`,
-                    label: "Tuyển dụng",
+                    label: "Tin tuyển dụng",
                     icon: <MonitorCheckIcon size={14} />,
+                },
+                {
+                    to: `/${PATHS.MANAGE.DASHBOARD}/${PATHS.MANAGE.APPLY_RECRUITMENT}`,
+                    label: "Hồ sơ tuyển dụng",
+                    icon: <MonitorDown size={14} />,
                 },
             ],
         },

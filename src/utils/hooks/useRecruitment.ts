@@ -75,3 +75,16 @@ export const useUpdateRecruitment = (): UseMutationResult<
         },
     });
 };
+
+export const useDeleteRecruitment = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (id: string) => {
+            return await recruitmentApis.deleteRecruitment(id);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: recruitmentQueryKeys.lists() });
+        },
+    });
+};

@@ -54,6 +54,14 @@ const recruitmentApis = {
             throw error;
         }
     },
+    deleteRecruitment: async (id: string): Promise<BaseResponse<void>> => {
+        try {
+            const response = await axiosInstance.delete(`/${urls.api}/${urls.recruitments}/${id}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
 };
 
 export default recruitmentApis;
