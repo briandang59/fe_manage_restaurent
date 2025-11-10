@@ -1,12 +1,14 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { useLocation } from "react-router-dom";
 import authApis from "@/apis/authApis";
 import { tokenManager } from "@/lib/tokenManager";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import { PATHS } from "@/utils/constants/common/paths";
 
 // Hook để quản lý authentication
 export const useAuth = () => {
     const navigate = useNavigate();
+    const location = useLocation(); // Sử dụng dynamic path từ router
 
     // Login mutation
     const loginMutation = useMutation({
@@ -41,38 +43,6 @@ export const useAuth = () => {
         },
     });
 
-    // Logout mutation
-    const logoutMutation = useMutation({
-        mutationFn: async () => {
-            return await authApis.logout();
-        },
-        onSuccess: () => {
-            // Xóa thông tin user và role khỏi localStorage
-            tokenManager.removeToken();
-            localStorage.removeItem("user");
-            localStorage.removeItem("role");
-            navigate("/login");
-        },
-        onError: (error) => {
-            toast.error("Đăng xuất thất bại" + error);
-            // Vẫn xóa thông tin ngay cả khi API logout thất bại
-            tokenManager.removeToken();
-            localStorage.removeItem("user");
-            localStorage.removeItem("role");
-            navigate("/login");
-        },
-    });
-
-    // Verify token query
-    const verifyTokenQuery = useQuery({
-        queryKey: ["auth", "verify"],
-        queryFn: async () => {
-            return await authApis.verifyToken();
-        },
-        enabled: tokenManager.hasToken(), // Chỉ chạy khi có token
-        retry: false, // Không retry nếu thất bại
-    });
-
     // Kiểm tra xem user đã đăng nhập chưa
     const isAuthenticated = tokenManager.hasToken();
 
@@ -80,14 +50,6 @@ export const useAuth = () => {
     const login = async (username: string, password: string) => {
         await loginMutation.mutateAsync({ username, password });
     };
-
-    // Logout function
-    const logout = async () => {
-        await logoutMutation.mutateAsync();
-    };
-
-    // Kiểm tra token có hợp lệ không
-    const isTokenValid = verifyTokenQuery.data?.data?.valid ?? false;
 
     // Helper functions để lấy thông tin từ localStorage
     const getUser = () => {
@@ -104,18 +66,47 @@ export const useAuth = () => {
         const employeeStr = localStorage.getItem("employee");
         return employeeStr ? JSON.parse(employeeStr) : null;
     };
+
+    const getToken = () => {
+        const token = localStorage.getItem("token");
+        return token ? JSON.parse(token) : null;
+    };
     const isAdmin = () => {
         const role = getRole();
         return role?.role_name === "Admin";
     };
 
-    // Kiểm tra authentication và redirect
+    // Kiểm tra authentication và redirect (đã sửa: chỉ redirect nếu path không phải public)
     const checkAuthAndRedirect = () => {
         const hasToken = tokenManager.hasToken();
-        const currentPath = window.location.pathname;
+        const currentPath = location.pathname; // Sử dụng dynamic path từ useLocation thay vì window.location
 
-        // Nếu không có token và không ở trang login
-        if (!hasToken && currentPath !== "/login") {
+        const publicPaths = [
+            "/", // Home
+            "/login",
+            PATHS.PUBLIC.MENU,
+            PATHS.PUBLIC.BOOKING,
+            PATHS.PUBLIC.KITCHEN,
+            PATHS.PUBLIC.PROFILE,
+            PATHS.PUBLIC.TICKET,
+            PATHS.PUBLIC.RECRUITMENT,
+        ];
+
+        // Check nếu path là public (exact match)
+        const isPublic = publicPaths.includes(currentPath);
+
+        console.log(
+            "🔍 CheckAuth: Path =",
+            currentPath,
+            "| IsPublic =",
+            isPublic,
+            "| HasToken =",
+            hasToken
+        ); // Log debug (có thể xóa sau)
+
+        // Nếu không có token và KHÔNG ở trang public (ngoại trừ /login)
+        if (!hasToken && !isPublic) {
+            console.log("🚨 REDIRECT TO LOGIN!");
             navigate("/login");
             return false;
         }
@@ -137,13 +128,10 @@ export const useAuth = () => {
     return {
         // State
         isAuthenticated,
-        isTokenValid,
-        isLoading: loginMutation.isPending || logoutMutation.isPending,
-        isVerifying: verifyTokenQuery.isLoading,
+        isLoading: loginMutation.isPending,
 
         // Actions
         login,
-        logout,
 
         // Helper functions
         getUser,
@@ -151,10 +139,9 @@ export const useAuth = () => {
         getEmployee,
         isAdmin,
         checkAuthAndRedirect,
+        getToken,
 
         // Mutations
         loginMutation,
-        logoutMutation,
-        verifyTokenQuery,
     };
 };

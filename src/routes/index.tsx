@@ -39,11 +39,7 @@ const LoadingFallback = () => (
 export const router = createBrowserRouter([
     {
         path: "/",
-        element: (
-            <AuthWrapper>
-                <LandingLayout />
-            </AuthWrapper>
-        ),
+        element: <LandingLayout />,
         children: [
             {
                 path: "",

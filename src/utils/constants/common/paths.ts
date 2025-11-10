@@ -19,6 +19,7 @@ export const PATHS = {
         APPLY_RECRUITMENT: "apply-recruitment",
     },
     PUBLIC: {
+        LOGIN: "login",
         MENU: "menu-public",
         BOOKING: "booking",
         KITCHEN: "kitchen",

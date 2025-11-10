@@ -1,22 +1,27 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // Thêm useLocation
 import { tokenManager } from "@/lib/tokenManager";
 
 export const useAuthCheck = () => {
     const navigate = useNavigate();
+    const location = useLocation(); // Lấy path động thay vì window.location
 
     useEffect(() => {
         const checkAuth = () => {
             const hasToken = tokenManager.hasToken();
-            const currentPath = window.location.pathname;
+            const currentPath = location.pathname;
 
-            // Nếu không có token và không ở trang login
-            if (!hasToken && currentPath !== "/login") {
+            // Danh sách public routes (không cần token)
+            const publicPaths = ["/", "/login", "/menu", "/booking"]; // Thêm paths từ PATHS.PUBLIC
+
+            // Nếu không có token VÀ path không public → redirect login
+            if (!hasToken && !publicPaths.includes(currentPath)) {
+                console.log("[DEBUG] Redirect to login: No token + not public path");
                 navigate("/login");
                 return;
             }
 
-            // Nếu có token và đang ở trang login
+            // Nếu có token và đang ở login → redirect dựa trên role
             if (hasToken && currentPath === "/login") {
                 const roleStr = localStorage.getItem("role");
                 const role = roleStr ? JSON.parse(roleStr) : null;
@@ -24,14 +29,14 @@ export const useAuthCheck = () => {
                 if (role?.role_name === "Admin") {
                     navigate("/dashboard");
                 } else {
-                    navigate("/");
+                    navigate("/"); // Hoặc public dashboard nếu có
                 }
                 return;
             }
         };
 
         checkAuth();
-    }, [navigate]);
+    }, [navigate, location.pathname]); // Depend trên path để re-run khi change route
 
     return {
         isAuthenticated: tokenManager.hasToken(),
